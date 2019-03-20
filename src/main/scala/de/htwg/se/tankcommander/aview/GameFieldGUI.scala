@@ -13,47 +13,13 @@ import scala.swing.event.ButtonClicked
 
 class GameFieldGUI(controller: Controller, name1: String, name2: String, map: String) extends Frame with Observer {
   controller.add(this)
-  var cells = Array.ofDim[CellPanel](controller.matchfield.gridsX, controller.matchfield.gridsY)
   val statusLine = new TextArea()
   val messages = new TextArea("Welcome to the Game. \n" +
-    "Use the Buttons on the right to control your tank."){
+    "Use the Buttons on the right to control your tank.") {
     lineWrap = false
     editable = false
   }
   val scrollPanel = new ScrollPane(messages)
-  var scrollBar = scrollPanel.verticalScrollBar
-  controller.setUpGame(name1, name2, map)
-
-
-  paintGameField(controller)
-  //Main Panel
-  title = "Tank Commander"
-  menuBar = new MenuBar {
-    contents += new Menu("File") {
-  //    contents += new MenuItem("New Game") {
-  //    }
-  //    contents += new MenuItem("Restart") {
-  //    }
-  //    contents += new Separator()
-      contents += new MenuItem(Action("Load") {
-        controller.load()
-      })
-      contents += new MenuItem(Action("Save") {
-        controller.save()
-      })
-      contents += new Separator()
-      contents += new MenuItem(Action("Undo") {
-        controller.undo()
-      })
-      contents += new MenuItem(Action("Redo") {
-        controller.redo()
-      })
-      contents += new Separator()
-      contents += new MenuItem(Action("Exit") {
-        sys.exit(0)
-      })
-    }
-  }
   val controls = new GridPanel(8, 1) {
     val up = new Button() {
       this.preferredSize = (new Dimension(100, 120))
@@ -152,9 +118,43 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
           + " has won!")
     }
   }
+  val dimension = new Dimension(1000, 1000)
+  controller.setUpGame(name1, name2, map)
+
+
+  paintGameField(controller)
+  //Main Panel
+  title = "Tank Commander"
+  menuBar = new MenuBar {
+    contents += new Menu("File") {
+      //    contents += new MenuItem("New Game") {
+      //    }
+      //    contents += new MenuItem("Restart") {
+      //    }
+      //    contents += new Separator()
+      contents += new MenuItem(Action("Load") {
+        controller.load()
+      })
+      contents += new MenuItem(Action("Save") {
+        controller.save()
+      })
+      contents += new Separator()
+      contents += new MenuItem(Action("Undo") {
+        controller.undo()
+      })
+      contents += new MenuItem(Action("Redo") {
+        controller.redo()
+      })
+      contents += new Separator()
+      contents += new MenuItem(Action("Exit") {
+        sys.exit(0)
+      })
+    }
+  }
+  var cells = Array.ofDim[CellPanel](controller.matchfield.gridsX, controller.matchfield.gridsY)
   visible = true
   centerOnScreen()
-  val dimension = new Dimension(1000, 1000)
+  var scrollBar = scrollPanel.verticalScrollBar
   contents = new BorderPanel {
     add(paintWindow(controller), BorderPanel.Position.Center)
     add(controls, BorderPanel.Position.East)

@@ -7,17 +7,26 @@ import scala.swing._
 import scala.swing.event.ButtonClicked
 
 class MainMenu(controller: Controller) extends Frame {
+  val menuHeight = 1000
+  val gridWidth = 600
+  val gridHeight = 300
+  val textHeight = 50
+  val gridX = 4
+  val innerGridX = 3
+  val gridY = 1
+
   //Main Menu
   title = "Tank Commander"
+
   menuBar = new MenuBar {
     contents += new Menu("File") {
-    // contents += new MenuItem("New Game") {
+      // contents += new MenuItem("New Game") {
 
-    // }
-    // contents += new MenuItem("Restart") {
+      // }
+      // contents += new MenuItem("Restart") {
 
-    // }
-    //  contents += new Separator()
+      // }
+      //  contents += new Separator()
       contents += new MenuItem("Load") {
 
       }
@@ -31,44 +40,43 @@ class MainMenu(controller: Controller) extends Frame {
     }
   }
 
-  contents = new GridPanel(4, 1) {
-    val start = new Button() {
-      this.preferredSize = new Dimension(600, 300)
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/start_final_kleiner.png")
-        .getImage().getScaledInstance(600, 300, java.awt.Image.SCALE_SMOOTH)))
+  contents = new GridPanel(gridX, gridY) {
+    val start: Button = new Button() {
+      this.preferredSize = new Dimension(gridWidth, gridHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/start_final_kleiner.png")
+        .getImage.getScaledInstance(gridWidth, gridHeight, java.awt.Image.SCALE_SMOOTH))
     }
-    val name1 = new TextField("Player 1: Type your Name here") {
-      this.preferredSize = new Dimension(600, 50)
+    val name1: TextField = new TextField("Player 1: Type your Name here") {
+      this.preferredSize = new Dimension(gridWidth, textHeight)
     }
-    val name2 = new TextField("Player 2: Type your Name here") {
-      this.preferredSize = new Dimension(600, 50)
+    val name2: TextField = new TextField("Player 2: Type your Name here") {
+      this.preferredSize = new Dimension(gridWidth, textHeight)
     }
-    val chosenMap = new ComboBox(List("Map 1", "Map 2")){
+    val chosenMap: ComboBox[String] = new ComboBox(List("Map 1", "Map 2")) {
     }
 
-    val textFields = new GridPanel(3, 1) {
+    val textFields: GridPanel = new GridPanel(innerGridX, gridY) {
       contents += name1
       contents += name2
       contents += chosenMap
     }
     start.reactions += {
-      case ButtonClicked(start) => {
-        val gameInterface = new GameFieldGUI(controller, name1.text, name2.text, map = chosenMap.selection.item)
+      case ButtonClicked(`start`) =>
+        new GameFieldGUI(controller, name1.text, name2.text, map = chosenMap.selection.item)
         dispose()
-      }
     }
-    val exit = new Button() {
-      this.preferredSize = new Dimension(600, 300)
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/exit_final_kleiner.png")
-        .getImage().getScaledInstance(600, 300, java.awt.Image.SCALE_SMOOTH)))
+    val exit: Button = new Button() {
+      this.preferredSize = new Dimension(gridWidth, gridHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/exit_final_kleiner.png")
+        .getImage.getScaledInstance(gridWidth, gridHeight, java.awt.Image.SCALE_SMOOTH))
 
     }
     exit.reactions += {
-      case ButtonClicked(exit) => System.exit(0)
+      case ButtonClicked(`exit`) => System.exit(0)
     }
-    val label = new Label("Hauptmenü") {
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/TankCommanderLogo.png")
-        .getImage().getScaledInstance(600, 300, java.awt.Image.SCALE_SMOOTH)))
+    val label: Label = new Label("Hauptmenü") {
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/TankCommanderLogo.png")
+        .getImage.getScaledInstance(gridWidth, gridHeight, java.awt.Image.SCALE_SMOOTH))
     }
     contents += label
     contents += start
@@ -76,9 +84,7 @@ class MainMenu(controller: Controller) extends Frame {
     contents += exit
   }
 
-
-  size = new Dimension(600, 1000)
+  size = new Dimension(gridWidth, menuHeight)
   centerOnScreen()
   visible = true
-
 }

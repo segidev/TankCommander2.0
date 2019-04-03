@@ -5,7 +5,7 @@ import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.Cell
 trait GameFieldInterface {
   val gridsX: Int
   val gridsY: Int
-  var marray: Array[Array[Cell]]
+  var mArray: Array[Array[Cell]]
 
   def fillGameFieldWithCells(): Unit
 

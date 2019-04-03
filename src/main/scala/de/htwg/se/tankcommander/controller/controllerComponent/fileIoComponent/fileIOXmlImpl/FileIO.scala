@@ -7,28 +7,14 @@ import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
 import de.htwg.se.tankcommander.model.playerComponent.Player
 
-import scala.xml.{PrettyPrinter, XML}
+import scala.xml.{Elem, PrettyPrinter, XML}
 
 class FileIO() extends FileIOInterface {
-  def saveString: Unit = {
-    import java.io._
-    val file = new File("src/main/ressources/savegame.xml")
-    file.createNewFile()
-    val pw = new PrintWriter(file)
-    val prettyPrinter = new PrettyPrinter(120, 4)
-    val xml = prettyPrinter.format(gameStateToXML())
-    pw.write(xml)
-    pw.close()
-  }
-
   def saveXML(gamefield: GameFieldInterface): Unit = {
     XML.save("src/main/ressources/savegame.xml", gameStateToXML())
   }
 
-  override def save(): Unit = saveString
-
-  //noinspection ScalaStyle
-  def gameStateToXML() = {
+  def gameStateToXML(): Elem = {
     <game>
       <aPlayer>
         {GameStatus.activePlayer.get.toString}
@@ -75,10 +61,23 @@ class FileIO() extends FileIOInterface {
     </game>
   }
 
+  override def save(): Unit = saveString()
+
+  def saveString(): Unit = {
+    import java.io._
+    val file = new File("src/main/ressources/savegame.xml")
+    file.createNewFile()
+    val pw = new PrintWriter(file)
+    val prettyPrinter = new PrettyPrinter(120, 4)
+    val xml = prettyPrinter.format(gameStateToXML())
+    pw.write(xml)
+    pw.close()
+  }
+
   override def load(controller: Controller): Unit = {
     val file = XML.loadFile("src/main/ressources/savegame.xml")
-    GameStatus.activePlayer = Option(new Player((file \\ "game" \\ "aPlayer").text))
-    GameStatus.passivePlayer = Option(new Player((file \\ "game" \\ "pPlayer").text))
+    GameStatus.activePlayer = Option(Player((file \\ "game" \\ "aPlayer").text))
+    GameStatus.passivePlayer = Option(Player((file \\ "game" \\ "pPlayer").text))
     GameStatus.currentPlayerActions = (file \\ "game" \\ "movesCount").text.replaceAll(" ", "").toInt
     GameStatus.currentHitChance = (file \\ "game" \ "hitchance").text.replaceAll(" ", "").toInt
     val tank1: TankModel = new TankModel((file \\ "game" \ "aTankHP").text.replaceAll(" ", "").toInt,
@@ -92,9 +91,9 @@ class FileIO() extends FileIOInterface {
     GameStatus.activeTank = Option(tank1)
     GameStatus.passiveTank = Option(tank2)
     GameStatus.movesLeft = (file \\ "game" \ "movesLeft").text.replaceAll(" ", "").toBoolean
-    controller.matchfield.marray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
+    controller.matchfield.mArray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
       .containsThisTank = Option(tank1)
-    controller.matchfield.marray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
+    controller.matchfield.mArray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
       .containsThisTank = Option(tank2)
   }
 }

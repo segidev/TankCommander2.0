@@ -1,6 +1,6 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
 
-import com.google.inject.{Guice, Inject}
+import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.se.tankcommander.TankCommanderModule
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
 import de.htwg.se.tankcommander.controller.controllerComponent.{ControllerInterface, GameStatus}
@@ -13,11 +13,11 @@ import net.codingwell.scalaguice.InjectorExtensions._
 import scala.swing.Publisher
 
 class Controller @Inject()() extends Observable with Publisher with ControllerInterface {
+  val injector: Injector = Guice.createInjector(new TankCommanderModule)
+  val fileIO: FileIOInterface = injector.instance[FileIOInterface]
+  private val undoManager = new UndoManager
   var matchfield: GameFieldInterface = GameFieldFactory.apply("Map 1")
   var mapChosen: String = ""
-  private val undoManager = new UndoManager
-  val injector = Guice.createInjector(new TankCommanderModule)
-  val fileIO = injector.instance[FileIOInterface]
 
   def this(matchfield2: GameFieldInterface) {
     this()
@@ -60,8 +60,8 @@ class Controller @Inject()() extends Observable with Publisher with ControllerIn
   override def fillGameFieldWithTank(pos: (Int, Int), tank: TankModel, pos2: (Int, Int), tank2: TankModel): Unit = {
     tank.posC = pos
     tank2.posC = pos2
-    matchfield.marray(pos._1)(pos._2).containsThisTank = Option(tank)
-    matchfield.marray(pos2._1)(pos2._2).containsThisTank = Option(tank)
+    matchfield.mArray(pos._1)(pos._2).containsThisTank = Option(tank)
+    matchfield.mArray(pos2._1)(pos2._2).containsThisTank = Option(tank)
   }
 
   override def endTurnChangeActivePlayer(): Unit = {
@@ -102,12 +102,12 @@ class Controller @Inject()() extends Observable with Publisher with ControllerIn
   }
 
   override def undo(): Unit = {
-    undoManager.undoStep
+    undoManager.undoStep()
     notifyObservers()
   }
 
   override def redo(): Unit = {
-    undoManager.redoStep
+    undoManager.redoStep()
     notifyObservers()
   }
 
@@ -121,5 +121,3 @@ class Controller @Inject()() extends Observable with Publisher with ControllerIn
     notifyObservers()
   }
 }
-
-

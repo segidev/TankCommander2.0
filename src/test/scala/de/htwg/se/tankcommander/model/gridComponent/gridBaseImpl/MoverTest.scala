@@ -37,7 +37,7 @@ class MoverTest extends FlatSpec with Matchers {
     assert(mover.movePossible((0, 12)) === false)
     assert(mover.movePossible((4, 0)) === false)
     assert(mover.movePossible((0, 1)) === true)
-    mover.aMoveOfTank((0, 2), tank1, true)
+    mover.aMoveOfTank((0, 2), tank1, x = true)
     assert(controller.matchfield.mArray(0)(2).containsThisTank.get === tank1)
     val atXY: (Int, Int) = (GameStatus.activeTank.get.posC._1, GameStatus.activeTank.get.posC._2)
     assert(atXY === (0, 2))

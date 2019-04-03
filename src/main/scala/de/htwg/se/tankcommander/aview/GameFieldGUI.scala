@@ -14,113 +14,132 @@ import scala.swing.event.ButtonClicked
 class GameFieldGUI(controller: Controller, name1: String, name2: String, map: String) extends Frame with Observer {
   controller.add(this)
   val statusLine = new TextArea()
-  val messages = new TextArea("Welcome to the Game. \n" +
+  val messages: TextArea = new TextArea("Welcome to the Game. \n" +
     "Use the Buttons on the right to control your tank.") {
     lineWrap = false
     editable = false
   }
+
+  val gridWidth = 1000
+  val gridHeight = 1000
+  val gridX = 8
+  val gridY = 1
+  val iconSize = 50
+  val upButtonWidth = 100
+  val upButtonHeight = 120
+  val buttonWidth = 50
+  val buttonHeight = 50
+
+
   val scrollPanel = new ScrollPane(messages)
-  val controls = new GridPanel(8, 1) {
-    val up = new Button() {
-      this.preferredSize = (new Dimension(100, 120))
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/up.png")
-        .getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)))
-      this.borderPainted = (true)
+  val controls: GridPanel = new GridPanel(gridX, gridY) {
+    val up: Button = new Button() {
+      this.preferredSize = new Dimension(upButtonWidth, upButtonHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/up.png")
+        .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
+      this.borderPainted = true
     }
     contents += up
-    val down = new Button() {
-      this.preferredSize = (new Dimension(50, 50))
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/down.png")
-        .getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)))
-      this.borderPainted = (true)
+    val down: Button = new Button() {
+      this.preferredSize = new Dimension(buttonWidth, buttonHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/down.png")
+        .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
+      this.borderPainted = true
     }
     contents += down
-    val left = new Button() {
-      this.preferredSize = (new Dimension(50, 50))
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/left.png")
-        .getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)))
-      this.borderPainted = (true)
+    val left: Button = new Button() {
+      this.preferredSize = new Dimension(buttonWidth, buttonHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/left.png")
+        .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
+      this.borderPainted = true
     }
     contents += left
-    val right = new Button() {
-      this.preferredSize = (new Dimension(50, 50))
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/right.png")
-        .getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)))
-      this.borderPainted = (true)
+    val right: Button = new Button() {
+      this.preferredSize = new Dimension(buttonWidth, buttonHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/right.png")
+        .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
+      this.borderPainted = true
     }
     contents += right
-    val shoot = new Button() {
-      this.preferredSize = (new Dimension(50, 50))
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/explosion.png")
-        .getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)))
-      this.borderPainted = (true)
+    val shoot: Button = new Button() {
+      this.preferredSize = new Dimension(buttonWidth, buttonHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/explosion.png")
+        .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
+      this.borderPainted = true
     }
     contents += shoot
-    val end_turn = new Button() {
-      this.preferredSize = (new Dimension(50, 50))
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/sandclock_take.png")
-        .getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)))
-      this.borderPainted = (true)
+    val end_turn: Button = new Button() {
+      this.preferredSize = new Dimension(buttonWidth, buttonHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/sandclock_take.png")
+        .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
+      this.borderPainted = true
     }
     contents += end_turn
-    val give_up = new Button() {
-      this.preferredSize = (new Dimension(50, 50))
-      this.icon = (new ImageIcon(new ImageIcon("src/main/ressources/icons/white_flag.png")
-        .getImage().getScaledInstance(50, 50, java.awt.Image.SCALE_SMOOTH)))
-      this.borderPainted = (true)
+    val give_up: Button = new Button() {
+      this.preferredSize = new Dimension(buttonWidth, buttonHeight)
+      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/white_flag.png")
+        .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
+      this.borderPainted = true
     }
     contents += give_up
     up.reactions += {
-      case ButtonClicked(up) => if (controller.checkIfPlayerHasMovesLeft())
-        controller.move("up")
-      else {
-        messages.append("\nNo more Moves left, end your turn!")
-      }
+      case ButtonClicked(`up`) =>
+        if (controller.checkIfPlayerHasMovesLeft()) {
+          controller.move("up")
+        }
+        else {
+          messages.append("\nNo more Moves left, end your turn!")
+        }
     }
     down.reactions += {
-      case ButtonClicked(up) => if (controller.checkIfPlayerHasMovesLeft())
-        controller.move("down")
-      else {
-        messages.append("\nNo more Moves left, end your turn!")
-      }
+      case ButtonClicked(`up`) =>
+        if (controller.checkIfPlayerHasMovesLeft()) {
+          controller.move("down")
+        }
+        else {
+          messages.append("\nNo more Moves left, end your turn!")
+        }
     }
     left.reactions += {
-      case ButtonClicked(up) =>
-        if (controller.checkIfPlayerHasMovesLeft())
+      case ButtonClicked(`up`) =>
+        if (controller.checkIfPlayerHasMovesLeft()) {
           controller.move("left")
+        }
         else {
-          messages.text = ("\nNo more Moves left, end your turn!")
+          messages.text = "\nNo more Moves left, end your turn!"
 
         }
     }
     right.reactions += {
-      case ButtonClicked(up) =>
-        if (controller.checkIfPlayerHasMovesLeft())
+      case ButtonClicked(`up`) =>
+        if (controller.checkIfPlayerHasMovesLeft()) {
           controller.move("right")
+        }
         else {
           messages.append("\nNo more Moves left, end your turn!")
         }
     }
     shoot.reactions += {
-      case ButtonClicked(shoot) => if (controller.checkIfPlayerHasMovesLeft())
-        controller.shoot()
-      else {
-        messages.append("\nNo more Moves left, end your turn!")
-      }
+      case ButtonClicked(`shoot`) =>
+        if (controller.checkIfPlayerHasMovesLeft()) {
+          controller.shoot()
+        }
+        else {
+          messages.append("\nNo more Moves left, end your turn!")
+        }
     }
     end_turn.reactions += {
-      case ButtonClicked(end_turn) => controller.endTurnChangeActivePlayer()
+      case ButtonClicked(`end_turn`) => controller.endTurnChangeActivePlayer()
         messages.append("\nPlease change seats.")
     }
     give_up.reactions += {
-      case ButtonClicked(give_up) => GameStatus.endGame()
+      case ButtonClicked(`give_up`) => GameStatus.endGame()
         messages.append("\n" + GameStatus.activePlayer.toString + " gave up, \n" + GameStatus.passivePlayer.toString
           + " has won!")
     }
   }
-  val dimension = new Dimension(1000, 1000)
+  val dimension = new Dimension(gridWidth, gridHeight)
   controller.setUpGame(name1, name2, map)
-
 
   paintGameField(controller)
   //Main Panel
@@ -151,10 +170,10 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
       })
     }
   }
-  var cells = Array.ofDim[CellPanel](controller.matchfield.gridsX, controller.matchfield.gridsY)
+  var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.matchfield.gridsX, controller.matchfield.gridsY)
   visible = true
   centerOnScreen()
-  var scrollBar = scrollPanel.verticalScrollBar
+  var scrollBar: ScrollBar = scrollPanel.verticalScrollBar
   contents = new BorderPanel {
     add(paintWindow(controller), BorderPanel.Position.Center)
     add(controls, BorderPanel.Position.East)
@@ -163,8 +182,8 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
 
   def paintWindow(controller: Controller): BorderPanel = {
     import BorderPanel.Position._
-    val mainFrame = new BorderPanel {
-      val gameArea = paintGameField(controller)
+    val mainFrame: BorderPanel = new BorderPanel {
+      val gameArea: GridPanel = paintGameField(controller)
       layout += gameArea -> Center
       layout += statusLine -> South
     }
@@ -188,7 +207,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     gameField
   }
 
-  override def update: Unit = {
+  override def update(): Unit = {
     redraw()
   }
 

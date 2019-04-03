@@ -1,31 +1,30 @@
 package de.htwg.se.tankcommander.util
 
-//noinspection ScalaStyle
 class UndoManager {
   private var undoStack: List[Command] = Nil
   private var redoStack: List[Command] = Nil
 
-  def doStep(command: Command) = {
+  def doStep(command: Command): Unit = {
     undoStack = command :: undoStack
-    command.doStep
+    command.doStep()
   }
 
-  def undoStep = {
+  def undoStep(): Unit = {
     undoStack match {
       case Nil =>
       case head :: stack => {
-        head.undoStep
+        head.undoStep()
         undoStack = stack
         redoStack = head :: redoStack
       }
     }
   }
 
-  def redoStep = {
+  def redoStep(): Unit = {
     redoStack match {
       case Nil =>
       case head :: stack => {
-        head.redoStep
+        head.redoStep()
         redoStack = stack
         undoStack = head :: undoStack
       }

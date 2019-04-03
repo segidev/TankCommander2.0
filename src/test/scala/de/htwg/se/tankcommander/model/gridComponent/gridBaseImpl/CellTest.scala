@@ -8,7 +8,7 @@ class CellTest extends FlatSpec with Matchers {
     val cell = new Cell(1, 0)
     assert(cell.y === 0)
     assert(cell.x === 1)
-    assert(cell.cobstacle === None)
+    assert(cell.cObstacle === None)
     assert(cell.containsThisTank === None)
 
   }

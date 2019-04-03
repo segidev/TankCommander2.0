@@ -1,5 +1,5 @@
-[![Build Status](https://travis-ci.org/travis-ci/travis-web.svg?branch=master)](https://travis-ci.org/travis-ci/travis-web)
-[![Coverage Status](https://coveralls.io/repos/github/RoWe90/TankCommander/badge.svg?branch=master)](https://coveralls.io/github/RoWe90/TankCommander?branch=master)
+[![Build Status](https://travis-ci.org/segidev/TankCommander2.0.svg?branch=master)](https://travis-ci.org/segidev/TankCommander2.0)
+[![Coverage Status](https://coveralls.io/repos/github/segidev/TankCommander2.0/badge.svg)](https://coveralls.io/github/segidev/TankCommander2.0)
 
 # Htwg TankCommander Project 
 This is a seed project to create a basic scala project as used in the

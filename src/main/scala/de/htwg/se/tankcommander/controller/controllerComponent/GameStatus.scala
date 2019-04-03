@@ -3,7 +3,6 @@ package de.htwg.se.tankcommander.controller.controllerComponent
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
 import de.htwg.se.tankcommander.model.playerComponent.Player
 
-//noinspection ScalaStyle
 case class GameStatus() {
   var activePlayer: Option[Player] = Option(GameStatus.activePlayer.get.deepClone())
   var passivePlayer: Option[Player] = Option(GameStatus.passivePlayer.get.deepClone())
@@ -54,7 +53,8 @@ object GameStatus {
   def endGame(): Unit = {
     print(GameStatus.activePlayer.get + " Won\n")
   }
-  def resetGameStatus() : Unit = {
+
+  def resetGameStatus(): Unit = {
     GameStatus.activePlayer = None
     GameStatus.passivePlayer = None
     GameStatus.activeTank = None
@@ -64,4 +64,3 @@ object GameStatus {
     GameStatus.currentHitChance = 0
   }
 }
-

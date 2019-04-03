@@ -17,19 +17,19 @@ class TUI(controller: Controller) extends Observer {
       case "redo" => controller.redo()
       case "save" => controller.save()
       case "load" => controller.load()
-      case _ => if (!controller.checkIfPlayerHasMovesLeft())
-        println("no turns left")
       case _ =>
-    }
-    if (controller.checkIfPlayerHasMovesLeft()) {
-      input.toLowerCase match {
-        case "up" => controller.move(input)
-        case "down" => controller.move(input)
-        case "left" => controller.move(input)
-        case "right" => controller.move(input)
-        case "shoot" => controller.shoot()
-        case _ =>
-      }
+        if (controller.checkIfPlayerHasMovesLeft()) {
+          input.toLowerCase match {
+            case "up" => controller.move(input)
+            case "down" => controller.move(input)
+            case "left" => controller.move(input)
+            case "right" => controller.move(input)
+            case "shoot" => controller.shoot()
+            case _ =>
+          }
+        } else {
+          print("No turns left")
+        }
     }
   }
 

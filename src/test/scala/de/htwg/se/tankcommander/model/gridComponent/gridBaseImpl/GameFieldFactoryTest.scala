@@ -21,15 +21,18 @@ class GameFieldFactoryTest extends FlatSpec with Matchers {
       }
     }
   }
-  "Every Cell" should "have been filled with an Obstacle-Option" in {
+  "Cells" should "be filled with an Obstacle or None" in {
     val gameField = GameFieldFactory.apply("Map 1")
     for (y <- 0 until gameField.gridsX) {
       for (x <- 0 until gameField.gridsY) {
-        assert(gameField.mArray(x)(y).cObstacle.isInstanceOf[Option[Bush]] === true |
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Option[Hill]] === true |
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Option[Rock]] === true |
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Option[Forest]] === true |
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Option[Water]])
+        assert(
+          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Bush]] === true |
+          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Hill]] === true |
+          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Rock]] === true |
+          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Forest]] === true |
+          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Water]] === true |
+            gameField.mArray(x)(y).cObstacle === None
+        )
       }
     }
   }

@@ -1,8 +1,8 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.fileIOXmlImpl
 
-import de.htwg.se.tankcommander.controller.controllerComponent.GameStatus
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
+import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
 import de.htwg.se.tankcommander.model.playerComponent.Player
@@ -91,9 +91,9 @@ class FileIO() extends FileIOInterface {
     GameStatus.activeTank = Option(tank1)
     GameStatus.passiveTank = Option(tank2)
     GameStatus.movesLeft = (file \\ "game" \ "movesLeft").text.replaceAll(" ", "").toBoolean
-    controller.matchfield.mArray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
+    controller.matchField.mArray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
       .containsThisTank = Option(tank1)
-    controller.matchfield.mArray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
+    controller.matchField.mArray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
       .containsThisTank = Option(tank2)
   }
 }

@@ -1,5 +1,6 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
+import de.htwg.se.tankcommander.model.gameFieldComponent.GameFieldFactory
 import org.scalatest.{FlatSpec, Matchers}
 
 class GameFieldFactoryTest extends FlatSpec with Matchers {

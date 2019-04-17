@@ -1,6 +1,6 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
 
-import de.htwg.se.tankcommander.controller.controllerComponent.GameStatus
+import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.Mover
 import de.htwg.se.tankcommander.util.Command
@@ -11,14 +11,14 @@ class MoveCommand(controller: Controller, s: String) extends Command {
   var backupGameStatus: GameStatus = _
 
   override def doStep(): Unit = {
-    memento = controller.matchfield.deepCopy
+    memento = controller.matchField.deepCopy
     backupGameStatus = controller.createGameStatusBackup
-    controller.matchfield = new Mover(controller.matchfield).moveTank(s)
+    controller.matchField = new Mover(controller.matchField).moveTank(s)
   }
 
   override def undoStep(): Unit = {
-    val new_memento = controller.matchfield.deepCopy
-    controller.matchfield = memento
+    val new_memento = controller.matchField.deepCopy
+    controller.matchField = memento
     memento = new_memento
 
     val new_memento2 = controller.createGameStatusBackup
@@ -27,8 +27,8 @@ class MoveCommand(controller: Controller, s: String) extends Command {
   }
 
   override def redoStep(): Unit = {
-    val new_memento = controller.matchfield
-    controller.matchfield = memento
+    val new_memento = controller.matchField
+    controller.matchField = memento
     memento = new_memento
 
     val new_memento2 = controller.createGameStatusBackup

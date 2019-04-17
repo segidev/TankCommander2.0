@@ -1,7 +1,7 @@
 package de.htwg.se.tankcommander.aview
 
-import de.htwg.se.tankcommander.controller.controllerComponent.GameStatus
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.util.Observer
 
 class TUI(controller: Controller) extends Observer {

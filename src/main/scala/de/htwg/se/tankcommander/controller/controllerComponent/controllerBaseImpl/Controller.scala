@@ -2,10 +2,13 @@ package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseIm
 
 import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.se.tankcommander.TankCommanderModule
+import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
-import de.htwg.se.tankcommander.controller.controllerComponent.{ControllerInterface, GameStatus}
+import de.htwg.se.tankcommander.model.Individual
+import de.htwg.se.tankcommander.model.gameFieldComponent.GameFieldFactory
+import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
-import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.{GameFieldFactory, TankModel}
+import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
 import de.htwg.se.tankcommander.model.playerComponent.Player
 import de.htwg.se.tankcommander.util.{Observable, UndoManager}
 import net.codingwell.scalaguice.InjectorExtensions._
@@ -15,53 +18,34 @@ import scala.swing.Publisher
 class Controller @Inject()() extends Observable with Publisher with ControllerInterface {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)
   val fileIO: FileIOInterface = injector.instance[FileIOInterface]
-  private val undoManager = new UndoManager
-  var matchfield: GameFieldInterface = GameFieldFactory.apply("Map 1")
-  var mapChosen: String = ""
+  var undoManager = new UndoManager
+  var matchField: GameFieldInterface
+  var gameStatus: GameStatus
 
-  def this(matchfield2: GameFieldInterface) {
+  def this(matchField2: GameFieldInterface) {
     this()
-    matchfield = matchfield2
+    matchField = matchField2
   }
 
   override def setUpGame(): Unit = {
-    print("Welcome to Tank-Commander\n" + "Player 1 please choose your Name" + "\n")
-    val player1 = Player(scala.io.StdIn.readLine())
-    print("Player 2 please choose your Name" + "\n")
-    val player2 = Player(scala.io.StdIn.readLine())
-    val tank1 = new TankModel()
-    val tank2 = new TankModel()
-    print("Choose your Map: Map 1 or Map 2" + "\n")
-    mapChosen = scala.io.StdIn.readLine()
-    matchfield = GameFieldFactory.apply(mapChosen)
-    fillGameFieldWithTank((0, 5), tank1, (10, 5), tank2)
-    GameStatus.activePlayer = Option(player1)
-    GameStatus.passivePlayer = Option(player2)
-    GameStatus.activeTank = Option(tank1)
-    GameStatus.passiveTank = Option(tank2)
-    notifyObservers()
-  }
+    print("Welcome to Tank-Commander\n")
 
-  def setUpGame(name1: String, name2: String, map: String): Unit = {
-    val player1 = Player(name1)
-    val player2 = Player(name2)
-    mapChosen = map
-    matchfield = GameFieldFactory.apply(mapChosen)
-    val tank1 = new TankModel()
-    val tank2 = new TankModel()
+    val player1 = Player.generatePlayer(1)
+    val player2 = Player.generatePlayer(2)
+    val tank1 = TankModel()
+    val tank2 = TankModel()
+    print("Choose your Map: Map 1 or Map 2" + "\n")
+    matchField = GameFieldFactory.apply(scala.io.StdIn.readLine())
     fillGameFieldWithTank((0, 5), tank1, (10, 5), tank2)
-    GameStatus.activePlayer = Option(player1)
-    GameStatus.passivePlayer = Option(player2)
-    GameStatus.activeTank = Option(tank1)
-    GameStatus.passiveTank = Option(tank2)
+    gameStatus = GameStatus(Individual(player1, tank1), Individual(player2, tank2))
     notifyObservers()
   }
 
   override def fillGameFieldWithTank(pos: (Int, Int), tank: TankModel, pos2: (Int, Int), tank2: TankModel): Unit = {
     tank.posC = pos
     tank2.posC = pos2
-    matchfield.mArray(pos._1)(pos._2).containsThisTank = Option(tank)
-    matchfield.mArray(pos2._1)(pos2._2).containsThisTank = Option(tank)
+    matchField.mArray(pos._1)(pos._2).containsThisTank = Option(tank)
+    matchField.mArray(pos2._1)(pos2._2).containsThisTank = Option(tank)
   }
 
   override def endTurnChangeActivePlayer(): Unit = {
@@ -85,7 +69,7 @@ class Controller @Inject()() extends Observable with Publisher with ControllerIn
     }
   }
 
-  override def matchfieldToString: String = matchfield.toString
+  override def matchfieldToString: String = matchField.toString
 
   /*
  * Undo manager
@@ -116,7 +100,7 @@ class Controller @Inject()() extends Observable with Publisher with ControllerIn
   }
 
   override def load(): Unit = {
-    matchfield = GameFieldFactory.apply(mapChosen)
+    matchField = GameFieldFactory.apply(mapChosen)
     fileIO.load(this)
     notifyObservers()
   }

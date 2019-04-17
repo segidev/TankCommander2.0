@@ -3,7 +3,8 @@ package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseIm
 
 import java.io.ByteArrayInputStream
 
-import de.htwg.se.tankcommander.controller.controllerComponent.GameStatus
+import de.htwg.se.tankcommander.model.gameFieldComponent.GameFieldFactory
+import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 import de.htwg.se.tankcommander.model.playerComponent.Player
 import org.scalatest.{FlatSpec, Matchers}

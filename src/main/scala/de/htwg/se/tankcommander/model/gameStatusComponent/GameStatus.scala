@@ -1,18 +1,11 @@
-package de.htwg.se.tankcommander.controller.controllerComponent
+package de.htwg.se.tankcommander.model.gameStatusComponent
 
-import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
-import de.htwg.se.tankcommander.model.playerComponent.Player
+import de.htwg.se.tankcommander.model.Individual
 
-case class GameStatus() {
-  var activePlayer: Option[Player] = Option(GameStatus.activePlayer.get.deepClone())
-  var passivePlayer: Option[Player] = Option(GameStatus.passivePlayer.get.deepClone())
-  var activeTank: Option[TankModel] = Option(GameStatus.activeTank.get.deepClone())
-  var passiveTank: Option[TankModel] = Option(GameStatus.passiveTank.get.deepClone())
-  var movesLeft: Boolean = GameStatus.movesLeft
-  var currentPlayerActions: Int = GameStatus.currentPlayerActions
-  var currentHitChance: Int = GameStatus.currentHitChance
+case class GameStatus(individual1: Individual, individual2: Individual) {
 }
 
+/*
 object GameStatus {
   var activePlayer: Option[Player] = None
   var passivePlayer: Option[Player] = None
@@ -62,5 +55,5 @@ object GameStatus {
     GameStatus.movesLeft = true
     GameStatus.currentPlayerActions = 2
     GameStatus.currentHitChance = 0
-  }
+  }/*
 }

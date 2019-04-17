@@ -2,8 +2,8 @@ package de.htwg.se.tankcommander.aview
 
 import java.awt.Dimension
 
-import de.htwg.se.tankcommander.controller.controllerComponent.GameStatus
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.util.Observer
 import javax.swing.ImageIcon
 
@@ -170,7 +170,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
       })
     }
   }
-  var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.matchfield.gridsX, controller.matchfield.gridsY)
+  var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.matchField.gridsX, controller.matchField.gridsY)
   visible = true
   centerOnScreen()
   var scrollBar: ScrollBar = scrollPanel.verticalScrollBar
@@ -191,13 +191,13 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
   }
 
   def paintGameField(controller: Controller): GridPanel = {
-    val gameField = new GridPanel(controller.matchfield.gridsX, controller.matchfield.gridsY) {
+    val gameField = new GridPanel(controller.matchField.gridsX, controller.matchField.gridsY) {
       border = LineBorder(java.awt.Color.BLACK, 2)
       for {
-        column <- 0 until controller.matchfield.gridsY
+        column <- 0 until controller.matchField.gridsY
       }
         for {
-          row <- 0 until controller.matchfield.gridsX
+          row <- 0 until controller.matchField.gridsX
         } {
           val cellPanel = new CellPanel(row, column, controller)
           cells(row)(column) = cellPanel
@@ -213,10 +213,10 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
 
   def redraw(): Unit = {
     for {
-      column <- 0 until controller.matchfield.gridsY
+      column <- 0 until controller.matchField.gridsY
     }
       for {
-        row <- 0 until controller.matchfield.gridsX
+        row <- 0 until controller.matchField.gridsX
       } {
         cells(row)(column)
       }

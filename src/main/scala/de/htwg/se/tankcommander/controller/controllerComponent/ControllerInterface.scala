@@ -1,5 +1,6 @@
 package de.htwg.se.tankcommander.controller.controllerComponent
 
+import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
 
 import scala.swing.Publisher

@@ -61,7 +61,7 @@ class CellPanel(row: Int, column: Int, controller: Controller) extends FlowPanel
     }
   }
 
-  private def myCell = controller.matchField.mArray(row)(column)
+  private def myCell = controller.gameField.matchfieldArray(row)(column)
 
   override def update: Unit = {
     this.label.text = cellText(row, column)

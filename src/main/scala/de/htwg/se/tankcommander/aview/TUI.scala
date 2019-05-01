@@ -1,8 +1,11 @@
 package de.htwg.se.tankcommander.aview
 
+import de.htwg.se.tankcommander.controller.{MsgEvent, UpdateEvent}
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.util.Observer
+
+import scala.swing.event.Event
 
 class TUI(controller: Controller) extends Observer {
   controller.add(this)
@@ -33,13 +36,16 @@ class TUI(controller: Controller) extends Observer {
     }
   }
 
-  override def update(): Unit = {
-    print(controller.matchfieldToString)
-    print("aktiver Spieler: " + GameStatus.activePlayer.get + " Hitpoints: " +
-      GameStatus.activeTank.get.hp + "\n" + "MovesLeft: " + GameStatus.currentPlayerActions + "\n" +
-      "passiver Spieler: " + GameStatus.passivePlayer.get + " Hitpoints: " +
-      GameStatus.passiveTank.get.hp + "\n")
+  override def update(event: Event): Unit = {
+    event match {
+      case event: MsgEvent => print(event.message)
+      case event: UpdateEvent =>
+        print(controller.matchfieldToString)
+        print("aktiver Spieler: " + GameStatus.activePlayer.get + " Hitpoints: " +
+          GameStatus.activeTank.get.hp + "\n" + "MovesLeft: " + GameStatus.currentPlayerActions + "\n" +
+          "passiver Spieler: " + GameStatus.passivePlayer.get + " Hitpoints: " +
+          GameStatus.passiveTank.get.hp + "\n")
+
+    }
   }
 }
-
-

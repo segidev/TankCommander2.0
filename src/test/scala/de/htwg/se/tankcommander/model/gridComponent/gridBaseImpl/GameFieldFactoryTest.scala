@@ -1,6 +1,5 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.tankcommander.model.gameFieldComponent.GameFieldFactory
 import org.scalatest.{FlatSpec, Matchers}
 
 class GameFieldFactoryTest extends FlatSpec with Matchers {
@@ -13,12 +12,12 @@ class GameFieldFactoryTest extends FlatSpec with Matchers {
     val gameField = GameFieldFactory.apply("Map 1")
     for (y <- 0 until gameField.gridsX) {
       for (x <- 0 until gameField.gridsY) {
-        assert(gameField.mArray(x)(y).isInstanceOf[Cell])
+        assert(gameField.matchfieldArray(x)(y).isInstanceOf[Cell])
       }
     }
     for (y <- 0 until gameField.gridsX) {
       for (x <- 0 until gameField.gridsY) {
-        assert(gameField.mArray(x)(y).isInstanceOf[Cell])
+        assert(gameField.matchfieldArray(x)(y).isInstanceOf[Cell])
       }
     }
   }
@@ -27,12 +26,12 @@ class GameFieldFactoryTest extends FlatSpec with Matchers {
     for (y <- 0 until gameField.gridsX) {
       for (x <- 0 until gameField.gridsY) {
         assert(
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Bush]] === true |
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Hill]] === true |
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Rock]] === true |
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Forest]] === true |
-          gameField.mArray(x)(y).cObstacle.isInstanceOf[Some[Water]] === true |
-            gameField.mArray(x)(y).cObstacle === None
+          gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Bush]] === true |
+          gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Hill]] === true |
+          gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Rock]] === true |
+          gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Forest]] === true |
+          gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Water]] === true |
+            gameField.matchfieldArray(x)(y).cObstacle === None
         )
       }
     }
@@ -41,15 +40,15 @@ class GameFieldFactoryTest extends FlatSpec with Matchers {
     val gameField = GameFieldFactory.apply("Map 1")
     for (y <- 0 until gameField.gridsX) {
       for (x <- 0 until gameField.gridsY) {
-        gameField.mArray(x)(y).cObstacle = Option(new Bush)
+        gameField.matchfieldArray(x)(y).cObstacle = Option(new Bush)
       }
     }
     val tank1 = new TankModel
     val tank2 = new TankModel
-    gameField.mArray(0)(0).containsThisTank = Option(tank1)
-    gameField.mArray(10)(10) = new Cell(10, 10)
-    gameField.mArray(10)(10).containsThisTank = Option(tank2)
-    gameField.mArray(9)(10) = new Cell(9, 10)
+    gameField.matchfieldArray(0)(0).containsThisTank = Option(tank1)
+    gameField.matchfieldArray(10)(10) = new Cell(10, 10)
+    gameField.matchfieldArray(10)(10).containsThisTank = Option(tank2)
+    gameField.matchfieldArray(9)(10) = new Cell(9, 10)
     assert(gameField.toString === "\n" +
       "T  B  B  B  B  B  B  B  B  B  B  \n" +
       "B  B  B  B  B  B  B  B  B  B  B  \n" +

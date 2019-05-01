@@ -11,14 +11,14 @@ class MoveCommand(controller: Controller, s: String) extends Command {
   var backupGameStatus: GameStatus = _
 
   override def doStep(): Unit = {
-    memento = controller.matchField.deepCopy
+    memento = controller.gameField.deepCopy
     backupGameStatus = controller.createGameStatusBackup
-    controller.matchField = new Mover(controller.matchField).moveTank(s)
+    controller.gameField = new Mover(controller.gameField).moveTank(s)
   }
 
   override def undoStep(): Unit = {
-    val new_memento = controller.matchField.deepCopy
-    controller.matchField = memento
+    val new_memento = controller.gameField.deepCopy
+    controller.gameField = memento
     memento = new_memento
 
     val new_memento2 = controller.createGameStatusBackup
@@ -27,8 +27,8 @@ class MoveCommand(controller: Controller, s: String) extends Command {
   }
 
   override def redoStep(): Unit = {
-    val new_memento = controller.matchField
-    controller.matchField = memento
+    val new_memento = controller.gameField
+    controller.gameField = memento
     memento = new_memento
 
     val new_memento2 = controller.createGameStatusBackup

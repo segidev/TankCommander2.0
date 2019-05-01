@@ -1,7 +1,10 @@
 package de.htwg.se.tankcommander.util
 
+
+import scala.swing.event.Event
+
 trait Observer {
-  def update(): Unit
+  def update(event: Event): Unit
 }
 
 class Observable {
@@ -11,5 +14,5 @@ class Observable {
 
   def remove(s: Observer): Unit = subscribers = subscribers.filterNot(o => o == s)
 
-  def notifyObservers(): Unit = subscribers.foreach(o => o.update())
+  def notifyObservers(event: Event): Unit = subscribers.foreach(o => o.update(event))
 }

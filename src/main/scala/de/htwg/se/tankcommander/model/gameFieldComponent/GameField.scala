@@ -1,21 +1,18 @@
 package de.htwg.se.tankcommander.model.gameFieldComponent
 
+import de.htwg.se.tankcommander.model.gameFieldComponent.Maps.MapOptions
 import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 
-case class GameField(mArray: Array[Array[Cell]])
+case class GameField(options: MapOptions)
   extends GameFieldInterface {
+  val matchfieldArray: Array[Array[Cell]] =  Array(Array())
 
-  //override val mArray: Array[Array[Cell]] = Array.ofDim[Cell](gridsX, gridsY)
-  fillGameFieldWithCells()
-  fillGameFieldCellsWithObstacles()
-
-  override def fillGameFieldWithCells(): Unit = {
     for (x <- 0 until gridsX) {
       for (y <- 0 until gridsY) {
-        mArray(x)(y) = new Cell(x, y)
+        matchfieldArray(x)(y) = new Cell(x, y, Option(new Bush),None)
       }
-    }
+
   }
 
   override def toString: String = {
@@ -23,14 +20,14 @@ case class GameField(mArray: Array[Array[Cell]])
     for (z <- 0 until gridsY) {
       output.append("\n")
       for (i <- 0 until gridsX) {
-        if (mArray(i)(z).cObstacle.isDefined) {
-          if (mArray(i)(z).containsThisTank.isDefined) {
+        if (matchfieldArray(i)(z).cObstacle.isDefined) {
+          if (matchfieldArray(i)(z).containsThisTank.isDefined) {
             output.append("T" + "  ")
           } else {
-            output.append(mArray(i)(z).cObstacle.get.shortName + "  ")
+            output.append(matchfieldArray(i)(z).cObstacle.get.shortName + "  ")
           }
         } else {
-          if (mArray(i)(z).containsThisTank.isDefined) {
+          if (matchfieldArray(i)(z).containsThisTank.isDefined) {
             output.append("T" + "  ")
           } else {
             output.append("o" + "  ")

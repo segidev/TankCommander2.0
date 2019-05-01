@@ -170,7 +170,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
       })
     }
   }
-  var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.matchField.gridsX, controller.matchField.gridsY)
+  var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.gameField.gridsX, controller.gameField.gridsY)
   visible = true
   centerOnScreen()
   var scrollBar: ScrollBar = scrollPanel.verticalScrollBar
@@ -191,13 +191,13 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
   }
 
   def paintGameField(controller: Controller): GridPanel = {
-    val gameField = new GridPanel(controller.matchField.gridsX, controller.matchField.gridsY) {
+    val gameField = new GridPanel(controller.gameField.gridsX, controller.gameField.gridsY) {
       border = LineBorder(java.awt.Color.BLACK, 2)
       for {
-        column <- 0 until controller.matchField.gridsY
+        column <- 0 until controller.gameField.gridsY
       }
         for {
-          row <- 0 until controller.matchField.gridsX
+          row <- 0 until controller.gameField.gridsX
         } {
           val cellPanel = new CellPanel(row, column, controller)
           cells(row)(column) = cellPanel
@@ -213,10 +213,10 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
 
   def redraw(): Unit = {
     for {
-      column <- 0 until controller.matchField.gridsY
+      column <- 0 until controller.gameField.gridsY
     }
       for {
-        row <- 0 until controller.matchField.gridsX
+        row <- 0 until controller.gameField.gridsX
       } {
         cells(row)(column)
       }

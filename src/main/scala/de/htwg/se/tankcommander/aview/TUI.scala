@@ -1,11 +1,9 @@
 package de.htwg.se.tankcommander.aview
 
-import de.htwg.se.tankcommander.controller.{MsgEvent, UpdateEvent}
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.tankcommander.controller.{CustomEvent, MsgEvent, UpdateEvent}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.util.Observer
-
-import scala.swing.event.Event
 
 class TUI(controller: Controller) extends Observer {
   controller.add(this)
@@ -13,7 +11,7 @@ class TUI(controller: Controller) extends Observer {
   def processInputLine(input: String): Unit = {
     input.toLowerCase match {
       case "start" => print("Das Spiel startet, macht euch bereit" + "\n")
-        controller.setUpGame()
+        controller.initGame()
       case "exit" =>
       case "end turn" => controller.endTurnChangeActivePlayer()
       case "undo" => controller.undo()
@@ -36,7 +34,7 @@ class TUI(controller: Controller) extends Observer {
     }
   }
 
-  override def update(event: Event): Unit = {
+  override def update(event: CustomEvent): Unit = {
     event match {
       case event: MsgEvent => print(event.message)
       case event: UpdateEvent =>

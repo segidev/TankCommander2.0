@@ -4,14 +4,14 @@ import de.htwg.se.tankcommander.model.gameFieldComponent.Maps.MapOptions
 import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 
-case class GameField(options: MapOptions)
+case class GameField(matchfieldArray: Array[Array[Cell]], options: MapOptions)
   extends GameFieldInterface {
-  val matchfieldArray: Array[Array[Cell]] =  Array(Array())
-
-    for (x <- 0 until gridsX) {
-      for (y <- 0 until gridsY) {
-        matchfieldArray(x)(y) = new Cell(x, y, Option(new Bush),None)
-      }
+  val gridsX = 11
+  val gridsY = 11
+  for (x <- 0 until gridsX) {
+    for (y <- 0 until gridsY) {
+      matchfieldArray(x)(y) = new Cell(x, y, Option(new Bush), None)
+    }
 
   }
 
@@ -37,14 +37,4 @@ case class GameField(options: MapOptions)
     }
     output.toString()
   }
-
-  /*  override def deepCopy: GameFieldInterface = {
-      val gameFieldClone: GameField = new GameField
-      for (x <- 0 until gridsX) {
-        for (y <- 0 until gridsY) {
-          gameFieldClone.mArray(x)(y) = this.mArray(x)(y).deepClone()
-        }
-      }
-      gameFieldClone
-    }*/
 }

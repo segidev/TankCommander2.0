@@ -2,6 +2,7 @@ package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseIm
 
 
 import java.io.ByteArrayInputStream
+
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 import de.htwg.se.tankcommander.model.playerComponent.Player
@@ -185,7 +186,7 @@ class ControllerTest extends FlatSpec with Matchers {
   }
   "SetupGame" should "set up a game correctly when parameters are given" in {
     val controller = new Controller
-    controller.setUpGame("p1", "p2", map = "Map 1")
+    controller.initGame("p1", "p2", map = "Map 1")
     assert(GameStatus.activePlayer.get.name === "p1")
     assert(GameStatus.passivePlayer.get.name === "p2")
     assert(controller.mapChosen === "Map 1")
@@ -196,7 +197,7 @@ class ControllerTest extends FlatSpec with Matchers {
     val in = new ByteArrayInputStream(("p1\np2\nMap 1\n").getBytes)
     System.setIn(in)
     Console.withIn(in){
-      controller.setUpGame()
+      controller.initGame()
     assert(GameStatus.activePlayer.get.name === "p1")
     assert(GameStatus.passivePlayer.get.name === "p2")
     assert(controller.mapChosen === "Map 1")}

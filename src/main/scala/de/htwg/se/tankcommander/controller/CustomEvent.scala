@@ -1,16 +1,14 @@
 package de.htwg.se.tankcommander.controller
 
-import scala.swing.event.Event
+trait CustomEvent
 
-trait MsgEvent {
+trait MsgEvent extends CustomEvent {
   val message: String
 }
-trait UpdateEvent
+
+trait UpdateEvent extends CustomEvent
 
 
 case class MapSelectionErrorEvent() extends MsgEvent {
   override val message: String = "Wrong Map selected. Please choose a valid map"
-}
-
-case class PrintGamefieldEvent() extends UpdateEvent{
 }

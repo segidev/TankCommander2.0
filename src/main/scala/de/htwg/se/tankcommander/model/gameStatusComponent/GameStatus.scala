@@ -2,7 +2,10 @@ package de.htwg.se.tankcommander.model.gameStatusComponent
 
 import de.htwg.se.tankcommander.model.Individual
 
-case class GameStatus(individual1: Individual, individual2: Individual) {
+case class GameStatus(activePlayer: Individual, individual1: Individual, individual2: Individual) {
+  def changeActivePlayer(): GameStatus =
+    if (activePlayer == individual1) copy(activePlayer = individual2)
+    else copy(activePlayer = individual1)
 }
 
 /*

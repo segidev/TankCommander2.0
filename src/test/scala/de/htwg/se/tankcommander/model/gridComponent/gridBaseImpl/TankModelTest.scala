@@ -9,7 +9,7 @@ class TankModelTest extends FlatSpec with Matchers {
 
     assert(
       testTank.tankBaseDamage === 10 & testTank.accuracy === 100 & testTank.hp === 100
-        & testTank.posC === (0, 0) & testTank.facing === "up"
+        & testTank.coordinates === (0, 0) & testTank.facing === "up"
     )
   }
   "deepClone" should "should clone a TankModel" in {
@@ -18,7 +18,7 @@ class TankModelTest extends FlatSpec with Matchers {
 
     assert(
       testTank.tankBaseDamage === testTank2.tankBaseDamage & testTank.accuracy === testTank2.accuracy
-        & testTank.hp === testTank2.hp & testTank.posC === testTank2.posC & testTank.facing === testTank2.facing &
+        & testTank.hp === testTank2.hp & testTank.coordinates === testTank2.posC & testTank.facing === testTank2.facing &
         testTank != testTank2
 
     )

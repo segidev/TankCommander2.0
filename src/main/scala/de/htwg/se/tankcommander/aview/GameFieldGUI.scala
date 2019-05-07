@@ -139,7 +139,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     }
   }
   val dimension = new Dimension(gridWidth, gridHeight)
-  controller.setUpGame(name1, name2, map)
+  controller.initGame(name1, name2, map)
 
   paintGameField(controller)
   //Main Panel

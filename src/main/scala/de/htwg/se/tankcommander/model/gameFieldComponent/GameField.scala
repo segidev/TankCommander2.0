@@ -7,25 +7,22 @@ import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 case class GameField(options: MapOptions) extends GameFieldInterface {
   val gridsX = 11
   val gridsY = 11
-  val gameFieldArray: Array[Array[Cell]]
+  val gameField: Array[Array[Cell]] = GameField(Array.ofDim[Cell](gridsX, gridsY))
 
-  options.foreach(obstacles => obstacles.foreach(
-    pair => {
-      gameFieldArray(pair._1._1, pair._1._2) = new Cell(pair._1._1, pair._1._2, Option(pair._2))
-    }
-  ))
-
-  for (x <- 0 until gridsX) {
-    for (y <- 0 until gridsY) {
-      gameFieldArray(x)(y) = new Cell(x, y, Option(new Bush))
-    }
+  def GameField(array: Array[Array[Cell]]): Array[Array[Cell]] = {
+    //TODO: Check if obstacle works
+    options.obstacles.foreach(x => x._1 match {
+      case obstacle => x._2.get.foreach(y => array(y._1)(y._2) = Cell(y._1, y._2, Option(obstacle())))
+    })
+    array
   }
 
   override def toString: String = {
     val output = new StringBuilder
-    for (z <- 0 until gridsY) {
-      output.append("\n")
-      for (i <- 0 until gridsX) {
+    gameField.foreach(x => x.foreach(y => output.append(y.toString)))
+
+    /*  for (z <- 0 to gridsY; i <- 0 to gridsX) {
+        output.append("\n")
         if (gameFieldArray(i)(z).cObstacle.isDefined) {
           if (gameFieldArray(i)(z).containsThisTank.isDefined) {
             output.append("T" + "  ")
@@ -39,8 +36,8 @@ case class GameField(options: MapOptions) extends GameFieldInterface {
             output.append("o" + "  ")
           }
         }
-      }
-    }
+
+      }*/
     output.toString()
   }
 }

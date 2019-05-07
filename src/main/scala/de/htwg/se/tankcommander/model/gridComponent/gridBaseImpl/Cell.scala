@@ -1,15 +1,9 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-class Cell(x: Int, y: Int, obstacle: Option[Obstacle]) {
+case class Cell(x: Int, y: Int, obstacle: Option[Obstacle]) {
 
-  /*  def deepClone(): Cell = {
-      val cellClone = new Cell(this.x, this.y)
-      if (this.cObstacle.isDefined) {
-        cellClone.cObstacle = Option(this.cObstacle.get.deepClone())
-      }
-      if (this.containsThisTank.isDefined) {
-        cellClone.containsThisTank = Option(this.containsThisTank.get.deepClone())
-      }
-      cellClone
-    }*/
+  override def toString: String = obstacle match {
+    case Some(o) => o.toString
+    case None => " o "
+  }
 }

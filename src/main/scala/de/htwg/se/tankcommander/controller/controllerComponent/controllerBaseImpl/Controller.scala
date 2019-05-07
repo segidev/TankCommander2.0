@@ -37,7 +37,7 @@ class Controller @Inject()() extends Observable with Publisher with ControllerIn
   def initGameStatus(mapName: String, player1: Player, player2: Player, tank1: TankModel, tank2: TankModel): Unit =
     MapSelector.select(mapName) match {
       case Some(map) =>
-        gameField = new GameField(map)
+        gameField = GameField(map)
         fillGameFieldWithTank((0, 5), tank1, (10, 5), tank2)
         val player1 = Individual(player1, tank1)
         gameStatus = GameStatus(player1, player1, Individual(player2, tank2))

@@ -1,6 +1,5 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-
 trait Obstacle {
   val name: String
   val desc: String
@@ -9,11 +8,10 @@ trait Obstacle {
   val hitMalus: Int
   val imagePath: String
 
-  def deepClone(): Obstacle
-
+  override def toString: String = shortName
 }
 
-class Bush extends Obstacle {
+case class Bush() extends Obstacle {
   override val name: String = "Gebüsche"
   override val desc: String = "Gebüsche verringern die Präzision von Schüssen"
   override val passable: Boolean = true
@@ -21,11 +19,9 @@ class Bush extends Obstacle {
   override val hitMalus: Int = 10
   override val imagePath: String = "src/main/ressources/icons/bush.png"
 
-  override def deepClone(): Obstacle = new Bush
-
 }
 
-class Hill extends Obstacle {
+case class Hill() extends Obstacle {
   override val name: String = "Hügel"
   override val desc: String = "Ermöglichen direkten Beschuss mapweit"
   override val passable: Boolean = true
@@ -33,11 +29,9 @@ class Hill extends Obstacle {
   override val hitMalus: Int = 20
   override val imagePath: String = "src/main/ressources/icons/mountain.png"
 
-  override def deepClone(): Obstacle = new Hill
-
 }
 
-class Stone extends Obstacle {
+case class Stone() extends Obstacle {
   override val name: String = "Stein"
   override val desc: String = "Steine dienen als Hinderniss und können weder passiert noch durschossen werden"
   override val passable: Boolean = false
@@ -45,11 +39,9 @@ class Stone extends Obstacle {
   override val hitMalus: Int = 100
   override val imagePath: String = "src/main/ressources/icons/rock.png"
 
-  override def deepClone(): Obstacle = new Stone
-
 }
 
-class Forest extends Obstacle {
+case class Forest() extends Obstacle {
   override val name: String = "Wald"
   override val desc: String = "Wälder liefern Schutz und verringern die Hitchance des Gegners"
   override val passable: Boolean = true
@@ -57,19 +49,15 @@ class Forest extends Obstacle {
   override val hitMalus: Int = 10
   override val imagePath: String = "src/main/ressources/icons/tree.png"
 
-  override def deepClone(): Obstacle = new Forest
-
 }
 
-class Water extends Obstacle {
+case class Water() extends Obstacle {
   override val name: String = "Wasser"
   override val desc: String = "Wasser kann nicht passiert werden"
   override val passable: Boolean = false
   override val shortName: String = "W"
   override val hitMalus: Int = 0
   override val imagePath: String = "src/main/ressources/icons/water.png"
-
-  override def deepClone(): Obstacle = new Water
 
 }
 

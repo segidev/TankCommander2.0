@@ -1,6 +1,6 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-class Cell(x: Int, y: Int, obstacle: Option[Obstacle], containsThisTank: Option[TankModel]) {
+class Cell(x: Int, y: Int, obstacle: Option[Obstacle]) {
 
   /*  def deepClone(): Cell = {
       val cellClone = new Cell(this.x, this.y)

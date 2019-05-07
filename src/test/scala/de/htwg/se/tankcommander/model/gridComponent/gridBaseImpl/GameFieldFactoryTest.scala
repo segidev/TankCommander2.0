@@ -28,7 +28,7 @@ class GameFieldFactoryTest extends FlatSpec with Matchers {
         assert(
           gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Bush]] === true |
           gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Hill]] === true |
-          gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Rock]] === true |
+          gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Stone]] === true |
           gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Forest]] === true |
           gameField.matchfieldArray(x)(y).cObstacle.isInstanceOf[Some[Water]] === true |
             gameField.matchfieldArray(x)(y).cObstacle === None

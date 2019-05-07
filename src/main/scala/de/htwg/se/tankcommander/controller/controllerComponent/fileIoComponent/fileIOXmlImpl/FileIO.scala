@@ -91,9 +91,9 @@ class FileIO() extends FileIOInterface {
     GameStatus.activeTank = Option(tank1)
     GameStatus.passiveTank = Option(tank2)
     GameStatus.movesLeft = (file \\ "game" \ "movesLeft").text.replaceAll(" ", "").toBoolean
-    controller.gameField.matchfieldArray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
+    controller.gameField.gameFieldArray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
       .containsThisTank = Option(tank1)
-    controller.gameField.matchfieldArray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
+    controller.gameField.gameFieldArray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
       .containsThisTank = Option(tank2)
   }
 }

@@ -6,6 +6,7 @@ import de.htwg.se.tankcommander.controller.MapSelectionErrorEvent
 import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
 import de.htwg.se.tankcommander.model.Individual
+import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.model.gameFieldComponent.Maps.MapSelector
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
@@ -36,7 +37,7 @@ class Controller @Inject()() extends Observable with Publisher with ControllerIn
   def initGameStatus(mapName: String, player1: Player, player2: Player, tank1: TankModel, tank2: TankModel): Unit =
     MapSelector.select(mapName) match {
       case Some(map) =>
-        gameField = GameField(map)
+        gameField = new GameField(map)
         fillGameFieldWithTank((0, 5), tank1, (10, 5), tank2)
         val player1 = Individual(player1, tank1)
         gameStatus = GameStatus(player1, player1, Individual(player2, tank2))
@@ -49,8 +50,8 @@ class Controller @Inject()() extends Observable with Publisher with ControllerIn
   override def fillGameFieldWithTank(pos: (Int, Int), tank: TankModel, pos2: (Int, Int), tank2: TankModel): Unit = {
     tank.coordinates = pos
     tank2.coordinates = pos2
-    gameField.matchfieldArray(pos._1)(pos._2).containsThisTank = Option(tank)
-    gameField.matchfieldArray(pos2._1)(pos2._2).containsThisTank = Option(tank)
+    gameField.gameFieldArray(pos._1)(pos._2).containsThisTank = Option(tank)
+    gameField.gameFieldArray(pos2._1)(pos2._2).containsThisTank = Option(tank)
   }
 
   override def endTurnChangeActivePlayer(): Unit = {

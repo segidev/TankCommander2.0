@@ -7,28 +7,28 @@ import de.htwg.se.tankcommander.util.Coordinate
 
 import scala.collection.mutable.ListBuffer
 
-object Mover {
+case class Mover(gameFieldArray) {
   def moveTank(input: String, gameField: GameFieldInterface, individual: Individual): GameFieldInterface = {
-    var matchfieldArray = gameField.matchfieldArray
+    var matchfieldArray = gameField.gameFieldArray
     var positionOfActiveTank = individual.tank.coordinates
     input match {
       case "up" =>
         positionOfActiveTank = individual.tank.coordinates.sub(y = 1)
-        matchfieldArray = MoveTankOnGameField(positionOfActiveTank, individual.tank)
+        matchfieldArray = moveTankOnGameField(positionOfActiveTank, individual.tank)
       case "down" =>
         positionOfActiveTank = individual.tank.coordinates.add(y = 1)
-        matchfieldArray = MoveTankOnGameField(positionOfActiveTank, individual.tank)
+        matchfieldArray = moveTankOnGameField(positionOfActiveTank, individual.tank)
       case "left" =>
         positionOfActiveTank = individual.tank.coordinates.sub(x = 1)
-        matchfieldArray = MoveTankOnGameField(positionOfActiveTank, individual.tank)
+        matchfieldArray = moveTankOnGameField(positionOfActiveTank, individual.tank)
       case "right" =>
         positionOfActiveTank = individual.tank.coordinates.add(x = 1)
-        matchfieldArray = MoveTankOnGameField(positionOfActiveTank, individual.tank)
+        matchfieldArray = moveTankOnGameField(positionOfActiveTank, individual.tank)
     }
     individual = individual.copy(tank = new TankModel())
   }
 
-  def MoveTankOnGameField(positionOfActiveTank: Coordinate, activeTank: TankModel): GameFieldInterface = {
+  def moveTankOnGameField(positionOfActiveTank: Coordinate, activeTank: TankModel): GameFieldInterface = {
     if (movePossible(positionOfActiveTank)) {
       gameField.matchfieldArray(activeTank.coordinates._1)(activeTank.coordinates._2).containsThisTank = None
       activeTank.coordinates = pos

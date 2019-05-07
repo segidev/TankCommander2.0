@@ -37,7 +37,7 @@ class Hill extends Obstacle {
 
 }
 
-class Rock extends Obstacle {
+class Stone extends Obstacle {
   override val name: String = "Stein"
   override val desc: String = "Steine dienen als Hinderniss und können weder passiert noch durschossen werden"
   override val passable: Boolean = false
@@ -45,7 +45,7 @@ class Rock extends Obstacle {
   override val hitMalus: Int = 100
   override val imagePath: String = "src/main/ressources/icons/rock.png"
 
-  override def deepClone(): Obstacle = new Rock
+  override def deepClone(): Obstacle = new Stone
 
 }
 

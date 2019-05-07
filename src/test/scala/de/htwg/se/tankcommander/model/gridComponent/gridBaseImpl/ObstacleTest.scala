@@ -6,7 +6,7 @@ class ObstacleTest extends FlatSpec with Matchers {
   "Different Obstacles" should "initialize as their actual types" in {
     val aBush = new Bush
     val aHill = new Hill
-    val aRock = new Rock
+    val aRock = new Stone
     val aForest = new Forest
     val aWater = new Water
     assert(aBush.name.equals("Gebüsche") & aBush.desc.equals("Gebüsche verringern die Präzision von Schüssen")

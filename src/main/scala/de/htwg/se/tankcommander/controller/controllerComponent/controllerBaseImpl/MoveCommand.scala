@@ -1,38 +1,45 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
 
+import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
-import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.Mover
 import de.htwg.se.tankcommander.util.Command
 
-//Success or not yet to be implemented
-class MoveCommand(controller: Controller, s: String) extends Command {
-  var memento: GameFieldInterface = _
-  var backupGameStatus: GameStatus = _
+class MoveCommand(controller: Controller, command: String) extends Command {
+  var backupGameField: Option[GameField] = None
+  var backupGameStatus: Option[GameStatus] = None
 
   override def doStep(): Unit = {
-    memento = controller.gameField.deepCopy
+    backupGameField = controller.createGameFieldBackup
     backupGameStatus = controller.createGameStatusBackup
-    controller.gameStatus.activePlayer = Mover.moveTank(s, controller.gameStatus.activePlayer)
+    // TODO: Move
+    // controller.gameStatus.activePlayer = Mover.moveTank(command, controller.gameStatus.activePlayer)
   }
 
   override def undoStep(): Unit = {
-    val new_memento = controller.gameField.deepCopy
-    controller.gameField = memento
-    memento = new_memento
+    val memento = controller.createGameFieldBackup
+    backupGameField match {
+      case Some(gf) => controller.gameField = gf
+    }
+    backupGameField = memento
 
     val new_memento2 = controller.createGameStatusBackup
-    GameStatus.restoreGameStatus(backupGameStatus)
+    backupGameStatus match {
+      case Some(gs) => controller.gameStatus = gs
+    }
     backupGameStatus = new_memento2
   }
 
   override def redoStep(): Unit = {
-    val new_memento = controller.gameField
-    controller.gameField = memento
-    memento = new_memento
+    val memento = controller.createGameFieldBackup
+    backupGameField match {
+      case Some(gf) => controller.gameField = gf
+    }
+    backupGameField = memento
 
     val new_memento2 = controller.createGameStatusBackup
-    GameStatus.restoreGameStatus(backupGameStatus)
+    backupGameStatus match {
+      case Some(gs) => controller.gameStatus = gs
+    }
     backupGameStatus = new_memento2
   }
 }

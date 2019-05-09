@@ -1,5 +1,6 @@
 package de.htwg.se.tankcommander.aview
 
+import de.htwg.se.tankcommander.controller.CustomEvent
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.tankcommander.util.Observer
 import javax.swing.ImageIcon
@@ -38,47 +39,53 @@ class CellPanel(row: Int, column: Int, controller: Controller) extends FlowPanel
   //   repaint
   // }
 
-  def cellIcon(row: Int, col: Int): Label = if (myCell.cObstacle.isDefined) {
-    if (myCell.containsThisTank.isDefined) {
-      new Label {
-        new ImageIcon("src/main/ressources/icons/tank.png")
-      }
-    } else {
-      new Label {
-        new ImageIcon(myCell.cObstacle.get.imagePath)
-      }
-    }
-  } else {
-    if (myCell.containsThisTank.isDefined) {
-      new Label {
-        new ImageIcon("src/main/ressources/icons/tank.png")
-      }
-    } else {
-      new Label {
-        new ImageIcon("src/main/ressources/icons/grass.png")
-      }
-
-    }
-  }
-
   private def myCell = controller.gameField.gameFieldArray(row)(column)
 
-  override def update: Unit = {
+  def cellIcon(row: Int, col: Int): Label = new Label {
+    new ImageIcon("src/main/ressources/icons/tank.png")
+  }
+
+  //    if (myCell.cObstacle.isDefined) {
+  //    if (myCell.containsThisTank.isDefined) {
+  //      new Label {
+  //        new ImageIcon("src/main/ressources/icons/tank.png")
+  //      }
+  //    } else {
+  //      new Label {
+  //        new ImageIcon(myCell.cObstacle.get.imagePath)
+  //      }
+  //    }
+  //  } else {
+  //    if (myCell.containsThisTank.isDefined) {
+  //      new Label {
+  //        new ImageIcon("src/main/ressources/icons/tank.png")
+  //      }
+  //    } else {
+  //      new Label {
+  //        new ImageIcon("src/main/ressources/icons/grass.png")
+  //      }
+  //
+  //    }
+  //  }
+
+  override def update(event: CustomEvent): Unit = {
     this.label.text = cellText(row, column)
     repaint
   }
 
-  def cellText(row: Int, col: Int): String = if (myCell.cObstacle.isDefined) {
-    if (myCell.containsThisTank.isDefined) {
-      "T"
-    } else {
-      myCell.cObstacle.get.shortName
-    }
-  } else {
-    if (myCell.containsThisTank.isDefined) {
-      "T"
-    } else {
-      "o"
-    }
-  }
+  def cellText(row: Int, col: Int): String = "T"
+
+  //    if (myCell.cObstacle.isDefined) {
+  //    if (myCell.containsThisTank.isDefined) {
+  //      "T"
+  //    } else {
+  //      myCell.cObstacle.get.shortName
+  //    }
+  //  } else {
+  //    if (myCell.containsThisTank.isDefined) {
+  //      "T"
+  //    } else {
+  //      "o"
+  //    }
+  //  }
 }

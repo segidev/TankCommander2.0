@@ -4,6 +4,6 @@ case class Cell(x: Int, y: Int, obstacle: Option[Obstacle]) {
 
   override def toString: String = obstacle match {
     case Some(o) => o.toString
-    case None => " o "
+    case None => "O"
   }
 }

@@ -3,7 +3,7 @@ package de.htwg.se.tankcommander.aview
 import java.awt.Dimension
 
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
+import de.htwg.se.tankcommander.controller.{CustomEvent, MsgEvent, UpdateEvent}
 import de.htwg.se.tankcommander.util.Observer
 import javax.swing.ImageIcon
 
@@ -133,13 +133,14 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
         messages.append("\nPlease change seats.")
     }
     give_up.reactions += {
-      case ButtonClicked(`give_up`) => GameStatus.endGame()
-        messages.append("\n" + GameStatus.activePlayer.toString + " gave up, \n" + GameStatus.passivePlayer.toString
+      case ButtonClicked(`give_up`) => controller.endGame()
+        messages.append("\n" + controller.gameStatus.activePlayer + " gave up, \n" + controller.gameStatus.passivePlayer
           + " has won!")
     }
   }
   val dimension = new Dimension(gridWidth, gridHeight)
-  controller.initGame(name1, name2, map)
+  // TODO: Map wählen in GUI
+  controller.initGame()
 
   paintGameField(controller)
   //Main Panel
@@ -207,8 +208,11 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     gameField
   }
 
-  override def update(): Unit = {
-    redraw()
+  override def update(event: CustomEvent): Unit = {
+    event match {
+      case event: MsgEvent => print(event.message)
+      case event: UpdateEvent => redraw()
+    }
   }
 
   def redraw(): Unit = {
@@ -220,10 +224,12 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
       } {
         cells(row)(column)
       }
-    statusLine.text = "aktiver Spieler: " + GameStatus.activePlayer.get + " Hitpoints: " +
-      GameStatus.activeTank.get.hp + "\n" + "MovesLeft: " + GameStatus.currentPlayerActions + "\n" +
-      "passiver Spieler: " + GameStatus.passivePlayer.get + " Hitpoints: " +
-      GameStatus.passiveTank.get.hp + "\n" + "Hitchance: " + GameStatus.currentHitChance
+    statusLine.text = "Aktiver Spieler: " + controller.gameStatus.activePlayer + " Hitpoints: " +
+      controller.gameStatus.activePlayer.tank.hp + "\n" + "MovesLeft: " + controller.gameStatus.activePlayer.movesLeft + "\n" +
+      "Passiver Spieler: " + controller.gameStatus.passivePlayer + " Hitpoints: " +
+      controller.gameStatus.passivePlayer.tank.hp + "\n"
+    // TODO: Hitchance berechnen und anzeigen
+    //      "Hitchance: " + GameStatus.currentHitChance
     repaint
   }
 }

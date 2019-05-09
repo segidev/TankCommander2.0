@@ -1,99 +1,92 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.fileIOXmlImpl
 
-import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
+import java.io._
+
+import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
+import de.htwg.se.tankcommander.model.Individual
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
 import de.htwg.se.tankcommander.model.playerComponent.Player
+import de.htwg.se.tankcommander.util.Coordinate
 
 import scala.xml.{Elem, PrettyPrinter, XML}
 
-class FileIO() extends FileIOInterface {
-  def saveXML(gamefield: GameFieldInterface): Unit = {
-    XML.save("src/main/ressources/savegame.xml", gameStateToXML())
-  }
-
-  def gameStateToXML(): Elem = {
-    <game>
-      <aPlayer>
-        {GameStatus.activePlayer.get.toString}
-      </aPlayer>
-      <pPlayer>
-        {GameStatus.passivePlayer.get.toString}
-      </pPlayer>
-      <movesCount>
-        {GameStatus.currentPlayerActions}
-      </movesCount>
-      <hitchance>
-        {GameStatus.currentHitChance}
-      </hitchance>
-      <posATankX>
-        {GameStatus.activeTank.get.posC._1}
-      </posATankX>
-      <posATankY>
-        {GameStatus.activeTank.get.posC._2}
-      </posATankY>
-      <posPTankX>
-        {GameStatus.passiveTank.get.posC._1}
-      </posPTankX>
-      <posPTankY>
-        {GameStatus.passiveTank.get.posC._2}
-      </posPTankY>
-      <aTankHP>
-        {GameStatus.activeTank.get.hp}
-      </aTankHP>
-      <pTankHP>
-        {GameStatus.passiveTank.get.hp}
-      </pTankHP>
-      <aTankFacing>
-        {GameStatus.activeTank.get.facing}
-      </aTankFacing>
-      <pTankFacing>
-        {GameStatus.passiveTank.get.facing}
-      </pTankFacing>
-      <currentHS>
-        {GameStatus.currentHitChance}
-      </currentHS>
-      <movesLeft>
-        {GameStatus.movesLeft}
-      </movesLeft>
-    </game>
-  }
-
-  override def save(): Unit = saveString()
-
-  def saveString(): Unit = {
-    import java.io._
+class FileIO extends FileIOInterface {
+  override def save(controller: ControllerInterface): Unit = {
     val file = new File("src/main/ressources/savegame.xml")
     file.createNewFile()
     val pw = new PrintWriter(file)
     val prettyPrinter = new PrettyPrinter(120, 4)
-    val xml = prettyPrinter.format(gameStateToXML())
+    val xml = prettyPrinter.format(gameStateToXML(controller))
     pw.write(xml)
     pw.close()
   }
 
-  override def load(controller: Controller): Unit = {
+  def gameStateToXML(controller: ControllerInterface): Elem = {
+    <game>
+      <aPlayer>
+        {controller.gameStatus.activePlayer.player.name}
+      </aPlayer>
+      <pPlayer>
+        {controller.gameStatus.passivePlayer.player.name}
+      </pPlayer>
+      <movesLeft>
+        {controller.gameStatus.activePlayer.movesLeft}
+      </movesLeft>
+      <hitchance>
+        {1}
+        // controller.gameStatus.activePlayer.tank
+      </hitchance>
+      <posATankX>
+        {controller.gameStatus.activePlayer.tank.coordinates.x}
+      </posATankX>
+      <posATankY>
+        {controller.gameStatus.activePlayer.tank.coordinates.y}
+      </posATankY>
+      <posPTankX>
+        {controller.gameStatus.passivePlayer.tank.coordinates.x}
+      </posPTankX>
+      <posPTankY>
+        {controller.gameStatus.passivePlayer.tank.coordinates.y}
+      </posPTankY>
+      <aTankHP>
+        {controller.gameStatus.activePlayer.tank.hp}
+      </aTankHP>
+      <pTankHP>
+        {controller.gameStatus.passivePlayer.tank.hp}
+      </pTankHP>
+    </game>
+  }
+
+  override def load(controller: ControllerInterface): GameStatus = {
     val file = XML.loadFile("src/main/ressources/savegame.xml")
-    GameStatus.activePlayer = Option(Player((file \\ "game" \\ "aPlayer").text))
-    GameStatus.passivePlayer = Option(Player((file \\ "game" \\ "pPlayer").text))
-    GameStatus.currentPlayerActions = (file \\ "game" \\ "movesCount").text.replaceAll(" ", "").toInt
-    GameStatus.currentHitChance = (file \\ "game" \ "hitchance").text.replaceAll(" ", "").toInt
-    val tank1: TankModel = new TankModel((file \\ "game" \ "aTankHP").text.replaceAll(" ", "").toInt,
-      ((file \\ "game" \ "posATankX").text.replaceAll(" ", "").toInt,
-        (file \\ "game" \ "posATankY").text.replaceAll(" ", "").toInt),
-      (file \\ "game" \ "aTankFacing").text.replaceAll(" ", ""))
-    val tank2: TankModel = new TankModel((file \\ "game" \ "pTankHP").text.replaceAll(" ", "").toInt,
-      ((file \\ "game" \ "posPTankX").text.replaceAll(" ", "").toInt,
-        (file \\ "game" \ "posPTankY").text.replaceAll(" ", "").toInt),
-      (file \\ "game" \ "pTankFacing").text.replaceAll(" ", ""))
-    GameStatus.activeTank = Option(tank1)
-    GameStatus.passiveTank = Option(tank2)
-    GameStatus.movesLeft = (file \\ "game" \ "movesLeft").text.replaceAll(" ", "").toBoolean
-    controller.gameField.gameFieldArray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
-      .containsThisTank = Option(tank1)
-    controller.gameField.gameFieldArray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
-      .containsThisTank = Option(tank2)
+    val activePlayer = Individual(
+      Player((file \\ "game" \\ "aPlayer").text),
+      TankModel(
+        Coordinate(
+          (file \\ "game" \ "posATankX").text.replaceAll(" ", "").toInt,
+          (file \\ "game" \ "posATankY").text.replaceAll(" ", "").toInt
+        )
+      ),
+      (file \\ "game" \\ "movesLeft").text.replaceAll(" ", "").toInt
+    )
+    val passivePlayer = Individual(
+      Player((file \\ "game" \\ "pPlayer").text),
+      TankModel(
+        Coordinate(
+          (file \\ "game" \ "posPTankX").text.replaceAll(" ", "").toInt,
+          (file \\ "game" \ "posPTankY").text.replaceAll(" ", "").toInt
+        )
+      )
+    )
+
+    controller.gameStatus.copy(activePlayer, passivePlayer)
+
+    //    GameStatus.currentHitChance = (file \\ "game" \ "hitchance").text.replaceAll(" ", "").toInt
+    //    controller.gameField.gameFieldArray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
+    //      .containsThisTank = Option(tank1)
+    //    controller.gameField.gameFieldArray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
+    //      .containsThisTank = Option(tank2)
   }
 }

@@ -5,7 +5,7 @@ import de.htwg.se.tankcommander.controller.CustomEvent
 import scala.swing.event.Event
 
 trait Observer {
-  def update(event: Event): Unit
+  def update(event: CustomEvent): Unit
 }
 
 class Observable {

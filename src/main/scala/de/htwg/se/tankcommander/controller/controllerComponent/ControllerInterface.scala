@@ -1,22 +1,29 @@
 package de.htwg.se.tankcommander.controller.controllerComponent
 
+import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
+import de.htwg.se.tankcommander.util.UndoManager
 
 import scala.swing.Publisher
 
 trait ControllerInterface extends Publisher {
+  var undoManager: UndoManager
+  var gameField: GameField
+  var gameStatus: GameStatus
+
   def initGame(): Unit
 
-  def fillGameFieldWithTank(pos: (Int, Int), tank: TankModel, pos2: (Int, Int), tank2: TankModel): Unit
+  def endGame(): Unit
 
   def endTurnChangeActivePlayer(): Unit
 
-  def createGameStatusBackup: GameStatus
+  def createGameStatusBackup: Option[GameStatus]
+
+  def createGameFieldBackup: Option[GameField]
 
   def checkIfPlayerHasMovesLeft(): Boolean
 
-  def matchfieldToString: String
+  def gameFieldToString: String
 
   def move(s: String): Unit
 

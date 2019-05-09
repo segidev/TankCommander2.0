@@ -2,14 +2,13 @@ package de.htwg.se.tankcommander.model.gameStatusComponent
 
 import de.htwg.se.tankcommander.model.Individual
 
-case class GameStatus(activePlayer: Individual, individual1: Individual, individual2: Individual) {
-  def changeActivePlayer(): GameStatus =
-    if (activePlayer == individual1) copy(activePlayer = individual2)
-    else copy(activePlayer = individual1)
+case class GameStatus(activePlayer: Individual, passivePlayer: Individual) {
+  def activePlayerHasMovesLeft(): Option[Boolean] = Option(activePlayer.movesLeft > 0)
+
+  def changeActivePlayer(): GameStatus = copy(activePlayer = passivePlayer, passivePlayer = activePlayer)
 }
 
-/*
-object GameStatus {
+/*object GameStatus {
   var activePlayer: Option[Player] = None
   var passivePlayer: Option[Player] = None
   var activeTank: Option[TankModel] = None
@@ -58,5 +57,5 @@ object GameStatus {
     GameStatus.movesLeft = true
     GameStatus.currentPlayerActions = 2
     GameStatus.currentHitChance = 0
-  }/*
-}
+  }
+}*/

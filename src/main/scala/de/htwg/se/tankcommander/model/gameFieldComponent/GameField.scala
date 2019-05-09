@@ -7,37 +7,36 @@ import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 case class GameField(options: MapOptions) extends GameFieldInterface {
   val gridsX = 11
   val gridsY = 11
-  val gameField: Array[Array[Cell]] = GameField(Array.ofDim[Cell](gridsX, gridsY))
+  val gameFieldArray: Array[Array[Cell]] = generateGameField()
 
-  def GameField(array: Array[Array[Cell]]): Array[Array[Cell]] = {
-    //TODO: Check if obstacle works
+  override def generateGameField(): Array[Array[Cell]] = {
+    val array = Array.ofDim[Cell](gridsX, gridsY).zipWithIndex.map {
+      case (yArray, x) => yArray.zipWithIndex.map {
+        case (_, y) => Cell(x, y, None)
+      }
+    }
     options.obstacles.foreach(x => x._1 match {
-      case obstacle => x._2.get.foreach(y => array(y._1)(y._2) = Cell(y._1, y._2, Option(obstacle())))
+      case obstacle => x._2 match {
+        case Some(coordinates) => coordinates.foreach(
+          coordinate => array(coordinate.x)(coordinate.y) = Cell(coordinate.x, coordinate.y, Option(obstacle))
+        )
+        case None =>
+      }
     })
     array
   }
 
   override def toString: String = {
     val output = new StringBuilder
-    gameField.foreach(x => x.foreach(y => output.append(y.toString)))
-
-    /*  for (z <- 0 to gridsY; i <- 0 to gridsX) {
-        output.append("\n")
-        if (gameFieldArray(i)(z).cObstacle.isDefined) {
-          if (gameFieldArray(i)(z).containsThisTank.isDefined) {
-            output.append("T" + "  ")
-          } else {
-            output.append(gameFieldArray(i)(z).cObstacle.get.shortName + "  ")
-          }
-        } else {
-          if (gameFieldArray(i)(z).containsThisTank.isDefined) {
-            output.append("T" + "  ")
-          } else {
-            output.append("o" + "  ")
+    gameFieldArray.zipWithIndex.foreach {
+      case (yArray, _) =>
+        yArray.zipWithIndex.foreach {
+          case (cell, y) => (y + 1) % gridsX match {
+            case 0 => output.append(cell + "\n")
+            case _ => output.append(cell + " ")
           }
         }
-
-      }*/
+    }
     output.toString()
   }
 }

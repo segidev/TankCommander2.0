@@ -85,7 +85,7 @@ class ControllerTest extends FlatSpec with Matchers {
     gameField.matchfieldArray(9)(10) = new Cell(9, 10)
     val controller = new Controller(gameField)
     val gameFieldtoString = controller.toString
-    assert(controller.matchfieldToString === "\n" +
+    assert(controller.gameFieldToString === "\n" +
       "T  B  B  B  B  B  B  B  B  B  B  \n" +
       "B  B  B  B  B  B  B  B  B  B  B  \n" +
       "B  B  B  B  B  B  B  B  B  B  B  \n" +

@@ -7,9 +7,9 @@ case class Coordinate(x: Int, y: Int) {
 
   def onSameLine(coordinate: Coordinate): Option[Coordinate] = {
     if (this.x == coordinate.x) {
-      Option(Coordinate(this.x, math.abs(this.y - coordinate.y)))
+      Option(Coordinate(this.x, this.y - coordinate.y))
     } else if (this.y == coordinate.y) {
-      Option(Coordinate(math.abs(this.x - coordinate.x), this.y))
+      Option(Coordinate(this.x - coordinate.x, this.y))
     } else {
       None
     }

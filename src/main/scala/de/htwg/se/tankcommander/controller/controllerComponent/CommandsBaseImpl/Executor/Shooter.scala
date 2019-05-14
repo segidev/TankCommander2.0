@@ -1,6 +1,4 @@
-package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
-
-import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
+package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor
 
 class Shooter {
 //  def shoot(): Unit = {

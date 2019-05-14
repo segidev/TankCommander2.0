@@ -1,7 +1,7 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
+package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl
 
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.util.Command
 
 class ShootCommand(controller: Controller) extends Command {
   var backupGameStatus: Option[GameStatus] = None

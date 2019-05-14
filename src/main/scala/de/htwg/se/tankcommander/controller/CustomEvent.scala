@@ -1,6 +1,6 @@
 package de.htwg.se.tankcommander.controller
 
-import de.htwg.se.tankcommander.model.Individual
+import de.htwg.se.tankcommander.model.IndividualComponent.Individual
 
 trait CustomEvent
 

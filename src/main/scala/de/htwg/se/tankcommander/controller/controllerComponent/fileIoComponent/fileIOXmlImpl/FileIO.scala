@@ -4,10 +4,8 @@ import java.io._
 
 import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
-import de.htwg.se.tankcommander.model.Individual
+import de.htwg.se.tankcommander.model.IndividualComponent.{Individual, Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
-import de.htwg.se.tankcommander.model.playerComponent.Player
 import de.htwg.se.tankcommander.util.Coordinate
 
 import scala.xml.{Elem, PrettyPrinter, XML}
@@ -63,7 +61,7 @@ class FileIO extends FileIOInterface {
     val file = XML.loadFile("src/main/ressources/savegame.xml")
     val activePlayer = Individual(
       Player((file \\ "game" \\ "aPlayer").text),
-      TankModel(
+      Tank(
         Coordinate(
           (file \\ "game" \ "posATankX").text.replaceAll(" ", "").toInt,
           (file \\ "game" \ "posATankY").text.replaceAll(" ", "").toInt
@@ -73,7 +71,7 @@ class FileIO extends FileIOInterface {
     )
     val passivePlayer = Individual(
       Player((file \\ "game" \\ "pPlayer").text),
-      TankModel(
+      Tank(
         Coordinate(
           (file \\ "game" \ "posPTankX").text.replaceAll(" ", "").toInt,
           (file \\ "game" \ "posPTankY").text.replaceAll(" ", "").toInt

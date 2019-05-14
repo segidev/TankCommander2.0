@@ -3,14 +3,13 @@ package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseIm
 import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.se.tankcommander.TankCommanderModule
 import de.htwg.se.tankcommander.controller._
+import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.{MoveCommand, ShootCommand}
 import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
-import de.htwg.se.tankcommander.model.Individual
+import de.htwg.se.tankcommander.model.IndividualComponent.{Individual, Player, Tank}
 import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.model.gameFieldComponent.Maps.MapSelector
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
-import de.htwg.se.tankcommander.model.playerComponent.Player
 import de.htwg.se.tankcommander.util.{Coordinate, Observable, UndoManager}
 
 class Controller @Inject() extends Observable with ControllerInterface {
@@ -26,19 +25,19 @@ class Controller @Inject() extends Observable with ControllerInterface {
     val player1 = Player.generatePlayer(1)
     notifyObservers(ChoosePlayerNameEvent(2))
     val player2 = Player.generatePlayer(2)
-    val tank1 = TankModel(Coordinate(0, 5))
-    val tank2 = TankModel(Coordinate(10, 5))
+    val tank1 = Tank(Coordinate(0, 5))
+    val tank2 = Tank(Coordinate(10, 5))
     initGameStatus(player1, player2, tank1, tank2)
   }
 
-  def initGameStatus(player1: Player, player2: Player, tank1: TankModel, tank2: TankModel): Unit = {
+  def initGameStatus(player1: Player, player2: Player, tank1: Tank, tank2: Tank): Unit = {
     notifyObservers(MapSelectionEvent())
 
     // TODO: Blockiert für immer, falls GUI genutzt?
     val mapName: String = scala.io.StdIn.readLine()
     MapSelector.select(mapName) match {
       case Some(map) =>
-        val activePlayer = Individual(player1, tank1, movesLeft = 2)
+        val activePlayer = Individual(player1, tank1)
         val passivePlayer = Individual(player1, tank1)
         gameField = GameField(map)
         print(gameField)
@@ -65,12 +64,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
   }
 
   override def checkIfPlayerHasMovesLeft(): Boolean = {
-    gameStatus.activePlayerHasMovesLeft() match {
-      case Some(false) =>
-        notifyObservers(NoMovesLeftEvent())
-        false
-      case _ => true
-    }
+    if (gameStatus.activePlayer.movesLeft > 0) true else false
   }
 
   override def gameFieldToString: String = gameField.toString

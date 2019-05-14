@@ -1,18 +1,18 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
+package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl
 
+import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor.Mover
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.util.Command
 
 class MoveCommand(controller: Controller, command: String) extends Command {
-  var backupGameField: Option[GameField] = None
-  var backupGameStatus: Option[GameStatus] = None
+  var backupGameField: GameField = _
+  var backupGameStatus: GameStatus = _
 
   override def doStep(): Unit = {
-    backupGameField = controller.createGameFieldBackup
-    backupGameStatus = controller.createGameStatusBackup
-    // TODO: Move
-    // controller.gameStatus.activePlayer = Mover.moveTank(command, controller.gameStatus.activePlayer)
+    backupGameField = controller.gameField.copy()
+    backupGameStatus = controller.gameStatus.copy()
+    controller.gameStatus = Mover(controller.gameStatus, controller.gameField).moveTank(command, controller.gameStatus.activePlayer)
   }
 
   override def undoStep(): Unit = {

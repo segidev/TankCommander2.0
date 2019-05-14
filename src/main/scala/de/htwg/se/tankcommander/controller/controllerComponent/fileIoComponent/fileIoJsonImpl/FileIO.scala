@@ -3,10 +3,8 @@ package de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.
 import com.google.inject.Inject
 import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
-import de.htwg.se.tankcommander.model.Individual
+import de.htwg.se.tankcommander.model.IndividualComponent.{Individual, Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
-import de.htwg.se.tankcommander.model.playerComponent.Player
 import de.htwg.se.tankcommander.util.Coordinate
 import play.api.libs.json._
 
@@ -47,7 +45,7 @@ class FileIO @Inject() extends FileIOInterface {
 
     val activePlayer = Individual(
       Player((json \ "game" \ "aPlayer").toString),
-      TankModel(
+      Tank(
         Coordinate(
           (json \ "game" \ "posATankX").toString.toInt,
           (json \ "game" \ "posATankY").toString.toInt
@@ -58,7 +56,7 @@ class FileIO @Inject() extends FileIOInterface {
 
     val passivePlayer = Individual(
       Player((json \ "game" \ "pPlayer").toString),
-      TankModel(
+      Tank(
         Coordinate(
           (json \ "game" \ "posPTankX").toString.toInt,
           (json \ "game" \ "posPTankY").toString.toInt

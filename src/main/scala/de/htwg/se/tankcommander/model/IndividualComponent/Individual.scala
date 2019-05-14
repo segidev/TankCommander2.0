@@ -15,11 +15,8 @@ object Player {
   }
 }
 
-case class Tank(coordinates: Coordinate) {
-  val tankBaseDamage = 10
-  val accuracy = 100
-  val hp = 100
-  val currentHitChance = 0
+case class Tank(coordinates: Coordinate, tankBaseDamage: Int = 10, accuracy: Int = 100, hp: Int = 100,
+                currentHitChance: Int = 0) {
 }
 
 

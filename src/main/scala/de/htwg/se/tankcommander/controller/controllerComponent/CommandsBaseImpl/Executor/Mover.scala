@@ -32,8 +32,9 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
 
   def moveTankOnGameField(positionOfActiveTank: Coordinate): Individual = {
     if (movePossible(positionOfActiveTank.x, positionOfActiveTank.y)) {
-      gameStatus.activePlayer.copy(movesLeft = gameStatus.activePlayer.movesLeft - 1)
-      calcHitChance(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
+      val hitRate = calcHitChance(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
+      gameStatus.activePlayer.copy(tank = gameStatus.activePlayer.tank.copy(currentHitChance = hitRate),
+        movesLeft = gameStatus.activePlayer.movesLeft - 1)
     }
     else {
       print("Move not possible\n")
@@ -142,16 +143,16 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
          }
        case _ => GameStatus.currentHitChance = 0
      }
-   }*/
+   }
 
-  def calcHitChance(distance: Int, List: List[Obstacle]): Int = {
-    var obstacleMalus = 0
-    List.foreach(n => obstacleMalus += n.hitMalus)
-    val hitchance = GameStatus.activeTank.get.accuracy - (distance * 5) - obstacleMalus
-    if (hitchance > 0) {
-      hitchance
-    } else {
-      0
-    }
-  }
+    def calcHitChance(distance: Int, List: List[Obstacle]): Int = {
+      var obstacleMalus = 0
+      List.foreach(n => obstacleMalus += n.hitMalus)
+      val hitchance = GameStatus.activeTank.get.accuracy - (distance * 5) - obstacleMalus
+      if (hitchance > 0) {
+        hitchance
+      } else {
+        0
+      }
+    }*/
 }

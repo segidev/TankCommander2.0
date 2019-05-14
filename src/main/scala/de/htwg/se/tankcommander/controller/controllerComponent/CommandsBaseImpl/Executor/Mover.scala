@@ -9,7 +9,7 @@ import de.htwg.se.tankcommander.util.Coordinate
 import scala.collection.mutable.ListBuffer
 
 case class Mover(gameStatus: GameStatus, gameField: GameField) {
-  def moveTank(input: String): Individual = {
+  def moveTank(input: String): GameStatus = {
     var positionOfActiveTank = gameStatus.activePlayer.tank.coordinates
     var individual: Individual = _
     input match {
@@ -25,7 +25,9 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
       case "right" =>
         positionOfActiveTank = positionOfActiveTank.add(x = 1)
         individual = moveTankOnGameField(positionOfActiveTank)
+      case _ => print("Error in Movement of Tank")
     }
+    gameStatus.copy(activePlayer = individual)
   }
 
   def moveTankOnGameField(positionOfActiveTank: Coordinate): Individual = {
@@ -43,6 +45,20 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
       y < 0 | (gameField.gameFieldArray(x)(y).obstacle.isDefined
       && !gameField.gameFieldArray(x)(y).obstacle.get.passable)) return false
     true
+  }
+
+  def calcHitChance(): Int = {
+    def getDirection: Option[(String, Int)] = {
+      gameStatus.activePlayer.tank.coordinates.onSameLine(gameStatus.passivePlayer.tank.coordinates) match {
+        case Some(value) => value match {
+          case x > 0 => x
+          case y > 0 => y
+        }
+        case None => None
+      }
+      val DirectionAndDistance = getDirection.get
+
+    }
   }
 
   def lineOfSightContainsTank(): Unit = {

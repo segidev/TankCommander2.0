@@ -18,10 +18,7 @@ object TankCommander {
 
     do {
       input = scala.io.StdIn.readLine()
-      Try(tui.preconditions(input)) match {
-        case Success(e) => tui.processInputLine(e)
-        case Failure(e) => print(e)
-      }
+      tui.processInputLine(input)
     } while (input != "exit")
   }
 }

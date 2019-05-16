@@ -21,7 +21,7 @@ trait ControllerInterface extends Publisher {
 
   def createGameFieldBackup: Option[GameField]
 
-  def checkIfPlayerHasMovesLeft(): Boolean
+  def playerHasMovesLeft(): Boolean
 
   def gameFieldToString: String
 

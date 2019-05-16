@@ -13,12 +13,14 @@ class MoveCommand(controller: Controller, command: String) extends Command {
   }
 
   override def undoStep(): Unit = {
-    val new_memento2 = Option(controller.gameStatus.copy())
-    backupGameStatus = new_memento2
+    val new_memento = Option(controller.gameStatus.copy())
+    backupGameStatus = new_memento
+    controller.gameStatus = new_memento.get
   }
 
   override def redoStep(): Unit = {
-    val new_memento2 = Option(controller.gameStatus.copy())
-    backupGameStatus = new_memento2
+    val new_memento = Option(controller.gameStatus.copy())
+    backupGameStatus = new_memento
+    controller.gameStatus = new_memento.get
   }
 }

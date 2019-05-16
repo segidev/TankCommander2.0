@@ -26,17 +26,5 @@ case class GameField(options: MapOptions) extends GameFieldInterface {
     array
   }
 
-  override def toString: String = {
-    val output = new StringBuilder
-    gameFieldArray.zipWithIndex.foreach {
-      case (yArray, _) =>
-        yArray.zipWithIndex.foreach {
-          case (cell, y) => (y + 1) % gridsX match {
-            case 0 => output.append(cell + "\n")
-            case _ => output.append(cell + " ")
-          }
-        }
-    }
-    output.toString()
-  }
+
 }

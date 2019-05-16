@@ -38,10 +38,10 @@ class Controller @Inject() extends Observable with ControllerInterface {
     MapSelector.select(mapName) match {
       case Some(map) =>
         val activePlayer = Individual(player1, tank1)
-        val passivePlayer = Individual(player1, tank1)
+        val passivePlayer = Individual(player2, tank1)
         gameField = GameField(map)
-        print(gameField)
         gameStatus = GameStatus(activePlayer, passivePlayer)
+        notifyObservers(DrawGameField())
       case None =>
         notifyObservers(MapSelectionErrorEvent())
         initGameStatus(player1, player2, tank1, tank2)
@@ -63,11 +63,21 @@ class Controller @Inject() extends Observable with ControllerInterface {
     Option(gameField.copy())
   }
 
-  override def checkIfPlayerHasMovesLeft(): Boolean = {
-    if (gameStatus.activePlayer.movesLeft > 0) true else false
-  }
+  override def playerHasMovesLeft(): Boolean = gameStatus.activePlayer.movesLeft > 0
 
-  override def gameFieldToString: String = gameField.toString
+  override def gameFieldToString: String = {
+    val output = new StringBuilder
+    gameField.gameFieldArray.zipWithIndex.foreach {
+      case (yArray, _) =>
+        yArray.zipWithIndex.foreach {
+          case (cell, y) => (y + 1) % gameField.gridsX match {
+            case 0 => output.append(cell + "\n")
+            case _ => output.append(cell + " ")
+          }
+        }
+    }
+    output.toString()
+  }
 
   /*
  * Undo manager
@@ -103,4 +113,5 @@ class Controller @Inject() extends Observable with ControllerInterface {
     gameStatus = fileIO.load(this)
     notifyObservers(DrawGameField())
   }
+
 }

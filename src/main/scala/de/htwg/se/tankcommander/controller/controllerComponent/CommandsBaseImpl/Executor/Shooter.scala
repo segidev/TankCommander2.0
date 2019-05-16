@@ -1,35 +1,29 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor
 
-class Shooter {
-//  def shoot(): Unit = {
-//    if (GameStatus.currentHitChance > 0) {
-//      simShot()
-//      if (GameStatus.passiveTank.get.hp <= 0) {
-//        GameStatus.endGame()
-//      }
-//      GameStatus.increaseTurns()
-//    } else {
-//      print("No Target in sight\n")
-//    }
-//  }
-//
-//  def simShot(): Unit = {
-//    val r = new scala.util.Random
-//    val maxDmg = 100
-//    val r1 = r.nextInt(maxDmg)
-//    if (GameStatus.currentHitChance >= r1) {
-//      val dmg = GameStatus.activeTank.get.tankBaseDamage + 40
-//      dealDmgTo(dmg)
-//      print("You did: " + dmg + " dmg\n")
-//    } else {
-//      print("Sadly you missed...\n")
-//    }
-//  }
-//
-//  def dealDmgTo(dmg: Int): Unit = {
-//    GameStatus.passiveTank.get.hp -= dmg
-//    if (GameStatus.passiveTank.get.hp <= 0) {
-//      GameStatus.endGame()
-//    }
-//  }
+import de.htwg.se.tankcommander.controller.{DmgEvent, EndOfGameEvent, MissedShotEvent}
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
+
+case class Shooter(controller: Controller, gameStatus: GameStatus) {
+
+  def shoot(): GameStatus = {
+    if (gameStatus.activePlayer.tank.currentHitChance > 0) {
+      if (gameStatus.activePlayer.tank.currentHitChance >= scala.util.Random.nextInt(100)) {
+        val currentHP = gameStatus.passivePlayer.tank.hp - gameStatus.activePlayer.tank.tankBaseDamage
+        controller.notifyObservers(DmgEvent(gameStatus.activePlayer.tank.tankBaseDamage))
+        if (currentHP <= 0) {
+          controller.notifyObservers(EndOfGameEvent(gameStatus.activePlayer))
+        }
+        gameStatus.copy(
+          passivePlayer = gameStatus.passivePlayer.copy(tank = gameStatus.passivePlayer.tank.copy(hp = currentHP)),
+          activePlayer = gameStatus.activePlayer.copy(movesLeft = gameStatus.activePlayer.movesLeft - 1))
+      } else {
+        controller.notifyObservers(MissedShotEvent())
+        gameStatus
+      }
+    } else {
+      print("No Target in sight\n")
+      gameStatus
+    }
+  }
 }

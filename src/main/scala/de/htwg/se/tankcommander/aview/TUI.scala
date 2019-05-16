@@ -1,28 +1,12 @@
 package de.htwg.se.tankcommander.aview
 
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.tankcommander.controller.{CustomEvent, MsgEvent, UpdateEvent}
+import de.htwg.se.tankcommander.controller.{CustomEvent, MsgEvent, NoMovesLeftEvent, UpdateEvent}
 import de.htwg.se.tankcommander.util.Observer
 
 class TUI(controller: Controller) extends Observer {
   controller.add(this)
 
-  def preconditions(s: String): String = {
-    s match {
-      case "start" =>
-      case "end turn" =>
-      case "undo" =>
-      case "redo" =>
-      case "save" =>
-      case "load" =>
-      case "shoot" | " up" | " down" | " left" | " right" => //controller.checkIfPlayerHasMovesLeft()
-      case "shoot" =>
-      case _ =>
-    }
-    s
-  }
-
-  //noinspection ScalaStyle
   def processInputLine(input: String): Unit = {
     input.toLowerCase match {
       case "start" => controller.initGame()
@@ -31,8 +15,10 @@ class TUI(controller: Controller) extends Observer {
       case "redo" => controller.redo()
       case "save" => controller.save()
       case "load" => controller.load()
-      case "up" | "down" | "left" | "right" => controller.move(input)
-      case "shoot" => controller.shoot()
+      case "up" | "down" | "left" | "right" => if (!controller.playerHasMovesLeft())
+        controller.notifyObservers(NoMovesLeftEvent()) else controller.move(input)
+      case "shoot" => if (!controller.playerHasMovesLeft())
+        controller.notifyObservers(NoMovesLeftEvent()) else controller.shoot()
       case _ => println("Kommando \"%s\" existiert nicht.".format(input))
     }
   }
@@ -42,10 +28,7 @@ class TUI(controller: Controller) extends Observer {
       case event: MsgEvent => print(event.message + "\n")
       case event: UpdateEvent =>
         print(controller.gameFieldToString)
-        print("Aktiver Spieler: " + controller.gameStatus.activePlayer + " Hitpoints: " +
-          controller.gameStatus.activePlayer.tank.hp + "\n" + "MovesLeft: " + controller.gameStatus.activePlayer.movesLeft + "\n" +
-          "Passiver Spieler: " + controller.gameStatus.passivePlayer + " Hitpoints: " +
-          controller.gameStatus.passivePlayer.tank.hp + "\n")
+        print(controller.gameStatus)
     }
   }
 }

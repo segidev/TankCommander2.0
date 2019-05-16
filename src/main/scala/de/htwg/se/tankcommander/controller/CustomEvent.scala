@@ -10,7 +10,6 @@ trait MsgEvent extends CustomEvent {
 
 trait UpdateEvent extends CustomEvent
 
-
 case class WelcomeEvent() extends MsgEvent {
   override val message: String = "Willkommen bei Tank-Commander!"
 }
@@ -21,6 +20,14 @@ case class ChoosePlayerNameEvent(playerNumber: Int) extends MsgEvent {
 
 case class NoMovesLeftEvent() extends MsgEvent {
   override val message: String = "Du hast keine Züge mehr übrig."
+}
+
+case class DmgEvent(dmg: Int) extends MsgEvent {
+  override val message: String = "You did %d".format(dmg)
+}
+
+case class MissedShotEvent() extends MsgEvent {
+  override val message: String = "Sadly you missed...\n"
 }
 
 case class MapSelectionEvent() extends MsgEvent {

@@ -54,9 +54,9 @@ class ControllerTest extends FlatSpec with Matchers {
     GameStatus.movesLeft = true
     val matchfield = GameFieldFactory.apply("Map 1")
     val controller = new Controller(matchfield)
-    assert(controller.checkIfPlayerHasMovesLeft() === true)
+    assert(controller.playerHasMovesLeft() === true)
     GameStatus.movesLeft = false
-    assert(controller.checkIfPlayerHasMovesLeft() === false)
+    assert(controller.playerHasMovesLeft() === false)
     GameStatus.resetGameStatus()
   }
   it should "print the Gamefield" in {

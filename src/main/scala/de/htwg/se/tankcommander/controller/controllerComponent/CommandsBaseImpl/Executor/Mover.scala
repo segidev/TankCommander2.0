@@ -7,51 +7,52 @@ import de.htwg.se.tankcommander.util.Coordinate
 
 case class Mover(gameStatus: GameStatus, gameField: GameField) {
 
-  def moveTank(input: String): GameStatus = {
-    var positionOfActiveTank = gameStatus.activePlayer.tank.coordinates
+  def moveTank(input: String): Option[Individual] = {
+    val positionOfActiveTank = gameStatus.activePlayer.tank.coordinates
+    var newPosition = positionOfActiveTank
     var individual: Option[Individual] = None
     input match {
       case "up" =>
-        positionOfActiveTank = positionOfActiveTank.sub(y = 1)
-        individual = Option(moveTankOnGameField(positionOfActiveTank))
+        newPosition = positionOfActiveTank.sub(y = 1)
       case "down" =>
-        positionOfActiveTank = positionOfActiveTank.add(y = 1)
-        individual = Option(moveTankOnGameField(positionOfActiveTank))
+        newPosition = positionOfActiveTank.add(y = 1)
       case "left" =>
-        positionOfActiveTank = positionOfActiveTank.sub(x = 1)
-        individual = Option(moveTankOnGameField(positionOfActiveTank))
+        newPosition = positionOfActiveTank.sub(x = 1)
       case "right" =>
-        positionOfActiveTank = positionOfActiveTank.add(x = 1)
-        individual = Option(moveTankOnGameField(positionOfActiveTank))
-      case _ => print("Error in Movement of Tank")
+        newPosition = positionOfActiveTank.add(x = 1)
     }
-    gameStatus.copy(activePlayer = individual.get)
+    moveTankOnGameField(newPosition)
   }
 
-  def moveTankOnGameField(positionOfActiveTank: Coordinate): Individual = {
-    if (movePossible(positionOfActiveTank.x, positionOfActiveTank.y)) {
-      val hitRate = calcHitChance(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
-      gameStatus.activePlayer.copy(
-        tank = gameStatus.activePlayer.tank.copy(currentHitChance = hitRate),
-        movesLeft = gameStatus.activePlayer.movesLeft - 1)
+  def moveTankOnGameField(newPosition: Coordinate): Option[Individual] = {
+    if (moveNotPossible(newPosition)) {
+      None
     }
     else {
-      print("Move not possible\n")
-      gameStatus.activePlayer
+      val hitRate = calcHitChance(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
+      Option(
+        gameStatus.activePlayer.copy(
+          tank = gameStatus.activePlayer.tank.copy(currentHitChance = hitRate, coordinates = newPosition),
+          movesLeft = gameStatus.activePlayer.movesLeft - 1
+        )
+      )
     }
   }
 
-  def movePossible(x: Int, y: Int): Boolean =
-    x > gameField.gridsX - 1 | x < 0 | y > gameField.gridsY - 1 |
-      y < 0 | (gameField.gameFieldArray(x)(y).obstacle.isDefined
-      && !gameField.gameFieldArray(x)(y).obstacle.get.passable)
+  def moveNotPossible(newPosition: Coordinate): Boolean = {
+    newPosition.x > gameField.gridsX - 1 ||
+      newPosition.x < 0 ||
+      newPosition.y > gameField.gridsY - 1 ||
+      newPosition.y < 0 ||
+      (gameField.gameFieldArray(newPosition.y)(newPosition.x).obstacle.isDefined
+        && !gameField.gameFieldArray(newPosition.y)(newPosition.x).obstacle.get.passable)
+  }
 
   def calcHitChance(coordinate: Coordinate, coordinate2: Coordinate): Int = {
     coordinate.onSameLine(coordinate2) match {
       case Some(_) => hitChanceHelper(coordinate, coordinate2)
       case None => 0
     }
-
   }
 
   def hitChanceHelper(coordinate1: Coordinate, coordinate2: Coordinate): Int = {
@@ -62,5 +63,4 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
     list.foreach(x => hitChance - x)
     hitChance
   }
-
 }

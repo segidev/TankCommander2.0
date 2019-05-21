@@ -7,6 +7,7 @@ import de.htwg.se.tankcommander.util.Observer
 class TUI(controller: Controller) extends Observer {
   controller.add(this)
 
+  //noinspection ScalaStyle
   def processInputLine(input: String): Unit = {
     input.toLowerCase match {
       case "start" => controller.initGame()
@@ -15,10 +16,8 @@ class TUI(controller: Controller) extends Observer {
       case "redo" => controller.redo()
       case "save" => controller.save()
       case "load" => controller.load()
-      case "up" | "down" | "left" | "right" => if (!controller.playerHasMovesLeft())
-        controller.notifyObservers(NoMovesLeftEvent()) else controller.move(input)
-      case "shoot" => if (!controller.playerHasMovesLeft())
-        controller.notifyObservers(NoMovesLeftEvent()) else controller.shoot()
+      case "up" | "down" | "left" | "right" => controller.move(input)
+      case "shoot" => controller.shoot()
       case _ => println("Kommando \"%s\" existiert nicht.".format(input))
     }
   }

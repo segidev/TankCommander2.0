@@ -18,6 +18,10 @@ case class ChoosePlayerNameEvent(playerNumber: Int) extends MsgEvent {
   override val message: String = "Spieler %d bitte gib einen Namen ein:".format(playerNumber)
 }
 
+case class MoveNotPossibleEvent() extends MsgEvent {
+  override val message: String = "Diese Aktion ist nicht möglich."
+}
+
 case class NoMovesLeftEvent() extends MsgEvent {
   override val message: String = "Du hast keine Züge mehr übrig."
 }

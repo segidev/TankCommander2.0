@@ -89,13 +89,21 @@ class Controller @Inject() extends Observable with ControllerInterface {
  */
 
   override def move(s: String): Unit = {
-    undoManager.doStep(new MoveCommand(this, s))
-    notifyObservers(DrawGameField())
+    gameStatus.activePlayer.movesLeft match {
+      case 0 => notifyObservers(NoMovesLeftEvent())
+      case _ =>
+        undoManager.doStep(new MoveCommand(this, s))
+        notifyObservers(DrawGameField())
+    }
   }
 
   override def shoot(): Unit = {
-    undoManager.doStep(new ShootCommand(this))
-    notifyObservers(DrawGameField())
+    gameStatus.activePlayer.movesLeft match {
+      case 0 => notifyObservers(NoMovesLeftEvent())
+      case _ =>
+        undoManager.doStep(new ShootCommand(this))
+        notifyObservers(DrawGameField())
+    }
   }
 
   override def undo(): Unit = {

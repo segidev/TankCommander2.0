@@ -10,7 +10,6 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
   def moveTank(input: String): Option[Individual] = {
     val positionOfActiveTank = gameStatus.activePlayer.tank.coordinates
     var newPosition = positionOfActiveTank
-    var individual: Option[Individual] = None
     input match {
       case "up" =>
         newPosition = positionOfActiveTank.sub(y = 1)
@@ -48,19 +47,27 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
         && !gameField.gameFieldArray(newPosition.y)(newPosition.x).obstacle.get.passable)
   }
 
-  def calcHitChance(coordinate: Coordinate, coordinate2: Coordinate): Int = {
-    coordinate.onSameLine(coordinate2) match {
-      case Some(_) => hitChanceHelper(coordinate, coordinate2)
+  def calcHitChance(coordinate1: Coordinate, coordinate2: Coordinate): Int = {
+    coordinate1.onSameLine(coordinate2) match {
+      case Some(_) => hitChanceHelper(for {xCoordinate <- (coordinate1.x to coordinate2.x).toList
+                                           yCoordinate <- (coordinate1.y to coordinate2.y).toList
+      } yield (xCoordinate, yCoordinate))
       case None => 0
     }
+
   }
 
-  def hitChanceHelper(coordinate1: Coordinate, coordinate2: Coordinate): Int = {
-    var hitChance = 100
-    val list = for {xCoordinate <- coordinate1.x to coordinate2.x if gameField.gameFieldArray(xCoordinate)(coordinate1.y).obstacle.isDefined
-                    yCoordinate <- coordinate1.y to coordinate2.y if gameField.gameFieldArray(coordinate1.x)(yCoordinate).obstacle.isDefined
-    } yield gameField.gameFieldArray(xCoordinate)(yCoordinate).obstacle.get.hitMalus
-    list.foreach(x => hitChance - x)
-    hitChance
+  //noinspection ScalaUselessExpression
+  def hitChanceHelper(lst: List[(Int, Int)]): Int = {
+    val hitChance = 100
+    var flatMalus = 5
+    var totalMalus = 0
+    lst.foreach { a =>
+      gameField.gameFieldArray(a._1)(a._2).obstacle match {
+        case Some(obstacle) => totalMalus += obstacle.hitMalus
+        case None => totalMalus += flatMalus
+      }
+    }
+    hitChance - totalMalus
   }
 }

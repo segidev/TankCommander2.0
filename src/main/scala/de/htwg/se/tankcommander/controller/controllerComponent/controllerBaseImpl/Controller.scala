@@ -50,11 +50,6 @@ class Controller @Inject() extends Observable with ControllerInterface {
 
   override def endGame(): Unit = notifyObservers(EndOfGameEvent(gameStatus.activePlayer))
 
-  override def endTurnChangeActivePlayer(): Unit = {
-    gameStatus = gameStatus.changeActivePlayer()
-    notifyObservers(EndOfRoundEvent())
-  }
-
   override def createGameStatusBackup: Option[GameStatus] = {
     Option(gameStatus.copy())
   }
@@ -104,6 +99,12 @@ class Controller @Inject() extends Observable with ControllerInterface {
         undoManager.doStep(new ShootCommand(this))
         notifyObservers(DrawGameField())
     }
+  }
+
+  override def endTurnChangeActivePlayer(): Unit = {
+    gameStatus = gameStatus.changeActivePlayer()
+    notifyObservers(EndOfRoundEvent())
+    notifyObservers(DrawGameField())
   }
 
   override def undo(): Unit = {

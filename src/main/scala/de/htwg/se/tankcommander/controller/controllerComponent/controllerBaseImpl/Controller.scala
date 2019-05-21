@@ -38,7 +38,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
     MapSelector.select(mapName) match {
       case Some(map) =>
         val activePlayer = Individual(player1, tank1)
-        val passivePlayer = Individual(player2, tank1)
+        val passivePlayer = Individual(player2, tank2)
         gameField = GameField(map)
         gameStatus = GameStatus(activePlayer, passivePlayer)
         notifyObservers(DrawGameField())

@@ -25,7 +25,7 @@ class TUI(controller: Controller) extends Observer {
   override def update(event: CustomEvent): Unit = {
     event match {
       case event: MsgEvent => print(event.message + "\n")
-      case event: UpdateEvent =>
+      case _: UpdateEvent =>
         print(controller.gameFieldToString)
         print(controller.gameStatus)
     }

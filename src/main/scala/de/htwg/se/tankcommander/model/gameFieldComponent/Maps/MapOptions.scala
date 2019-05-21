@@ -25,8 +25,6 @@ case class MapOptions1() extends MapOptions {
         Coordinate(1, 0),
         Coordinate(9, 0),
         Coordinate(10, 0),
-        Coordinate(0, 1),
-        Coordinate(1, 1),
         Coordinate(9, 1),
         Coordinate(10, 1),
         Coordinate(0, 9),

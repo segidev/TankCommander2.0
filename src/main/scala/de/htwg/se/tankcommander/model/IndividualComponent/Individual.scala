@@ -10,8 +10,8 @@ case class Player(name: String) {
 }
 
 object Player {
-  def generatePlayer(index: Int): Player = {
-    Player(scala.io.StdIn.readLine())
+  def generatePlayer(name: String): Player = {
+    Player(name)
   }
 }
 

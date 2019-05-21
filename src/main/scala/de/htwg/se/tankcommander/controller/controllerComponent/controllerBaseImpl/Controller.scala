@@ -22,9 +22,9 @@ class Controller @Inject() extends Observable with ControllerInterface {
   override def initGame(): Unit = {
     notifyObservers(WelcomeEvent())
     notifyObservers(ChoosePlayerNameEvent(1))
-    val player1 = Player.generatePlayer(1)
+    val player1 = Player.generatePlayer("Mike") // TODO: scala.io.StdIn.readLine())
     notifyObservers(ChoosePlayerNameEvent(2))
-    val player2 = Player.generatePlayer(2)
+    val player2 = Player.generatePlayer("Sarah") // TODO: scala.io.StdIn.readLine())
     val tank1 = Tank(Coordinate(0, 5))
     val tank2 = Tank(Coordinate(10, 5))
     initGameStatus(player1, player2, tank1, tank2)

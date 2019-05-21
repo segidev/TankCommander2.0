@@ -5,6 +5,16 @@ import de.htwg.se.tankcommander.util.Coordinate
 
 trait MapOptions {
   val obstacles: Map[Obstacle, Option[Array[Coordinate]]]
+
+  def getObstacleByCoordinate(coordinate: Coordinate): Option[Obstacle] = {
+    obstacles.find(tuple =>
+      tuple._2.exists(coordinates =>
+        coordinates.exists(c =>
+          c.equals(coordinate)))) match {
+      case Some(a) => Option(a._1)
+      case _ => None
+    }
+  }
 }
 
 case class MapOptions1() extends MapOptions {

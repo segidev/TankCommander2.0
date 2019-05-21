@@ -117,13 +117,15 @@ class Controller @Inject() extends Observable with ControllerInterface {
   }
 
   override def save(): Unit = {
-    fileIO.save(this)
+    fileIO.save(gameStatus, gameField.mapOptions.name)
+    notifyObservers(SavedGameEvent())
   }
 
   override def load(): Unit = {
-    // TODO: Wird das noch benötigt?
-    //    gameField = GameFieldFactory.apply(mapChosen)
-    gameStatus = fileIO.load(this)
+    val loadObj = fileIO.load(gameStatus, gameField.mapOptions.name)
+    gameStatus = loadObj._1
+    gameField = GameField(MapSelector.select(loadObj._2).get)
+    notifyObservers(LoadedGameEvent())
     notifyObservers(DrawGameField())
   }
 

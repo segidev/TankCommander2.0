@@ -49,5 +49,10 @@ case class EndOfRoundEvent() extends MsgEvent {
 case class EndOfGameEvent(individual: Individual) extends MsgEvent {
   override val message: String = "Spieler %s hat die Runde gewonnen.".format(individual.player.name)
 }
-
+case class LoadedGameEvent() extends MsgEvent {
+  override val message: String = "Spiel geladen"
+}
+case class SavedGameEvent()() extends MsgEvent {
+  override val message: String = "Spiel gespeichert"
+}
 case class DrawGameField() extends UpdateEvent

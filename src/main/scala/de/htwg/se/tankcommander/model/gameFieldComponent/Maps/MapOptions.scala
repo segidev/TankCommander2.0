@@ -4,6 +4,7 @@ import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 import de.htwg.se.tankcommander.util.Coordinate
 
 trait MapOptions {
+  val name: String
   val obstacles: Map[Obstacle, Option[Array[Coordinate]]]
 
   def getObstacleByCoordinate(coordinate: Coordinate): Option[Obstacle] = {
@@ -18,6 +19,7 @@ trait MapOptions {
 }
 
 case class MapOptions1() extends MapOptions {
+  val name = "Map1"
   val obstacles: Map[Obstacle, Option[Array[Coordinate]]] = Map(
     Bush() -> Option(
       Array(
@@ -98,6 +100,7 @@ case class MapOptions1() extends MapOptions {
 }
 
 case class MapOptions2() extends MapOptions {
+  val name = "Map2"
   val obstacles: Map[Obstacle, Option[Array[Coordinate]]] = Map(
     Bush() -> Option(
       Array(

@@ -11,53 +11,56 @@ import de.htwg.se.tankcommander.util.Coordinate
 import scala.xml.{Elem, PrettyPrinter, XML}
 
 class FileIO extends FileIOInterface {
-  override def save(controller: ControllerInterface): Unit = {
+  override def save(gameStatus: GameStatus, map: String): Unit = {
     val file = new File("src/main/ressources/savegame.xml")
     file.createNewFile()
     val pw = new PrintWriter(file)
     val prettyPrinter = new PrettyPrinter(120, 4)
-    val xml = prettyPrinter.format(gameStateToXML(controller))
+    val xml = prettyPrinter.format(gameStateToXML(gameStatus))
     pw.write(xml)
     pw.close()
   }
 
-  def gameStateToXML(controller: ControllerInterface): Elem = {
+  def gameStateToXML(gameStatus: GameStatus): Elem = {
     <game>
       <aPlayer>
-        {controller.gameStatus.activePlayer.player.name}
+        {gameStatus.activePlayer.player.name}
       </aPlayer>
       <pPlayer>
-        {controller.gameStatus.passivePlayer.player.name}
+        {gameStatus.passivePlayer.player.name}
       </pPlayer>
       <movesLeft>
-        {controller.gameStatus.activePlayer.movesLeft}
+        {gameStatus.activePlayer.movesLeft}
       </movesLeft>
       <hitchance>
         {1}
         // controller.gameStatus.activePlayer.tank
       </hitchance>
       <posATankX>
-        {controller.gameStatus.activePlayer.tank.coordinates.x}
+        {gameStatus.activePlayer.tank.coordinates.x}
       </posATankX>
       <posATankY>
-        {controller.gameStatus.activePlayer.tank.coordinates.y}
+        {gameStatus.activePlayer.tank.coordinates.y}
       </posATankY>
       <posPTankX>
-        {controller.gameStatus.passivePlayer.tank.coordinates.x}
+        {gameStatus.passivePlayer.tank.coordinates.x}
       </posPTankX>
       <posPTankY>
-        {controller.gameStatus.passivePlayer.tank.coordinates.y}
+        {gameStatus.passivePlayer.tank.coordinates.y}
       </posPTankY>
       <aTankHP>
-        {controller.gameStatus.activePlayer.tank.hp}
+        {gameStatus.activePlayer.tank.hp}
       </aTankHP>
       <pTankHP>
-        {controller.gameStatus.passivePlayer.tank.hp}
+        {gameStatus.passivePlayer.tank.hp}
       </pTankHP>
+      <MapSelected>
+        {gameStatus.passivePlayer.tank.hp}
+      </MapSelected>
     </game>
   }
 
-  override def load(controller: ControllerInterface): GameStatus = {
+  override def load(gameStatus: GameStatus, map: String): (GameStatus, String) = {
     val file = XML.loadFile("src/main/ressources/savegame.xml")
     val activePlayer = Individual(
       Player((file \\ "game" \\ "aPlayer").text),
@@ -78,13 +81,7 @@ class FileIO extends FileIOInterface {
         )
       )
     )
-
-    controller.gameStatus.copy(activePlayer, passivePlayer)
-
-    //    GameStatus.currentHitChance = (file \\ "game" \ "hitchance").text.replaceAll(" ", "").toInt
-    //    controller.gameField.gameFieldArray(GameStatus.activeTank.get.posC._1)(GameStatus.activeTank.get.posC._2)
-    //      .containsThisTank = Option(tank1)
-    //    controller.gameField.gameFieldArray(GameStatus.passiveTank.get.posC._1)(GameStatus.passiveTank.get.posC._2)
-    //      .containsThisTank = Option(tank2)
+    val map = (file \\ "game" \ "MapSelected").text
+    (gameStatus.copy(activePlayer, passivePlayer), map)
   }
 }

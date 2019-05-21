@@ -10,6 +10,7 @@ class TUI(controller: Controller) extends Observer {
   //noinspection ScalaStyle
   def processInputLine(input: String): Unit = {
     input.toLowerCase match {
+      case "exit" =>
       case "start" => controller.initGame()
       case "end turn" => controller.endTurnChangeActivePlayer()
       case "undo" => controller.undo()

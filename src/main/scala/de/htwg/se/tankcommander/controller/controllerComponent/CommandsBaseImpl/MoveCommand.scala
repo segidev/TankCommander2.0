@@ -6,10 +6,10 @@ import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImp
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
 class MoveCommand(controller: Controller, command: String) extends Command {
-  var backupGameStatus: Option[GameStatus] = None
+  var backupGameStatus: GameStatus = _
 
   override def doStep(): Unit = {
-    backupGameStatus = Option(controller.gameStatus.copy())
+    backupGameStatus = controller.gameStatus.copy()
     Mover(controller.gameStatus, controller.gameField).moveTank(command) match {
       case Some(i) => controller.gameStatus = controller.gameStatus.copy(activePlayer = i)
       case _ => controller.notifyObservers(MoveNotPossibleEvent())
@@ -17,14 +17,14 @@ class MoveCommand(controller: Controller, command: String) extends Command {
   }
 
   override def undoStep(): Unit = {
-    val new_memento = Option(controller.gameStatus.copy())
+    val new_memento = controller.gameStatus.copy()
+    controller.gameStatus = backupGameStatus
     backupGameStatus = new_memento
-    controller.gameStatus = new_memento.get
   }
 
   override def redoStep(): Unit = {
-    val new_memento = Option(controller.gameStatus.copy())
+    val new_memento = controller.gameStatus.copy()
+    controller.gameStatus = backupGameStatus
     backupGameStatus = new_memento
-    controller.gameStatus = new_memento.get
   }
 }

@@ -4,7 +4,7 @@ import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterfa
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
 trait FileIOInterface {
-  def save(controller: ControllerInterface): Unit
+  def save(gameStatus: GameStatus, map: String): Unit
 
-  def load(controller: ControllerInterface): GameStatus
+  def load(gameStatus: GameStatus, map: String): (GameStatus, String)
 }

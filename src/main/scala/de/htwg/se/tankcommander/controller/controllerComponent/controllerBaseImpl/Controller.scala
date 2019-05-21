@@ -34,7 +34,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
     notifyObservers(MapSelectionEvent())
 
     // TODO: Blockiert für immer, falls GUI genutzt?
-    val mapName: String = scala.io.StdIn.readLine()
+    val mapName: String = "Map1" // TODO: scala.io.StdIn.readLine()
     MapSelector.select(mapName) match {
       case Some(map) =>
         val activePlayer = Individual(player1, tank1)

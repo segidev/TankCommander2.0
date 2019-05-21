@@ -68,12 +68,17 @@ class Controller @Inject() extends Observable with ControllerInterface {
   override def gameFieldToString: String = {
     val output = new StringBuilder
     gameField.gameFieldArray.zipWithIndex.foreach {
-      case (yArray, _) =>
-        yArray.zipWithIndex.foreach {
-          case (cell, y) => (y + 1) % gameField.gridsX match {
-            case 0 => output.append(cell + "\n")
-            case _ => output.append(cell + " ")
-          }
+      case (xArray, y) =>
+        xArray.zipWithIndex.foreach {
+          case (cell, x) =>
+            gameStatus.activePlayer.tank.coordinates match {
+              case Coordinate(`x`, `y`) => output.append("T ")
+              case _ => gameStatus.passivePlayer.tank.coordinates match {
+                case Coordinate(`x`, `y`) => output.append("T ")
+                case _ => output.append(cell + " ")
+              }
+                if ((x + 1) % gameField.gridsX == 0) output.append("\n")
+            }
         }
     }
     output.toString()

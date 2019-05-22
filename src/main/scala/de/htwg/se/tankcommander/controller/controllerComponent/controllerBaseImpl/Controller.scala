@@ -73,8 +73,8 @@ class Controller @Inject() extends Observable with ControllerInterface {
                 case Coordinate(`x`, `y`) => output.append("T ")
                 case _ => output.append(cell + " ")
               }
-                if ((x + 1) % gameField.gridsX == 0) output.append("\n")
             }
+            if ((x + 1) % gameField.gridsX == 0) output.append("\n")
         }
     }
     output.toString()

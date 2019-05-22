@@ -20,21 +20,14 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
       case "right" =>
         newPosition = positionOfActiveTank.add(x = 1)
     }
-    moveTankOnGameField(newPosition)
-  }
-
-  def moveTankOnGameField(newPosition: Coordinate): Option[Individual] = {
     if (moveNotPossible(newPosition)) {
       None
-    }
-    else {
-      val hitRate = calcHitChance(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
-      Option(
-        gameStatus.activePlayer.copy(
-          tank = gameStatus.activePlayer.tank.copy(currentHitChance = hitRate, coordinates = newPosition),
-          movesLeft = gameStatus.activePlayer.movesLeft - 1
-        )
-      )
+    } else {
+      val hitChance = Calculator.apply(gameStatus, gameField).calcHitChance(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
+
+      Option(gameStatus.activePlayer.copy(
+        tank = gameStatus.activePlayer.tank.copy(currentHitChance = hitChance, coordinates = newPosition),
+        movesLeft = gameStatus.activePlayer.movesLeft - 1))
     }
   }
 
@@ -47,27 +40,5 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
         && !gameField.gameFieldArray(newPosition.y)(newPosition.x).obstacle.get.passable)
   }
 
-  def calcHitChance(coordinate1: Coordinate, coordinate2: Coordinate): Int = {
-    coordinate1.onSameLine(coordinate2) match {
-      case Some(_) => hitChanceHelper(for {xCoordinate <- (coordinate1.x to coordinate2.x).toList
-                                           yCoordinate <- (coordinate1.y to coordinate2.y).toList
-      } yield (xCoordinate, yCoordinate))
-      case None => 0
-    }
 
-  }
-
-  //noinspection ScalaUselessExpression
-  def hitChanceHelper(lst: List[(Int, Int)]): Int = {
-    val hitChance = 100
-    var flatMalus = 5
-    var totalMalus = 0
-    lst.foreach { a =>
-      gameField.gameFieldArray(a._1)(a._2).obstacle match {
-        case Some(obstacle) => totalMalus += obstacle.hitMalus
-        case None => totalMalus += flatMalus
-      }
-    }
-    hitChance - totalMalus
-  }
 }

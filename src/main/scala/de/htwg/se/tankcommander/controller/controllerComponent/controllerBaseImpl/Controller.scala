@@ -3,6 +3,7 @@ package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseIm
 import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.se.tankcommander.TankCommanderModule
 import de.htwg.se.tankcommander.controller._
+import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor.Calculator
 import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.{MoveCommand, ShootCommand}
 import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
@@ -103,6 +104,8 @@ class Controller @Inject() extends Observable with ControllerInterface {
 
   override def endTurnChangeActivePlayer(): Unit = {
     gameStatus = gameStatus.changeActivePlayer()
+    gameStatus = Calculator(gameStatus,gameField).calcHitChance(
+      gameStatus.activePlayer.tank.coordinates,gameStatus.passivePlayer.tank.coordinates)
     notifyObservers(EndOfRoundEvent())
     notifyObservers(DrawGameField())
   }

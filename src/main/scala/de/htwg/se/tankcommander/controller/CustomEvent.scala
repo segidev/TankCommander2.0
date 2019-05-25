@@ -26,6 +26,10 @@ case class NoMovesLeftEvent() extends MsgEvent {
   override val message: String = "Du hast keine Züge mehr übrig."
 }
 
+case class TargetNotInSightEvent() extends MsgEvent {
+  override val message: String = "Gegnerisches Ziel nicht in Sichtweite"
+}
+
 case class DmgEvent(dmg: Int) extends MsgEvent {
   override val message: String = "You did %d".format(dmg)
 }

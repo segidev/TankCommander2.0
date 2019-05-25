@@ -6,11 +6,10 @@ case class GameStatus(activePlayer: Individual, passivePlayer: Individual) {
   def changeActivePlayer(): GameStatus = copy(activePlayer = passivePlayer.copy(movesLeft = 2), passivePlayer = activePlayer.copy(movesLeft = 2))
 
   override def toString: String = {
-    "Aktiver Spieler: " + activePlayer.player + " Tank-HitPoints: " +
-      activePlayer.tank.hp + "\n" + "MovesLeft: " + activePlayer.movesLeft + "" + " Current Hitchance: " + activePlayer.tank.currentHitChance +
-      "\nPassiver Spieler: " + passivePlayer.player + " Tank-HitPoints: " +
-      passivePlayer.tank.hp + "\n"
+    val output = new StringBuilder()
+    output.append(s"Aktiver Spieler: ${activePlayer.player} [Panzer: ${activePlayer.tank.hp} Lebenspunkte]\n")
+    output.append(s"Passiver Spieler: ${passivePlayer.player} [Panzer: ${passivePlayer.tank.hp} Lebenspunkte]\n")
+    output.append(s"Übrige Züge: ${activePlayer.movesLeft}\n")
+    output.toString()
   }
 }
-
-

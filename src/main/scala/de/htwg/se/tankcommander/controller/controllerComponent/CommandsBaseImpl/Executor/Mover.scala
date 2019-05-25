@@ -23,10 +23,10 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
     if (moveNotPossible(newPosition)) {
       None
     } else {
-      val hitChance = Calculator.apply(gameStatus, gameField).calcHitChance(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
+//      val hitChance = Calculator.apply(gameStatus, gameField).calcHitChance(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
 
       Option(gameStatus.activePlayer.copy(
-        tank = gameStatus.activePlayer.tank.copy(currentHitChance = hitChance, coordinates = newPosition),
+        tank = gameStatus.activePlayer.tank.copy(currentHitChance = 0, coordinates = newPosition),
         movesLeft = gameStatus.activePlayer.movesLeft - 1))
     }
   }

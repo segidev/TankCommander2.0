@@ -104,8 +104,8 @@ class Controller @Inject() extends Observable with ControllerInterface {
 
   override def endTurnChangeActivePlayer(): Unit = {
     gameStatus = gameStatus.changeActivePlayer()
-    gameStatus = Calculator(gameStatus,gameField).calcHitChance(
-      gameStatus.activePlayer.tank.coordinates,gameStatus.passivePlayer.tank.coordinates)
+//    gameStatus = Calculator(gameStatus,gameField).calculateHitChance(
+//      gameStatus.activePlayer.tank.coordinates,gameStatus.passivePlayer.tank.coordinates)
     notifyObservers(EndOfRoundEvent())
     notifyObservers(DrawGameField())
   }

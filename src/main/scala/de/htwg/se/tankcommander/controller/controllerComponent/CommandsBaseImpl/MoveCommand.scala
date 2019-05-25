@@ -11,7 +11,7 @@ class MoveCommand(controller: Controller, command: String) extends Command {
   override def doStep(): Unit = {
     backupGameStatus = controller.gameStatus.copy()
     Mover(controller.gameStatus, controller.gameField).moveTank(command) match {
-      case Some(i) => controller.gameStatus = controller.gameStatus.copy(activePlayer = i)
+      case Some(individual) => controller.gameStatus = controller.gameStatus.copy(activePlayer = individual)
       case _ => controller.notifyObservers(MoveNotPossibleEvent())
     }
   }

@@ -15,8 +15,7 @@ object Player {
   }
 }
 
-case class Tank(coordinates: Coordinate, tankBaseDamage: Int = 10, accuracy: Int = 100, hp: Int = 100,
-                currentHitChance: Int = 0) {
+case class Tank(coordinates: Coordinate, tankBaseDamage: Int = 10, hp: Int = 100) {
 }
 
 

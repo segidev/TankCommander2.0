@@ -31,7 +31,7 @@ case class TargetNotInSightEvent() extends MsgEvent {
 }
 
 case class DmgEvent(dmg: Int) extends MsgEvent {
-  override val message: String = "You did %d".format(dmg)
+  override val message: String = "Du machst %d Schaden".format(dmg)
 }
 
 case class MissedShotEvent() extends MsgEvent {

@@ -19,6 +19,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
   var undoManager = new UndoManager
   var gameField: GameField = _
   var gameStatus: GameStatus = _
+  var calculator: Calculator = _
 
   override def initGame(): Unit = {
     notifyObservers(WelcomeEvent())
@@ -41,6 +42,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
         val activePlayer = Individual(player1, tank1)
         val passivePlayer = Individual(player2, tank2)
         gameField = GameField(map)
+        calculator = Calculator(gameField)
         gameStatus = GameStatus(activePlayer, passivePlayer)
         notifyObservers(DrawGameField())
       case None =>
@@ -87,10 +89,13 @@ class Controller @Inject() extends Observable with ControllerInterface {
   override def move(s: String): Unit = {
     gameStatus.activePlayer.movesLeft match {
       case 0 => notifyObservers(NoMovesLeftEvent())
-      case _ =>
-        undoManager.doStep(new MoveCommand(this, s))
+      case _ => undoManager.doStep(new MoveCommand(this, s))
         notifyObservers(DrawGameField())
     }
+  }
+
+  def updateHitchance(): Double = {
+    calculator.update(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
   }
 
   override def shoot(): Unit = {
@@ -104,8 +109,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
 
   override def endTurnChangeActivePlayer(): Unit = {
     gameStatus = gameStatus.changeActivePlayer()
-//    gameStatus = Calculator(gameStatus,gameField).calculateHitChance(
-//      gameStatus.activePlayer.tank.coordinates,gameStatus.passivePlayer.tank.coordinates)
+    calculator.update(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
     notifyObservers(EndOfRoundEvent())
     notifyObservers(DrawGameField())
   }

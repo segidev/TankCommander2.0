@@ -17,5 +17,6 @@ case class GameField(mapOptions: MapOptions) extends GameFieldInterface {
       }
     }
     array
+
   }
 }

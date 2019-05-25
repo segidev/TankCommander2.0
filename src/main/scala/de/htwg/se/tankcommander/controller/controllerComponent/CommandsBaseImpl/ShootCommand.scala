@@ -1,7 +1,7 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl
 
-import de.htwg.se.tankcommander.controller.TargetNotInSightEvent
-import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor.{Mover, Shooter}
+import de.htwg.se.tankcommander.controller.{DmgEvent, MissedShotEvent}
+import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor.Shooter
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
@@ -10,9 +10,14 @@ class ShootCommand(controller: Controller) extends Command {
 
   override def doStep(): Unit = {
     backupGameStatus = Option(controller.gameStatus.copy())
-    Shooter(controller.gameStatus, controller.gameField).shoot() match {
-      case Some(s) => controller.gameStatus = s
-      case None => controller.notifyObservers(TargetNotInSightEvent())
+    Shooter(controller.gameStatus, controller).shoot() match {
+      case value =>
+        controller.gameStatus = value._1
+        value._2 match {
+          case Some(dmg) => controller.notifyObservers(DmgEvent(dmg))
+          case None => controller.notifyObservers(MissedShotEvent())
+        }
+
     }
   }
 

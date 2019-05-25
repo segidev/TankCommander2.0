@@ -84,7 +84,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     contents += give_up
     up.reactions += {
       case ButtonClicked(`up`) =>
-        if (controller.checkIfPlayerHasMovesLeft()) {
+        if (controller.playerHasMovesLeft()) {
           controller.move("up")
         }
         else {
@@ -93,7 +93,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     }
     down.reactions += {
       case ButtonClicked(`up`) =>
-        if (controller.checkIfPlayerHasMovesLeft()) {
+        if (controller.playerHasMovesLeft()) {
           controller.move("down")
         }
         else {
@@ -102,7 +102,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     }
     left.reactions += {
       case ButtonClicked(`up`) =>
-        if (controller.checkIfPlayerHasMovesLeft()) {
+        if (controller.playerHasMovesLeft()) {
           controller.move("left")
         }
         else {
@@ -112,7 +112,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     }
     right.reactions += {
       case ButtonClicked(`up`) =>
-        if (controller.checkIfPlayerHasMovesLeft()) {
+        if (controller.playerHasMovesLeft()) {
           controller.move("right")
         }
         else {
@@ -121,7 +121,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     }
     shoot.reactions += {
       case ButtonClicked(`shoot`) =>
-        if (controller.checkIfPlayerHasMovesLeft()) {
+        if (controller.playerHasMovesLeft()) {
           controller.shoot()
         }
         else {

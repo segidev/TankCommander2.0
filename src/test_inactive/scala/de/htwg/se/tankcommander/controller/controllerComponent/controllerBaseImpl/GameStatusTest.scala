@@ -1,9 +1,7 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
 
+import de.htwg.se.tankcommander.model.IndividualComponent.{Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl.TankModel
-import de.htwg.se.tankcommander.model.playerComponent.Player
-import org.scalatest.{FlatSpec, Matchers}
 
 class GameStatusTest extends FlatSpec with Matchers {
   "GameStatus" should "" in {
@@ -11,8 +9,8 @@ class GameStatusTest extends FlatSpec with Matchers {
     val player2 = new Player("test1")
     GameStatus.activePlayer = Option(player1)
     GameStatus.passivePlayer = Option(player2)
-    val activeTank = new TankModel
-    val passiveTank = new TankModel
+    val activeTank = new Tank
+    val passiveTank = new Tank
     GameStatus.activeTank = Option(activeTank)
     GameStatus.passiveTank = Option(passiveTank)
     val gameStatus = new GameStatus

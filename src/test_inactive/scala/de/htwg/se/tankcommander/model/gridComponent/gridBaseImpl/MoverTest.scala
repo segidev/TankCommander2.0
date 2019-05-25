@@ -1,8 +1,9 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
+import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor.Mover
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.tankcommander.model.IndividualComponent.Tank
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import org.scalatest.{FlatSpec, Matchers}
 
 import scala.collection.mutable.ListBuffer
 
@@ -10,8 +11,8 @@ class MoverTest extends FlatSpec with Matchers {
   "calcHitChance method" should "correctly calc hitchance" in {
     val matchfield = GameFieldFactory.apply("Map 1")
     val controller = new Controller(matchfield)
-    val tank1 = new TankModel()
-    val tank2 = new TankModel()
+    val tank1 = new Tank()
+    val tank2 = new Tank()
     controller.fillGameFieldWithTank((0, 0), tank1, (5, 0), tank2)
     val mover = new Mover(controller.gameField)
     var obstacleList = new ListBuffer[Obstacle]()
@@ -30,13 +31,13 @@ class MoverTest extends FlatSpec with Matchers {
     assert(controller.gameField.gameFieldArray(1)(0).containsThisTank.get === tank1)
     mover.moveTank("left")
     assert(controller.gameField.gameFieldArray(0)(0).containsThisTank.get === tank1)
-    assert(mover.movePossible((0, -1)) === false)
-    assert(mover.movePossible((-1, 0)) === false)
-    assert(mover.movePossible((0, 0)) === false)
-    assert(mover.movePossible((12, 0)) === false)
-    assert(mover.movePossible((0, 12)) === false)
-    assert(mover.movePossible((4, 0)) === false)
-    assert(mover.movePossible((0, 1)) === true)
+    assert(mover.moveNotPossible((0, -1)) === false)
+    assert(mover.moveNotPossible((-1, 0)) === false)
+    assert(mover.moveNotPossible((0, 0)) === false)
+    assert(mover.moveNotPossible((12, 0)) === false)
+    assert(mover.moveNotPossible((0, 12)) === false)
+    assert(mover.moveNotPossible((4, 0)) === false)
+    assert(mover.moveNotPossible((0, 1)) === true)
     mover.aMoveOfTank((0, 2), tank1, x = true)
     assert(controller.gameField.gameFieldArray(0)(2).containsThisTank.get === tank1)
     val atXY: (Int, Int) = (GameStatus.activeTank.get.posC._1, GameStatus.activeTank.get.posC._2)

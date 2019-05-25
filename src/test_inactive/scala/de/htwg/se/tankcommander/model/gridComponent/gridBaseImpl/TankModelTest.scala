@@ -1,11 +1,11 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-import org.scalatest.{FlatSpec, Matchers}
+import de.htwg.se.tankcommander.model.IndividualComponent.Tank
 
 class TankModelTest extends FlatSpec with Matchers {
 
   "A TankModel" should "be properly initialized" in {
-    val testTank = new TankModel
+    val testTank = new Tank
 
     assert(
       testTank.tankBaseDamage === 10 & testTank.accuracy === 100 & testTank.hp === 100
@@ -13,7 +13,7 @@ class TankModelTest extends FlatSpec with Matchers {
     )
   }
   "deepClone" should "should clone a TankModel" in {
-    val testTank = new TankModel
+    val testTank = new Tank
     val testTank2 = testTank.deepClone()
 
     assert(

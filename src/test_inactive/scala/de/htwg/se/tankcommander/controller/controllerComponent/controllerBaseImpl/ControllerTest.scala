@@ -3,10 +3,9 @@ package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseIm
 
 import java.io.ByteArrayInputStream
 
+import de.htwg.se.tankcommander.model.IndividualComponent.{Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
-import de.htwg.se.tankcommander.model.playerComponent.Player
-import org.scalatest.{FlatSpec, Matchers}
 
 
 class ControllerTest extends FlatSpec with Matchers {
@@ -15,8 +14,8 @@ class ControllerTest extends FlatSpec with Matchers {
 
   }
   it should "position tanks in the right spot at beginning of match" in {
-    val tank1 = new TankModel()
-    val tank2 = new TankModel()
+    val tank1 = new Tank()
+    val tank2 = new Tank()
     val matchfield = GameFieldFactory.apply("Map 1")
     val controller = new Controller(matchfield)
     controller.fillGameFieldWithTank((0, 0), tank1, (5, 5), tank2)
@@ -40,8 +39,8 @@ class ControllerTest extends FlatSpec with Matchers {
     val controller = new Controller(matchfield)
     val player1 = Player("p1")
     val player2 = Player("p2")
-    val tank1 = new TankModel()
-    val tank2 = new TankModel()
+    val tank1 = new Tank()
+    val tank2 = new Tank()
     GameStatus.activePlayer = Option(player1)
     GameStatus.passivePlayer = Option(player2)
     GameStatus.activeTank = Option(tank1)
@@ -55,9 +54,9 @@ class ControllerTest extends FlatSpec with Matchers {
     GameStatus.movesLeft = true
     val matchfield = GameFieldFactory.apply("Map 1")
     val controller = new Controller(matchfield)
-    assert(controller.checkIfPlayerHasMovesLeft() === true)
+    assert(controller.playerHasMovesLeft() === true)
     GameStatus.movesLeft = false
-    assert(controller.checkIfPlayerHasMovesLeft() === false)
+    assert(controller.playerHasMovesLeft() === false)
     GameStatus.resetGameStatus()
   }
   it should "print the Gamefield" in {
@@ -68,8 +67,8 @@ class ControllerTest extends FlatSpec with Matchers {
         gameField.matchfieldArray(x)(y).cObstacle = Option(new Bush)
       }
     }
-    val tank1 = new TankModel
-    val tank2 = new TankModel
+    val tank1 = new Tank
+    val tank2 = new Tank
     val player1 = new Player("p1")
     val player2 = new Player("p2")
     GameStatus.activePlayer = Option(player1)
@@ -109,8 +108,8 @@ class ControllerTest extends FlatSpec with Matchers {
     val controller = new Controller(matchfield)
     val player1 = Player("p1")
     val player2 = Player("p2")
-    val tank1 = new TankModel()
-    val tank2 = new TankModel()
+    val tank1 = new Tank()
+    val tank2 = new Tank()
     GameStatus.activePlayer = Option(player1)
     GameStatus.passivePlayer = Option(player2)
     GameStatus.activeTank = Option(tank1)
@@ -139,8 +138,8 @@ class ControllerTest extends FlatSpec with Matchers {
     val controller = new Controller(matchfield)
     val player1 = Player("p1")
     val player2 = Player("p2")
-    val tank1 = new TankModel()
-    val tank2 = new TankModel()
+    val tank1 = new Tank()
+    val tank2 = new Tank()
     GameStatus.activePlayer = Option(player1)
     GameStatus.passivePlayer = Option(player2)
     GameStatus.activeTank = Option(tank1)
@@ -168,8 +167,8 @@ class ControllerTest extends FlatSpec with Matchers {
     val controller = new Controller(matchfield)
     val player1 = Player("p1")
     val player2 = Player("p2")
-    val tank1 = new TankModel()
-    val tank2 = new TankModel()
+    val tank1 = new Tank()
+    val tank2 = new Tank()
     GameStatus.activePlayer = Option(player1)
     GameStatus.passivePlayer = Option(player2)
     GameStatus.activeTank = Option(tank1)

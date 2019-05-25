@@ -10,16 +10,14 @@ class TUI(controller: Controller) extends Observer {
   //noinspection ScalaStyle
   def processInputLine(input: String): Unit = {
     input.toLowerCase match {
+      case "exit" =>
       case "start" => controller.initGame()
       case "end turn" => controller.endTurnChangeActivePlayer()
       case "undo" => controller.undo()
       case "redo" => controller.redo()
       case "save" => controller.save()
       case "load" => controller.load()
-      case "up" => controller.move(input)
-      case "down" => controller.move(input)
-      case "left" => controller.move(input)
-      case "right" => controller.move(input)
+      case "up" | "down" | "left" | "right" => controller.move(input)
       case "shoot" => controller.shoot()
       case _ => println("Kommando \"%s\" existiert nicht.".format(input))
     }
@@ -28,12 +26,10 @@ class TUI(controller: Controller) extends Observer {
   override def update(event: CustomEvent): Unit = {
     event match {
       case event: MsgEvent => print(event.message + "\n")
-      case event: UpdateEvent =>
+      case _: UpdateEvent =>
         print(controller.gameFieldToString)
-        print("Aktiver Spieler: " + controller.gameStatus.activePlayer + " Hitpoints: " +
-          controller.gameStatus.activePlayer.tank.hp + "\n" + "MovesLeft: " + controller.gameStatus.activePlayer.movesLeft + "\n" +
-          "Passiver Spieler: " + controller.gameStatus.passivePlayer + " Hitpoints: " +
-          controller.gameStatus.passivePlayer.tank.hp + "\n")
+        print(controller.gameStatus)
+        println("Hitchance: " + controller.updateHitchance())
     }
   }
 }

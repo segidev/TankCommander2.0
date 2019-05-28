@@ -6,4 +6,9 @@ case class Cell(x: Int, y: Int, obstacle: Option[Obstacle]) {
     case Some(o) => o.toString
     case None => "O"
   }
+
+  def consume = {
+    print("test")
+    this
+  }
 }

@@ -22,28 +22,18 @@ case class Coordinate(x: Int, y: Int) {
       case "right" => right()
     }
 
-  def cellDiffToList(otherCoordinate: Coordinate): Option[List[Coordinate]] =
-  //positiv runter negativ hoch
-    if (this.x == otherCoordinate.x) {
-      val diff = this.y - otherCoordinate.y
-      if (diff > 0) Option((this.y to otherCoordinate.y by -1).toList map {
-        Coordinate(this.x, _)
-      })
-      else Option((this.y to otherCoordinate.y).toList map {
-        Coordinate(this.x, _)
-      })
-    }
-    //positiv nach links negativ nach rechts
-    else if (this.y == otherCoordinate.y) {
-      val diff = this.x - otherCoordinate.x
-      if (diff > 0) Option((this.x to otherCoordinate.x by -1).toList map {
-        Coordinate(_, this.y)
-      })
-      else {
-        Option((this.x to otherCoordinate.x).toList map {
-          Coordinate(_, this.y)
-        })
+  def diff(otherCoordinate: Coordinate): Coordinate = Coordinate(this.x - otherCoordinate.x, this.y - otherCoordinate.y)
+
+  def cellDiffToList(otherCoordinate: Coordinate): Option[List[Coordinate]] = {
+    val diff = this.diff(otherCoordinate)
+    if (diff.x == 0 | diff.y == 0) {
+      if (diff.x > 0 | diff.y > 0) {
+        Option(for (x <- (this.x to otherCoordinate.x by -1).toList; y <- this.y to otherCoordinate.y by -1) yield Coordinate(x, y))
+      } else {
+        Option(for (x <- (this.x to otherCoordinate.x).toList; y <- this.y to otherCoordinate.y) yield Coordinate(x, y))
       }
+    } else {
+      None
     }
-    else None
+  }
 }

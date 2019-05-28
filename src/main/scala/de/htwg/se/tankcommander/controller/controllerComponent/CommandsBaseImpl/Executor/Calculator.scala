@@ -3,17 +3,20 @@ package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl
 import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.util.Coordinate
 
-
 case class Calculator(gameField: GameField) {
-  def update(coordinate1: Coordinate, coordinate2: Coordinate): Double = {
+  var hitchance = 0
+
+  def update(coordinate1: Coordinate, coordinate2: Coordinate): Int = {
     val baseHitChance = 100
     coordinate1.cellDiffToList(coordinate2) match {
-      case Some(value) => baseHitChance - calcMalus(value)
+      case Some(value) => if (value.isEmpty) 0 else hitchance = baseHitChance - calcMalus(value)
       case None => 0
+      case _ => throw new Exception("Calculation failed")
     }
+    hitchance
   }
 
-  def calcMalus(lst: List[Coordinate]): Int = {
+  private def calcMalus(lst: List[Coordinate]): Int = {
     lst match {
       case h :: t => gameField.gameFieldArray(h.x)(h.y).obstacle match {
         case Some(o) => o.hitMalus + calcMalus(t)

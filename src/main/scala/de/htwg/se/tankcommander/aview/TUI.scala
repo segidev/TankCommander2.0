@@ -1,7 +1,7 @@
 package de.htwg.se.tankcommander.aview
 
 import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.tankcommander.controller.{CustomEvent, MsgEvent, UpdateEvent}
+import de.htwg.se.tankcommander.controller.{CustomEvent, HitChanceEvent, MsgEvent, UpdateEvent}
 import de.htwg.se.tankcommander.util.Observer
 
 class TUI(controller: Controller) extends Observer {
@@ -26,10 +26,11 @@ class TUI(controller: Controller) extends Observer {
   override def update(event: CustomEvent): Unit = {
     event match {
       case event: MsgEvent => print(event.message + "\n")
+      case event: HitChanceEvent => println(event.message + "\n")
       case _: UpdateEvent =>
         print(controller.gameFieldToString)
         print(controller.gameStatus)
-        println("Hitchance: " + controller.updateHitchance())
+
     }
   }
 }

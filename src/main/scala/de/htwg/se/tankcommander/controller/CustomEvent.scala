@@ -10,6 +10,10 @@ trait MsgEvent extends CustomEvent {
 
 trait UpdateEvent extends CustomEvent
 
+case class HitChanceEvent(value: Int) extends MsgEvent {
+  override val message: String = "Hitchance: " + value.toString
+}
+
 case class WelcomeEvent() extends MsgEvent {
   override val message: String = "Willkommen bei Tank-Commander!"
 }
@@ -53,10 +57,13 @@ case class EndOfRoundEvent() extends MsgEvent {
 case class EndOfGameEvent(individual: Individual) extends MsgEvent {
   override val message: String = "Spieler %s hat die Runde gewonnen.".format(individual.player.name)
 }
+
 case class LoadedGameEvent() extends MsgEvent {
   override val message: String = "Spiel geladen"
 }
+
 case class SavedGameEvent()() extends MsgEvent {
   override val message: String = "Spiel gespeichert"
 }
+
 case class DrawGameField() extends UpdateEvent

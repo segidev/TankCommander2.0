@@ -9,7 +9,6 @@ case class Mover(gameStatus: GameStatus, gameField: GameField) {
 
   def moveTank(input: String): Option[Individual] = {
     var newPosition = gameStatus.activePlayer.tank.coordinates.relativeCoordinate(input)
-
     if (movePossible(newPosition)) {
       Option(gameStatus.activePlayer.copy(
         tank = gameStatus.activePlayer.tank.copy(coordinates = newPosition),

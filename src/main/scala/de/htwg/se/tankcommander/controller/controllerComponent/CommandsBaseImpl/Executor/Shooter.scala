@@ -5,7 +5,7 @@ import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
 case class Shooter(gameStatus: GameStatus, controller: Controller) {
   def shoot(): (GameStatus, Option[Int]) = {
-    if (controller.updateHitchance() >= getRandomNumberTo100) {
+    if (controller.calculator.hitchance >= getRandomNumberTo100) {
       val hpAfterDamage = gameStatus.passivePlayer.tank.hp - gameStatus.activePlayer.tank.tankBaseDamage
       (gameStatus.copy(
         passivePlayer = gameStatus.passivePlayer.copy(tank = gameStatus.passivePlayer.tank.copy(hp = hpAfterDamage)),

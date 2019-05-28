@@ -17,10 +17,6 @@ trait ControllerInterface extends Publisher {
 
   def endTurnChangeActivePlayer(): Unit
 
-  def createGameStatusBackup: Option[GameStatus]
-
-  def createGameFieldBackup: Option[GameField]
-
   def playerHasMovesLeft(): Boolean
 
   def gameFieldToString: String

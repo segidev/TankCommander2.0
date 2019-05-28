@@ -12,6 +12,12 @@ import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.model.gameFieldComponent.Maps.MapSelector
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.util.{Coordinate, Observable, UndoManager}
+import scala.concurrent.duration._
+
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
+import scala.concurrent.{Await, Future, Promise}
+import scala.util.{Failure, Success}
 
 class Controller @Inject() extends Observable with ControllerInterface {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)
@@ -53,18 +59,15 @@ class Controller @Inject() extends Observable with ControllerInterface {
 
   override def endGame(): Unit = notifyObservers(EndOfGameEvent(gameStatus.activePlayer))
 
-  override def createGameStatusBackup: Option[GameStatus] = {
-    Option(gameStatus.copy())
-  }
-
-  override def createGameFieldBackup: Option[GameField] = {
-    Option(gameField.copy())
-  }
-
   override def playerHasMovesLeft(): Boolean = gameStatus.activePlayer.movesLeft > 0
 
   override def gameFieldToString: String = {
     val output = new StringBuilder
+
+    /*Debug "Monoid"
+    for (arr1 <- gameField.gameFieldArray; cell: Cell <- arr1) yield print(cell)
+    */
+
     gameField.gameFieldArray.zipWithIndex.foreach {
       case (xArray, y) =>
         xArray.zipWithIndex.foreach {
@@ -92,10 +95,18 @@ class Controller @Inject() extends Observable with ControllerInterface {
       case _ => undoManager.doStep(new MoveCommand(this, s))
         notifyObservers(DrawGameField())
     }
+    updateHitchance()
   }
 
-  def updateHitchance(): Double = {
-    calculator.update(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
+  def updateHitchance(): Unit = {
+    var result = 0
+    val future1 = Future(calculator.update(gameStatus.activePlayer.tank.coordinates,
+      gameStatus.passivePlayer.tank.coordinates))
+    //Await.result(future1, Duration(10, SECONDS))
+    future1.onComplete {
+      case Success(value) => notifyObservers(HitChanceEvent(value))
+      case Failure(e) => print("Calculation Failed" + e)
+    }
   }
 
   override def shoot(): Unit = {
@@ -109,9 +120,9 @@ class Controller @Inject() extends Observable with ControllerInterface {
 
   override def endTurnChangeActivePlayer(): Unit = {
     gameStatus = gameStatus.changeActivePlayer()
-    calculator.update(gameStatus.activePlayer.tank.coordinates, gameStatus.passivePlayer.tank.coordinates)
     notifyObservers(EndOfRoundEvent())
     notifyObservers(DrawGameField())
+    updateHitchance()
   }
 
   override def undo(): Unit = {

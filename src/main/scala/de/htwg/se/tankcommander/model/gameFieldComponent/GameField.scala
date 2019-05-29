@@ -1,6 +1,6 @@
 package de.htwg.se.tankcommander.model.gameFieldComponent
 
-import de.htwg.se.tankcommander.model.gameFieldComponent.Maps.MapOptions
+import de.htwg.se.tankcommander.model.gameFieldComponent.maps.MapOptions
 import de.htwg.se.tankcommander.model.gridComponent.GameFieldInterface
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 import de.htwg.se.tankcommander.util.Coordinate

@@ -1,22 +1,21 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
+package de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl
 
+import akka.actor.{ActorRef, ActorSystem}
 import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.se.tankcommander.TankCommanderModule
-import de.htwg.se.tankcommander.controller._
-import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor.Calculator
-import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.{MoveCommand, ShootCommand}
+import de.htwg.se.tankcommander.controller.actorComponent.ActorMaster
+import de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.executor.Calculator
+import de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.{MoveCommand, ShootCommand}
 import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
-import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
-import de.htwg.se.tankcommander.model.IndividualComponent.{Individual, Player, Tank}
+import de.htwg.se.tankcommander.controller.fileIoComponent.FileIOInterface
+import de.htwg.se.tankcommander.model.individualComponent.{Individual, Player, Tank}
 import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
-import de.htwg.se.tankcommander.model.gameFieldComponent.Maps.MapSelector
+import de.htwg.se.tankcommander.model.gameFieldComponent.maps.MapSelector
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.se.tankcommander.util.{Coordinate, Observable, UndoManager}
-import scala.concurrent.duration._
+import de.htwg.se.tankcommander.util._
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, Future, Promise}
+import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 class Controller @Inject() extends Observable with ControllerInterface {
@@ -26,6 +25,8 @@ class Controller @Inject() extends Observable with ControllerInterface {
   var gameField: GameField = _
   var gameStatus: GameStatus = _
   var calculator: Calculator = _
+  val system = ActorSystem("actor-master")
+  val supervisor: ActorRef = system.actorOf(ActorMaster.props(), "actor-master")
 
   override def initGame(): Unit = {
     notifyObservers(WelcomeEvent())

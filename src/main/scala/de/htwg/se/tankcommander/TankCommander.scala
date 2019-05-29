@@ -2,9 +2,7 @@ package de.htwg.se.tankcommander
 
 import com.google.inject.{Guice, Injector}
 import de.htwg.se.tankcommander.aview.TUI
-import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
-
-import scala.util.{Failure, Success, Try}
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl.Controller
 
 object TankCommander {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)

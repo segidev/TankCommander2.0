@@ -1,6 +1,6 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
+package de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl
 
-import de.htwg.se.tankcommander.model.IndividualComponent.{Player, Tank}
+import de.htwg.se.tankcommander.model.individualComponent.{Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
 class GameStatusTest extends FlatSpec with Matchers {

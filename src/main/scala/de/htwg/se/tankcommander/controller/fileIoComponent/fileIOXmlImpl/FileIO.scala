@@ -1,10 +1,9 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.fileIOXmlImpl
+package de.htwg.se.tankcommander.controller.fileIoComponent.fileIOXmlImpl
 
 import java.io._
 
-import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
-import de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.FileIOInterface
-import de.htwg.se.tankcommander.model.IndividualComponent.{Individual, Player, Tank}
+import de.htwg.se.tankcommander.controller.fileIoComponent.FileIOInterface
+import de.htwg.se.tankcommander.model.individualComponent.{Individual, Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.util.Coordinate
 

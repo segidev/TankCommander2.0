@@ -1,8 +1,8 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor.Shooter
-import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.tankcommander.model.IndividualComponent.{Player, Tank}
+import de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.executor.Shooter
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl.Controller
+import de.htwg.se.tankcommander.model.individualComponent.{Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
 class ShooterTest extends FlatSpec with Matchers {

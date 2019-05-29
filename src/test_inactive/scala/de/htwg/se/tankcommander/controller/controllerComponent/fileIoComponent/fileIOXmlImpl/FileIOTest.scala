@@ -1,4 +1,4 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent.fileIOXmlImpl
+package de.htwg.se.tankcommander.controller.fileIoComponent.fileIOXmlImpl
 
 import org.scalatest.{FlatSpec, FunSuite, Matchers}
 

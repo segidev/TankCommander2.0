@@ -1,4 +1,4 @@
-package de.htwg.se.tankcommander.model.IndividualComponent
+package de.htwg.se.tankcommander.model.individualComponent
 
 import de.htwg.se.tankcommander.util.Coordinate
 

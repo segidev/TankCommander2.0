@@ -1,9 +1,9 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl
+package de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl
 
 
 import java.io.ByteArrayInputStream
 
-import de.htwg.se.tankcommander.model.IndividualComponent.{Player, Tank}
+import de.htwg.se.tankcommander.model.individualComponent.{Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 

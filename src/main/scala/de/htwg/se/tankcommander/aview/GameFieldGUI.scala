@@ -2,9 +2,8 @@ package de.htwg.se.tankcommander.aview
 
 import java.awt.Dimension
 
-import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.tankcommander.controller.{CustomEvent, MsgEvent, UpdateEvent}
-import de.htwg.se.tankcommander.util.Observer
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl.Controller
+import de.htwg.se.tankcommander.util.{CustomEvent, MsgEvent, Observer, UpdateEvent}
 import javax.swing.ImageIcon
 
 import scala.swing.Swing.LineBorder

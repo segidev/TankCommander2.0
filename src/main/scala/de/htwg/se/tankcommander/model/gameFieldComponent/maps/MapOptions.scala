@@ -1,4 +1,4 @@
-package de.htwg.se.tankcommander.model.gameFieldComponent.Maps
+package de.htwg.se.tankcommander.model.gameFieldComponent.maps
 
 import de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl._
 import de.htwg.se.tankcommander.util.Coordinate

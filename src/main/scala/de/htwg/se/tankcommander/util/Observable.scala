@@ -1,9 +1,5 @@
 package de.htwg.se.tankcommander.util
 
-import de.htwg.se.tankcommander.controller.CustomEvent
-
-import scala.swing.event.Event
-
 trait Observer {
   def update(event: CustomEvent): Unit
 }

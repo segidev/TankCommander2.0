@@ -1,6 +1,5 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.fileIoComponent
+package de.htwg.se.tankcommander.controller.fileIoComponent
 
-import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
 trait FileIOInterface {

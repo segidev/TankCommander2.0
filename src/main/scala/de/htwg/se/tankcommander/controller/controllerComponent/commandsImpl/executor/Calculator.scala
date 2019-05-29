@@ -1,4 +1,4 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor
+package de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.executor
 
 import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.util.Coordinate

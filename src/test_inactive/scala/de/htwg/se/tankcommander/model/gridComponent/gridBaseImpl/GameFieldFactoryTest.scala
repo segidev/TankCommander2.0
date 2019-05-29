@@ -1,6 +1,6 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.tankcommander.model.IndividualComponent.Tank
+import de.htwg.se.tankcommander.model.individualComponent.Tank
 
 class GameFieldFactoryTest extends FlatSpec with Matchers {
   "A GameField Object" should "have an Array with a size of 11x11" in {

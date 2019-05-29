@@ -1,6 +1,6 @@
 package de.htwg.se.tankcommander.aview
 
-import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl.Controller
 import javax.swing.ImageIcon
 
 import scala.swing._

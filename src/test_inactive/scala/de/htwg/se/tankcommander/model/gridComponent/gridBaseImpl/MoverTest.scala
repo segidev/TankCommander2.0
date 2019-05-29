@@ -1,8 +1,8 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor.Mover
-import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.tankcommander.model.IndividualComponent.Tank
+import de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.executor.Mover
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl.Controller
+import de.htwg.se.tankcommander.model.individualComponent.Tank
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
 import scala.collection.mutable.ListBuffer

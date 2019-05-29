@@ -1,6 +1,6 @@
 package de.htwg.se.tankcommander.model.gridComponent.gridBaseImpl
 
-import de.htwg.se.tankcommander.model.IndividualComponent.Tank
+import de.htwg.se.tankcommander.model.individualComponent.Tank
 
 class TankModelTest extends FlatSpec with Matchers {
 

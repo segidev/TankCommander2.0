@@ -1,8 +1,7 @@
 package de.htwg.se.tankcommander.aview
 
-import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
-import de.htwg.se.tankcommander.controller.{CustomEvent, HitChanceEvent, MsgEvent, UpdateEvent}
-import de.htwg.se.tankcommander.util.Observer
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl.Controller
+import de.htwg.se.tankcommander.util._
 
 class TUI(controller: Controller) extends Observer {
   controller.add(this)

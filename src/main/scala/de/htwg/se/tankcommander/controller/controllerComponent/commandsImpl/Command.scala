@@ -1,4 +1,4 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl
+package de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl
 
 trait Command {
   def doStep(): Unit

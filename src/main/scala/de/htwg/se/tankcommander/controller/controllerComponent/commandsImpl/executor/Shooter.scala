@@ -1,6 +1,6 @@
-package de.htwg.se.tankcommander.controller.controllerComponent.CommandsBaseImpl.Executor
+package de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.executor
 
-import de.htwg.se.tankcommander.controller.controllerComponent.controllerBaseImpl.Controller
+import de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl.Controller
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 
 case class Shooter(gameStatus: GameStatus, controller: Controller) {

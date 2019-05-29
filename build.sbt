@@ -23,7 +23,4 @@ libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.6"
 
 libraryDependencies += "net.liftweb" %% "lift-json" % "3.0.1"
 
-libraryDependencies ++= Seq(
-  "com.typesafe.akka" %% "akka-actor" % "2.5.23",
-  "com.typesafe.akka" %% "akka-testkit" % "2.5.23" % Test
-)
+libraryDependencies += "com.typesafe.akka" %% "akka-actor" % "2.5.23"

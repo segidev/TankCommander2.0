@@ -3,6 +3,7 @@ package de.htwg.se.tankcommander.controller.fileIoComponent.fileIoJsonImpl
 import java.io._
 
 import com.google.inject.Inject
+import de.htwg.se.tankcommander.controller.actorComponent.LoadResponse
 import de.htwg.se.tankcommander.controller.fileIoComponent.FileIOInterface
 import de.htwg.se.tankcommander.model.individualComponent.{Individual, Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
@@ -37,7 +38,7 @@ class FileIO @Inject() extends FileIOInterface {
       )
     )
 
-  override def load(gameStatus: GameStatus, map: String): (GameStatus, String) = {
+  override def load(): LoadResponse = {
     val io = Source.fromFile("src/main/ressources/savegame.json")
     val source: String = io.getLines.mkString
     io.close()
@@ -63,9 +64,8 @@ class FileIO @Inject() extends FileIOInterface {
         )
       )
     )
-    //@ToDo
     val map = (json \ "game" \ "MapSelected").get.toString().replaceAll("\"", "")
 
-    (gameStatus.copy(activePlayer, passivePlayer), map)
+    LoadResponse(GameStatus(activePlayer, passivePlayer), map)
   }
 }

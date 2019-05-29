@@ -2,7 +2,7 @@ package de.htwg.se.tankcommander.util
 
 import de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.Command
 
-class UndoManager {
+case class UndoManager() {
   private var undoStack: List[Command] = Nil
   private var redoStack: List[Command] = Nil
 

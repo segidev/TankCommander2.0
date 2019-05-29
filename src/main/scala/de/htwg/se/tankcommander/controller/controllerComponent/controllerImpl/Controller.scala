@@ -1,9 +1,9 @@
 package de.htwg.se.tankcommander.controller.controllerComponent.controllerImpl
 
-import akka.actor.{ActorRef, ActorSystem}
+import akka.actor.{AbstractActor, Actor, ActorRef, ActorSystem, Props}
 import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.se.tankcommander.TankCommanderModule
-import de.htwg.se.tankcommander.controller.actorComponent.ActorMaster
+import de.htwg.se.tankcommander.controller.actorComponent.{FileActor, LoadRequest, LoadResponse, SaveRequest}
 import de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.executor.Calculator
 import de.htwg.se.tankcommander.controller.controllerComponent.commandsImpl.{MoveCommand, ShootCommand}
 import de.htwg.se.tankcommander.controller.controllerComponent.ControllerInterface
@@ -13,20 +13,29 @@ import de.htwg.se.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.se.tankcommander.model.gameFieldComponent.maps.MapSelector
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
 import de.htwg.se.tankcommander.util._
+import akka.pattern.ask
+import akka.util.Timeout
+import de.htwg.se.tankcommander.controller.GameSupervisor
 
+import scala.concurrent.duration._
+import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
+import scala.concurrent.{Await, Future}
 import scala.util.{Failure, Success}
 
 class Controller @Inject() extends Observable with ControllerInterface {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)
   val fileIO: FileIOInterface = injector.getInstance(classOf[FileIOInterface])
-  var undoManager = new UndoManager
+  var undoManager = UndoManager()
+
   var gameField: GameField = _
   var gameStatus: GameStatus = _
   var calculator: Calculator = _
-  val system = ActorSystem("actor-master")
-  val supervisor: ActorRef = system.actorOf(ActorMaster.props(), "actor-master")
+
+  implicit val system: ActorSystem = ActorSystem("ControllerSystem")
+  //val supervisor: ActorRef = system.actorOf(GameSupervisor.props(), "GameSupervisor")
+  val fileActor: ActorRef = system.actorOf(FileActor.props(this), "FileActor")
+  implicit val timeout: Timeout = Timeout(15 seconds)
 
   override def initGame(): Unit = {
     notifyObservers(WelcomeEvent())
@@ -137,16 +146,18 @@ class Controller @Inject() extends Observable with ControllerInterface {
   }
 
   override def save(): Unit = {
-    fileIO.save(gameStatus, gameField.mapOptions.name)
-    notifyObservers(SavedGameEvent())
+    fileActor ! SaveRequest
   }
 
   override def load(): Unit = {
-    val loadObj = fileIO.load(gameStatus, gameField.mapOptions.name)
-    gameStatus = loadObj._1
-    gameField = GameField(MapSelector.select(loadObj._2).get)
+    val future = fileActor ? LoadRequest
+    val result = Await.result(future, timeout.duration).asInstanceOf[LoadResponse]
+    gameStatus = result.gameStatus
+    gameField = GameField(MapSelector.select(result.string).get)
     notifyObservers(LoadedGameEvent())
     notifyObservers(DrawGameField())
   }
 
 }
+
+

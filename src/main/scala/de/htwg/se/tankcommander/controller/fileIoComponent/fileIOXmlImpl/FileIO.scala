@@ -2,6 +2,7 @@ package de.htwg.se.tankcommander.controller.fileIoComponent.fileIOXmlImpl
 
 import java.io._
 
+import de.htwg.se.tankcommander.controller.actorComponent.LoadResponse
 import de.htwg.se.tankcommander.controller.fileIoComponent.FileIOInterface
 import de.htwg.se.tankcommander.model.individualComponent.{Individual, Player, Tank}
 import de.htwg.se.tankcommander.model.gameStatusComponent.GameStatus
@@ -59,7 +60,7 @@ class FileIO extends FileIOInterface {
     </game>
   }
 
-  override def load(gameStatus: GameStatus, map: String): (GameStatus, String) = {
+  override def load(): LoadResponse = {
     val file = XML.loadFile("src/main/ressources/savegame.xml")
     val activePlayer = Individual(
       Player((file \\ "game" \\ "aPlayer").text),
@@ -81,6 +82,6 @@ class FileIO extends FileIOInterface {
       )
     )
     val map = (file \\ "game" \ "MapSelected").text
-    (gameStatus.copy(activePlayer, passivePlayer), map)
+    LoadResponse(GameStatus(activePlayer, passivePlayer), map)
   }
 }

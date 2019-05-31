@@ -1,32 +1,29 @@
 package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl
 
-import akka.actor.{AbstractActor, Actor, ActorRef, ActorSystem, Props}
+import akka.actor.{ActorRef, ActorSystem}
+import akka.pattern.ask
+import akka.util.Timeout
 import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.sa.tankcommander.TankCommanderModule
 import de.htwg.sa.tankcommander.controller.actorComponent.{FileActor, LoadRequest, LoadResponse, SaveRequest}
+import de.htwg.sa.tankcommander.controller.controllerComponent.ControllerInterface
 import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor.Calculator
 import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.{MoveCommand, ShootCommand}
-import de.htwg.sa.tankcommander.controller.controllerComponent.ControllerInterface
-import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
-import de.htwg.sa.tankcommander.model.individualComponent.{Individual, Player, Tank}
 import de.htwg.sa.tankcommander.model.gameFieldComponent.GameField
 import de.htwg.sa.tankcommander.model.gameFieldComponent.maps.MapSelector
 import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
+import de.htwg.sa.tankcommander.model.individualComponent.{Individual, Player, Tank}
 import de.htwg.sa.tankcommander.util._
-import akka.pattern.ask
-import akka.util.Timeout
-import de.htwg.sa.tankcommander.controller.GameSupervisor
 
-import scala.concurrent.duration._
-import scala.language.postfixOps
 import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration._
 import scala.concurrent.{Await, Future}
+import scala.language.postfixOps
 import scala.util.{Failure, Success}
 
 class Controller @Inject() extends Observable with ControllerInterface {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)
   var undoManager = UndoManager()
-
   var gameField: GameField = _
   var gameStatus: GameStatus = _
   var calculator: Calculator = _
@@ -53,14 +50,14 @@ class Controller @Inject() extends Observable with ControllerInterface {
     // TODO: Blockiert für immer, falls GUI genutzt?
     val mapName: String = "Map1" // TODO: scala.io.StdIn.readLine()
     MapSelector.select(mapName) match {
-      case Some(map) =>
+      case Success(map) =>
         val activePlayer = Individual(player1, tank1)
         val passivePlayer = Individual(player2, tank2)
         gameField = GameField(map)
         calculator = Calculator(gameField)
         gameStatus = GameStatus(activePlayer, passivePlayer)
         notifyObservers(DrawGameField())
-      case None =>
+      case Failure(e) =>
         notifyObservers(MapSelectionErrorEvent())
         initGameStatus(player1, player2, tank1, tank2)
     }
@@ -104,17 +101,14 @@ class Controller @Inject() extends Observable with ControllerInterface {
       case _ => undoManager.doStep(new MoveCommand(this, s))
         notifyObservers(DrawGameField())
     }
-    updateHitchance()
+    updateHitChance()
   }
 
-  def updateHitchance(): Unit = {
-    var result = 0
-    val future1 = Future(calculator.update(gameStatus.activePlayer.tank.coordinates,
-      gameStatus.passivePlayer.tank.coordinates))
-    //Await.result(future1, Duration(10, SECONDS))
-    future1.onComplete {
+  def updateHitChance(): Unit = {
+    Future(calculator.update(gameStatus.activePlayer.tank.coordinates,
+      gameStatus.passivePlayer.tank.coordinates)).onComplete {
       case Success(value) => notifyObservers(HitChanceEvent(value))
-      case Failure(e) => print("Calculation Failed" + e)
+      case Failure(e) => notifyObservers(CalculatorException())
     }
   }
 
@@ -131,7 +125,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
     gameStatus = gameStatus.changeActivePlayer()
     notifyObservers(EndOfRoundEvent())
     notifyObservers(DrawGameField())
-    updateHitchance()
+    updateHitChance()
   }
 
   override def undo(): Unit = {
@@ -156,7 +150,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
     gameField = GameField(MapSelector.select(result.string).get)
     notifyObservers(LoadedGameEvent())
     notifyObservers(DrawGameField())
-    updateHitchance()
+    updateHitChance()
   }
 
 }

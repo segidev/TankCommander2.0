@@ -1,7 +1,9 @@
 package de.htwg.sa.tankcommander.model.gameFieldComponent.maps
 
 import de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl._
-import de.htwg.sa.tankcommander.util.Coordinate
+import de.htwg.sa.tankcommander.util.{Coordinate, MapSelectionException}
+
+import scala.util.{Failure, Success, Try}
 
 trait MapOptions {
   val name: String
@@ -157,11 +159,11 @@ case class MapOptions2() extends MapOptions {
 }
 
 object MapSelector {
-  def select(s: String): Option[MapOptions] = {
+  def select(s: String): Try[MapOptions] = {
     s match {
-      case "Map1" => Some(new MapOptions1)
-      case "Map2" => Some(new MapOptions2)
-      case _: String => None
+      case "Map1" => Success(new MapOptions1)
+      case "Map2" => Success(new MapOptions2)
+      case _: String => Failure(MapSelectionException())
     }
 
   }

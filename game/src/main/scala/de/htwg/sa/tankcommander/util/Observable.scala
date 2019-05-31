@@ -1,7 +1,7 @@
 package de.htwg.sa.tankcommander.util
 
 trait Observer {
-  def update(event: CustomEvent): Unit
+  def update(event: GameEvent): Unit
 }
 
 class Observable {
@@ -11,5 +11,5 @@ class Observable {
 
   def remove(s: Observer): Unit = subscribers = subscribers.filterNot(o => o == s)
 
-  def notifyObservers(event: CustomEvent): Unit = subscribers.foreach(o => o.update(event))
+  def notifyObservers(event: GameEvent): Unit = subscribers.foreach(o => o.update(event))
 }

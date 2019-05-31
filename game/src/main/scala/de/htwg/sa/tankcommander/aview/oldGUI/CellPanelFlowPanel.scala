@@ -1,13 +1,13 @@
-package de.htwg.sa.tankcommander.aview
+package de.htwg.sa.tankcommander.aview.oldGUI
 
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.util.{CustomEvent, Observer}
+import de.htwg.sa.tankcommander.util.{GameEvent, Observer}
 import javax.swing.ImageIcon
 
 import scala.swing._
 
 //Individual Cells
-class CellPanel(row: Int, column: Int, controller: Controller) extends FlowPanel with Observer {
+class CellPanelFlowPanel(row: Int, column: Int, controller: Controller) extends FlowPanel with Observer {
   controller.add(this)
   val fontSize = 36
   val fontStyle = 1
@@ -67,7 +67,7 @@ class CellPanel(row: Int, column: Int, controller: Controller) extends FlowPanel
   //    }
   //  }
 
-  override def update(event: CustomEvent): Unit = {
+  override def update(event: GameEvent): Unit = {
     this.label.text = cellText(row, column)
     repaint
   }

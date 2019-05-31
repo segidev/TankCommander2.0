@@ -1,16 +1,16 @@
-package de.htwg.sa.tankcommander.aview
+package de.htwg.sa.tankcommander.aview.oldGUI
 
 import java.awt.Dimension
 
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.util.{CustomEvent, MsgEvent, Observer, UpdateEvent}
+import de.htwg.sa.tankcommander.util.{GameEvent, MsgEvent, Observer, UpdateEvent}
 import javax.swing.ImageIcon
 
 import scala.swing.Swing.LineBorder
 import scala.swing._
 import scala.swing.event.ButtonClicked
 
-class GameFieldGUI(controller: Controller, name1: String, name2: String, map: String) extends Frame with Observer {
+class GameFieldFrame(controller: Controller, name1: String, name2: String, map: String) extends Frame with Observer {
   controller.add(this)
   val statusLine = new TextArea()
   val messages: TextArea = new TextArea("Welcome to the Game. \n" +
@@ -170,7 +170,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
       })
     }
   }
-  var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.gameField.gridsX, controller.gameField.gridsY)
+  var cells: Array[Array[CellPanelFlowPanel]] = Array.ofDim[CellPanelFlowPanel](controller.gameField.gridsX, controller.gameField.gridsY)
   visible = true
   centerOnScreen()
   var scrollBar: ScrollBar = scrollPanel.verticalScrollBar
@@ -199,7 +199,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
         for {
           row <- 0 until controller.gameField.gridsX
         } {
-          val cellPanel = new CellPanel(row, column, controller)
+          val cellPanel = new CellPanelFlowPanel(row, column, controller)
           cells(row)(column) = cellPanel
           contents += cellPanel.cell
         }
@@ -207,7 +207,7 @@ class GameFieldGUI(controller: Controller, name1: String, name2: String, map: St
     gameField
   }
 
-  override def update(event: CustomEvent): Unit = {
+  override def update(event: GameEvent): Unit = {
     event match {
       case event: MsgEvent => print(event.message)
       case event: UpdateEvent => redraw()

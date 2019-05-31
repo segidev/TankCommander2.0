@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.aview
+package de.htwg.sa.tankcommander.aview.TUI
 
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
 import de.htwg.sa.tankcommander.util._
@@ -22,9 +22,10 @@ class TUI(controller: Controller) extends Observer {
     }
   }
 
-  override def update(event: CustomEvent): Unit = {
+  override def update(event: GameEvent): Unit = {
     event match {
-      case event: MsgEvent => print(event.message + "\n")
+      case event: MsgEvent => println(event.message)
+      case error: GameExceptions => println(error)
       case _: UpdateEvent =>
         print(controller.gameFieldToString)
         print(controller.gameStatus)

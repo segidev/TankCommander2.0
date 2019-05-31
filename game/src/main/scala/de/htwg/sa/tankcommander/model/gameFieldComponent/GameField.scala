@@ -20,5 +20,26 @@ case class GameField(mapOptions: MapOptions) extends GameFieldInterface {
 
   }
 
+  /**
+    * Access element on coordinate
+    *
+    * @param coordinate
+    */
+  def getCell(coordinate: Coordinate): Cell = {
+    gameFieldArray(coordinate.x)(coordinate.y)
+  }
+
+  /**
+    * Get option of obstacle
+    * @param coordinate
+    * @return obstacle
+    */
+  def getCellObs(coordinate: Coordinate): Option[Obstacle] = {
+    gameFieldArray(coordinate.x)(coordinate.y).obstacle match {
+      case Some(obstacle) => Option(obstacle)
+      case None => None
+    }
+  }
+
 }
 

@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.aview
+package de.htwg.sa.tankcommander.aview.oldGUI
 
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
 import javax.swing.ImageIcon
@@ -6,7 +6,7 @@ import javax.swing.ImageIcon
 import scala.swing._
 import scala.swing.event.ButtonClicked
 
-class MainMenu(controller: Controller) extends Frame {
+class MainMenuFrame(controller: Controller) extends Frame {
   val menuHeight = 1000
   val gridWidth = 600
   val gridHeight = 300
@@ -62,7 +62,7 @@ class MainMenu(controller: Controller) extends Frame {
     }
     start.reactions += {
       case ButtonClicked(`start`) =>
-        new GameFieldGUI(controller, name1.text, name2.text, map = chosenMap.selection.item)
+        new GameFieldFrame(controller, name1.text, name2.text, map = chosenMap.selection.item)
         dispose()
     }
     val exit: Button = new Button() {

@@ -2,13 +2,13 @@ package de.htwg.sa.tankcommander.util
 
 import de.htwg.sa.tankcommander.model.individualComponent.Individual
 
-trait CustomEvent
+trait GameEvent
 
-trait MsgEvent extends CustomEvent {
+trait MsgEvent extends GameEvent {
   val message: String
 }
 
-trait UpdateEvent extends CustomEvent
+trait UpdateEvent extends GameEvent
 
 case class HitChanceEvent(value: Int) extends MsgEvent {
   override val message: String = "Hitchance: " + value.toString

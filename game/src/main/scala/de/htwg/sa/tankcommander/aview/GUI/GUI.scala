@@ -1,36 +1,92 @@
 package de.htwg.sa.tankcommander.aview.GUI
 
-import com.google.inject.Inject
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import java.awt.event.{WindowAdapter, WindowEvent}
-import javax.swing.{JFrame, WindowConstants}
+import javax.swing.ImageIcon
 
-import scala.swing.Dimension
-import scalafx.application.Platform
+import scala.swing._
+import scala.swing.event.ButtonClicked
 
-class GUI @Inject()(controller: Controller) extends JFrame {
-  val defaultSize: (Int, Int) = (1024, 768)
+class GUI(controller: Controller) extends Frame {
+  val menuHeight = 1000
+  val gridWidth = 600
+  val gridHeight = 300
+  val textHeight = 50
+  val gridX = 4
+  val innerGridX = 3
+  val gridY = 1
 
-  setResizable(false)
-  setMinimumSize(new Dimension(defaultSize._1, defaultSize._2))
-  setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE)
+  menuBar = GameMenuBar(controller).menuBar
 
-  // Layout
-  val mainPanel: GamePanel = new GamePanel(controller)
-  add(mainPanel)
+  //Main Menu
+  title = "Tank Commander"
 
-  setLocationRelativeTo(null)
-  setVisible(true)
+  menuBar = new MenuBar {
+    contents += new Menu("File") {
+      contents += new MenuItem("New Game") {
 
-  // Methods
-  def close(): Unit = {
-    setVisible(false)
-    dispose()
+      }
+      contents += new MenuItem("Restart") {
+
+      }
+      contents += new Separator()
+      contents += new MenuItem("Load") {
+
+      }
+      contents += new MenuItem("Save") {
+
+      }
+      contents += new Separator()
+      contents += new MenuItem(Action("Exit") {
+        sys.exit(0)
+      })
+    }
   }
 
-  addWindowListener(new WindowAdapter {
-    override def windowClosing(e: WindowEvent): Unit = {
-      Platform.runLater(mainPanel.exitApplication())
+  contents = new GridPanel(gridX, gridY) {
+    val start: Button = new Button() {
+      this.preferredSize = new Dimension(gridWidth, gridHeight)
+      this.icon = new ImageIcon(new ImageIcon("icons/start_final_kleiner.png")
+        .getImage.getScaledInstance(gridWidth, gridHeight, java.awt.Image.SCALE_SMOOTH))
     }
-  })
+    val name1: TextField = new TextField("Player 1: Type your Name here") {
+      this.preferredSize = new Dimension(gridWidth, textHeight)
+    }
+    val name2: TextField = new TextField("Player 2: Type your Name here") {
+      this.preferredSize = new Dimension(gridWidth, textHeight)
+    }
+    val chosenMap: ComboBox[String] = new ComboBox(List("Map 1", "Map 2")) {
+    }
+
+    val textFields: GridPanel = new GridPanel(innerGridX, gridY) {
+      contents += name1
+      contents += name2
+      contents += chosenMap
+    }
+    start.reactions += {
+      case ButtonClicked(`start`) =>
+        new GameFieldFrame(controller, name1.text, name2.text, map = chosenMap.selection.item, menuBar)
+        dispose()
+    }
+    val exit: Button = new Button() {
+      this.preferredSize = new Dimension(gridWidth, gridHeight)
+      this.icon = new ImageIcon(new ImageIcon("icons/exit_final_kleiner.png")
+        .getImage.getScaledInstance(gridWidth, gridHeight, java.awt.Image.SCALE_SMOOTH))
+
+    }
+    exit.reactions += {
+      case ButtonClicked(`exit`) => System.exit(0)
+    }
+    val label: Label = new Label("Hauptmenü") {
+      this.icon = new ImageIcon(new ImageIcon("icons/TankCommanderLogo.png")
+        .getImage.getScaledInstance(gridWidth, gridHeight, java.awt.Image.SCALE_SMOOTH))
+    }
+    contents += label
+    contents += start
+    contents += textFields
+    contents += exit
+  }
+
+  size = new Dimension(gridWidth, menuHeight)
+  centerOnScreen()
+  visible = true
 }

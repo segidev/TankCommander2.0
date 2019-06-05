@@ -17,7 +17,7 @@ case class Bush() extends Obstacle {
   override val passable: Boolean = true
   override val shortName: String = "B"
   override val hitMalus: Int = 10
-  override val imagePath: String = "src/main/ressources/icons/bush.png"
+  override val imagePath: String = "game/src/main/ressources/icons/bush.png"
 
 }
 
@@ -27,7 +27,7 @@ case class Hill() extends Obstacle {
   override val passable: Boolean = true
   override val shortName: String = "H"
   override val hitMalus: Int = 20
-  override val imagePath: String = "src/main/ressources/icons/mountain.png"
+  override val imagePath: String = "game/src/main/ressources/icons/mountain.png"
 
 }
 
@@ -37,7 +37,7 @@ case class Stone() extends Obstacle {
   override val passable: Boolean = false
   override val shortName: String = "S"
   override val hitMalus: Int = 100
-  override val imagePath: String = "src/main/ressources/icons/rock.png"
+  override val imagePath: String = "game/src/main/ressources/icons/rock.png"
 
 }
 
@@ -47,7 +47,7 @@ case class Forest() extends Obstacle {
   override val passable: Boolean = true
   override val shortName: String = "F"
   override val hitMalus: Int = 10
-  override val imagePath: String = "src/main/ressources/icons/tree.png"
+  override val imagePath: String = "game/src/main/ressources/icons/tree.png"
 
 }
 
@@ -57,7 +57,7 @@ case class Water() extends Obstacle {
   override val passable: Boolean = false
   override val shortName: String = "W"
   override val hitMalus: Int = 0
-  override val imagePath: String = "src/main/ressources/icons/water.png"
+  override val imagePath: String = "game/src/main/ressources/icons/water.png"
 
 }
 

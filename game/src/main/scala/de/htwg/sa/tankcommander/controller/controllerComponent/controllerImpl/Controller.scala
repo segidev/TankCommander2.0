@@ -56,7 +56,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
         gameField = GameField(map)
         calculator = Calculator(gameField)
         gameStatus = GameStatus(activePlayer, passivePlayer)
-        notifyObservers(DrawGameField())
+        //notifyObservers(DrawGameField())
       case Failure(e) =>
         notifyObservers(MapSelectionErrorEvent())
         initGameStatus(player1, player2, tank1, tank2)

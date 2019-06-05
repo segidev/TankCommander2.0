@@ -1,54 +1,34 @@
 package de.htwg.sa.tankcommander.aview.GUI
 
-import scalafx.Includes._
-import scalafx.event.ActionEvent
-import scalafx.scene.control._
-import scalafx.scene.input.KeyCombination
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
 
-class GameMenuBar(gamePanel: GamePanel) extends MenuBar {
-  menus = List(
-    // File Menu
-    new Menu() {
-      text = "Menue"
-      items = List(
-        new MenuItem("New Game") {
-          text = "New Game"
-          accelerator = KeyCombination.keyCombination("Ctrl + N")
-          onAction = {
-            _: ActionEvent => //gamePanel.showNewGameDialog()
-          }
-        },
+import scala.swing.{Action, Menu, MenuBar, MenuItem, Separator}
 
-        new SeparatorMenuItem(),
-
-        new MenuItem("End Game") {
-          text = "End Game"
-          accelerator = KeyCombination.keyCombination("Ctrl + Q")
-          onAction = {
-            _: ActionEvent => gamePanel.exitApplication()
-          }
-        },
-
-        new SeparatorMenuItem(),
-
-        new MenuItem("Save Game") {
-          text = "Save"
-          accelerator = KeyCombination.keyCombination("Ctrl + S")
-          onAction = {
-            _: ActionEvent => gamePanel.save()
-          }
-        },
-        new SeparatorMenuItem(),
-
-        new MenuItem("Load Game") {
-          text = "Load"
-          accelerator = KeyCombination.keyCombination("Ctrl + L")
-          onAction = {
-            _: ActionEvent => gamePanel.load()
-          }
-        }
-      )
+case class GameMenuBar(controller: Controller) {
+  val menuBar: MenuBar = new MenuBar {
+    contents += new Menu("File") {
+      contents += new MenuItem("New Game") {
+      }
+      contents += new MenuItem("Restart") {
+      }
+      contents += new Separator()
+      contents += new MenuItem(Action("Load") {
+        controller.load()
+      })
+      contents += new MenuItem(Action("Save") {
+        controller.save()
+      })
+      contents += new Separator()
+      contents += new MenuItem(Action("Undo") {
+        controller.undo()
+      })
+      contents += new MenuItem(Action("Redo") {
+        controller.redo()
+      })
+      contents += new Separator()
+      contents += new MenuItem(Action("Exit") {
+        sys.exit(0)
+      })
     }
-
-  )
+  }
 }

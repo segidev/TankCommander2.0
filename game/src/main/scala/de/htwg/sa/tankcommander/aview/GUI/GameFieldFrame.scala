@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.aview.oldGUI
+package de.htwg.sa.tankcommander.aview.GUI
 
 import java.awt.Dimension
 
@@ -10,7 +10,11 @@ import scala.swing.Swing.LineBorder
 import scala.swing._
 import scala.swing.event.ButtonClicked
 
-class GameFieldFrame(controller: Controller, name1: String, name2: String, map: String) extends Frame with Observer {
+class GameFieldFrame(controller: Controller,
+                     name1: String,
+                     name2: String,
+                     map: String, gameMenuBar: MenuBar) extends Frame with Observer {
+
   controller.add(this)
   val statusLine = new TextArea()
   val messages: TextArea = new TextArea("Welcome to the Game. \n" +
@@ -18,6 +22,7 @@ class GameFieldFrame(controller: Controller, name1: String, name2: String, map: 
     lineWrap = false
     editable = false
   }
+  menuBar = gameMenuBar
 
   val gridWidth = 1000
   val gridHeight = 1000
@@ -29,107 +34,76 @@ class GameFieldFrame(controller: Controller, name1: String, name2: String, map: 
   val buttonWidth = 50
   val buttonHeight = 50
 
-
   val scrollPanel = new ScrollPane(messages)
+
   val controls: GridPanel = new GridPanel(gridX, gridY) {
     val up: Button = new Button() {
       this.preferredSize = new Dimension(upButtonWidth, upButtonHeight)
-      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/up.png")
+      this.icon = new ImageIcon(new ImageIcon("game/src/main/resources/icons/up.png")
         .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
       this.borderPainted = true
     }
     contents += up
     val down: Button = new Button() {
       this.preferredSize = new Dimension(buttonWidth, buttonHeight)
-      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/down.png")
+      this.icon = new ImageIcon(new ImageIcon("game/src/main/resources/icons/down.png")
         .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
       this.borderPainted = true
     }
     contents += down
     val left: Button = new Button() {
       this.preferredSize = new Dimension(buttonWidth, buttonHeight)
-      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/left.png")
+      this.icon = new ImageIcon(new ImageIcon("game/src/main/resources/icons/left.png")
         .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
       this.borderPainted = true
     }
     contents += left
     val right: Button = new Button() {
       this.preferredSize = new Dimension(buttonWidth, buttonHeight)
-      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/right.png")
+      this.icon = new ImageIcon(new ImageIcon("game/src/main/resources/icons/right.png")
         .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
       this.borderPainted = true
     }
     contents += right
     val shoot: Button = new Button() {
       this.preferredSize = new Dimension(buttonWidth, buttonHeight)
-      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/explosion.png")
+      this.icon = new ImageIcon(new ImageIcon("game/src/main/resources/icons/explosion.png")
         .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
       this.borderPainted = true
     }
     contents += shoot
     val end_turn: Button = new Button() {
       this.preferredSize = new Dimension(buttonWidth, buttonHeight)
-      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/sandclock_take.png")
+      this.icon = new ImageIcon(new ImageIcon("game/src/main/resources/icons/sandclock_take.png")
         .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
       this.borderPainted = true
     }
     contents += end_turn
     val give_up: Button = new Button() {
       this.preferredSize = new Dimension(buttonWidth, buttonHeight)
-      this.icon = new ImageIcon(new ImageIcon("src/main/ressources/icons/white_flag.png")
+      this.icon = new ImageIcon(new ImageIcon("game/src/main/resources/icons/white_flag.png")
         .getImage.getScaledInstance(iconSize, iconSize, java.awt.Image.SCALE_SMOOTH))
       this.borderPainted = true
     }
     contents += give_up
+
     up.reactions += {
-      case ButtonClicked(`up`) =>
-        if (controller.playerHasMovesLeft()) {
-          controller.move("up")
-        }
-        else {
-          messages.append("\nNo more Moves left, end your turn!")
-        }
+      case ButtonClicked(`up`) => controller.move("up")
     }
     down.reactions += {
-      case ButtonClicked(`up`) =>
-        if (controller.playerHasMovesLeft()) {
-          controller.move("down")
-        }
-        else {
-          messages.append("\nNo more Moves left, end your turn!")
-        }
+      case ButtonClicked(`down`) => controller.move("down")
     }
     left.reactions += {
-      case ButtonClicked(`up`) =>
-        if (controller.playerHasMovesLeft()) {
-          controller.move("left")
-        }
-        else {
-          messages.text = "\nNo more Moves left, end your turn!"
-
-        }
+      case ButtonClicked(`left`) => controller.move("left")
     }
     right.reactions += {
-      case ButtonClicked(`up`) =>
-        if (controller.playerHasMovesLeft()) {
-          controller.move("right")
-        }
-        else {
-          messages.append("\nNo more Moves left, end your turn!")
-        }
+      case ButtonClicked(`right`) => controller.move("right")
     }
     shoot.reactions += {
-      case ButtonClicked(`shoot`) =>
-        if (controller.playerHasMovesLeft()) {
-          controller.shoot()
-        }
-        else {
-          messages.append("\nNo more Moves left, end your turn!")
-        }
+      case ButtonClicked(`shoot`) => controller.shoot()
     }
     end_turn.reactions += {
       case ButtonClicked(`end_turn`) => controller.endTurnChangeActivePlayer()
-        messages.append("\nPlease change seats.")
     }
     give_up.reactions += {
       case ButtonClicked(`give_up`) => controller.endGame()
@@ -140,37 +114,11 @@ class GameFieldFrame(controller: Controller, name1: String, name2: String, map: 
   val dimension = new Dimension(gridWidth, gridHeight)
   // TODO: Map wählen in GUI
   controller.initGame()
-
+  var cells: Array[Array[CellPanel]] = Array.ofDim[CellPanel](controller.gameField.gridsX, controller.gameField.gridsY)
   paintGameField(controller)
   //Main Panel
   title = "Tank Commander"
-  menuBar = new MenuBar {
-    contents += new Menu("File") {
-      //    contents += new MenuItem("New Game") {
-      //    }
-      //    contents += new MenuItem("Restart") {
-      //    }
-      //    contents += new Separator()
-      contents += new MenuItem(Action("Load") {
-        controller.load()
-      })
-      contents += new MenuItem(Action("Save") {
-        controller.save()
-      })
-      contents += new Separator()
-      contents += new MenuItem(Action("Undo") {
-        controller.undo()
-      })
-      contents += new MenuItem(Action("Redo") {
-        controller.redo()
-      })
-      contents += new Separator()
-      contents += new MenuItem(Action("Exit") {
-        sys.exit(0)
-      })
-    }
-  }
-  var cells: Array[Array[CellPanelFlowPanel]] = Array.ofDim[CellPanelFlowPanel](controller.gameField.gridsX, controller.gameField.gridsY)
+
   visible = true
   centerOnScreen()
   var scrollBar: ScrollBar = scrollPanel.verticalScrollBar
@@ -199,7 +147,7 @@ class GameFieldFrame(controller: Controller, name1: String, name2: String, map: 
         for {
           row <- 0 until controller.gameField.gridsX
         } {
-          val cellPanel = new CellPanelFlowPanel(row, column, controller)
+          val cellPanel = new CellPanel(row, column, controller)
           cells(row)(column) = cellPanel
           contents += cellPanel.cell
         }
@@ -209,7 +157,7 @@ class GameFieldFrame(controller: Controller, name1: String, name2: String, map: 
 
   override def update(event: GameEvent): Unit = {
     event match {
-      case event: MsgEvent => print(event.message)
+      case event: MsgEvent => messages.append(event.message + "\n")
       case event: UpdateEvent => redraw()
     }
   }
@@ -223,12 +171,7 @@ class GameFieldFrame(controller: Controller, name1: String, name2: String, map: 
       } {
         cells(row)(column)
       }
-    statusLine.text = "Aktiver Spieler: " + controller.gameStatus.activePlayer + " Hitpoints: " +
-      controller.gameStatus.activePlayer.tank.hp + "\n" + "MovesLeft: " + controller.gameStatus.activePlayer.movesLeft + "\n" +
-      "Passiver Spieler: " + controller.gameStatus.passivePlayer + " Hitpoints: " +
-      controller.gameStatus.passivePlayer.tank.hp + "\n"
-    // TODO: Hitchance berechnen und anzeigen
-    //      "Hitchance: " + GameStatus.currentHitChance
+    statusLine.text = controller.gameStatus.toString
     repaint
   }
 }

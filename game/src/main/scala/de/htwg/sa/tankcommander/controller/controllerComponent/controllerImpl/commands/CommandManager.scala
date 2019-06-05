@@ -1,8 +1,6 @@
-package de.htwg.sa.tankcommander.util
+package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands
 
-import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.Command
-
-case class UndoManager() {
+case class CommandManager() {
   private var undoStack: List[Command] = Nil
   private var redoStack: List[Command] = Nil
 

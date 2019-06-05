@@ -1,7 +1,7 @@
 package de.htwg.sa.tankcommander.aview.TUI
 
-import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.util._
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.{Controller, Observer}
+import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl.{GameEvent, GameExceptions, MsgEvent, UpdateEvent}
 
 class TUI(controller: Controller) extends Observer {
   controller.add(this)

@@ -1,9 +1,9 @@
-package de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl
+package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands
 
-import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor.Mover
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.util.MoveNotPossibleEvent
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.executor.Mover
+import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl.MoveNotPossibleEvent
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.GameStatus
 
 class MoveCommand(controller: Controller, command: String) extends Command {
   var backupGameStatus: GameStatus = _

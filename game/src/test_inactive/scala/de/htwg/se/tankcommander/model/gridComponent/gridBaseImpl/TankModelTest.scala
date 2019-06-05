@@ -1,6 +1,6 @@
-package de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl
+package de.htwg.sa.tankcommander.model.gameFieldComponent.grid.gridBaseImpl
 
-import de.htwg.sa.tankcommander.model.individualComponent.Tank
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.Tank
 
 class TankModelTest extends FlatSpec with Matchers {
 

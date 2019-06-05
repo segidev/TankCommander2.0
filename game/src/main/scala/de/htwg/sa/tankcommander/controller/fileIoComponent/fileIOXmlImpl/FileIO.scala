@@ -4,9 +4,8 @@ import java.io._
 
 import de.htwg.sa.tankcommander.controller.actorComponent.LoadResponse
 import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
-import de.htwg.sa.tankcommander.model.individualComponent.{Individual, Player, Tank}
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.util.Coordinate
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
 
 import scala.xml.{Elem, PrettyPrinter, XML}
 

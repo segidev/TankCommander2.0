@@ -1,14 +1,13 @@
 package de.htwg.sa.tankcommander.controller.controllerComponent
 
-import akka.actor.Actor
-import de.htwg.sa.tankcommander.model.gameFieldComponent.GameField
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.util.UndoManager
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.CommandManager
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.GameField
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.GameStatus
 
 import scala.swing.Publisher
 
 trait ControllerInterface extends Publisher  {
-  var undoManager: UndoManager
+  var undoManager: CommandManager
   var gameField: GameField
   var gameStatus: GameStatus
 

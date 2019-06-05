@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.util
+package de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl
 
 //noinspection ScalaStyle
 case class Coordinate(x: Int, y: Int) {

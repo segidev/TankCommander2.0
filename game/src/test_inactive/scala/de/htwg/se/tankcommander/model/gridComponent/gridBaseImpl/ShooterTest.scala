@@ -1,9 +1,9 @@
-package de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl
+package de.htwg.sa.tankcommander.model.gameFieldComponent.grid.gridBaseImpl
 
-import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor.Shooter
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.executor.Shooter
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.model.individualComponent.{Player, Tank}
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Player, Tank}
+import de.htwg.sa.tankcommander.model.individualComponent.Tank
 
 class ShooterTest extends FlatSpec with Matchers {
   "Shooter" should "deal Dmg to passive Tank" in {

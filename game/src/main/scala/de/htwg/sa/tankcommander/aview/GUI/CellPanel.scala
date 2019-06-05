@@ -1,7 +1,8 @@
 package de.htwg.sa.tankcommander.aview.GUI
 
-import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.util.{Coordinate, GameEvent, Observer}
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.{Controller, Observer}
+import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl.GameEvent
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
 import javax.swing.ImageIcon
 
 import scala.swing._

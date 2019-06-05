@@ -1,6 +1,6 @@
-package de.htwg.sa.tankcommander.model.individualComponent
+package de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl
 
-import de.htwg.sa.tankcommander.util.Coordinate
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
 
 case class Individual(player: Player, tank: Tank, movesLeft: Int = 2) {
 }

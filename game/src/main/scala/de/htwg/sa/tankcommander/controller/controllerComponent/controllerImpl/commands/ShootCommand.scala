@@ -1,9 +1,9 @@
-package de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl
+package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands
 
-import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor.Shooter
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.util.{DmgEvent, MissedShotEvent}
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.executor.Shooter
+import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl.{DmgEvent, MissedShotEvent}
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.GameStatus
 
 class ShootCommand(controller: Controller) extends Command {
   var backupGameStatus: Option[GameStatus] = None

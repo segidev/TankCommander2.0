@@ -1,4 +1,6 @@
-package de.htwg.sa.tankcommander.util
+package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl
+
+import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl.GameEvent
 
 trait Observer {
   def update(event: GameEvent): Unit

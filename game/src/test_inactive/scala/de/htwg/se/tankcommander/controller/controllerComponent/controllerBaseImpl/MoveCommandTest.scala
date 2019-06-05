@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl
+package de.htwg.sa.tankcommander.controller.controllerComponent.controller
 
 import org.scalatest.{FlatSpec, FunSuite, Matchers}
 

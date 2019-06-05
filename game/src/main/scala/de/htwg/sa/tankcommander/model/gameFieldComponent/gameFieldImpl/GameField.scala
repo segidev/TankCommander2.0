@@ -1,9 +1,7 @@
-package de.htwg.sa.tankcommander.model.gameFieldComponent
+package de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl
 
-import de.htwg.sa.tankcommander.model.gameFieldComponent.maps.MapOptions
-import de.htwg.sa.tankcommander.model.gridComponent.GameFieldInterface
-import de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl._
-import de.htwg.sa.tankcommander.util.Coordinate
+import de.htwg.sa.tankcommander.model.gameFieldComponent.GameFieldInterface
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.maps.MapOptions
 
 case class GameField(mapOptions: MapOptions) extends GameFieldInterface {
   val gridsX = 11
@@ -25,21 +23,14 @@ case class GameField(mapOptions: MapOptions) extends GameFieldInterface {
     *
     * @param coordinate
     */
-  def getCell(coordinate: Coordinate): Cell = {
-    gameFieldArray(coordinate.x)(coordinate.y)
-  }
+  def cell(coordinate: Coordinate): Cell = gameFieldArray(coordinate.x)(coordinate.y)
 
   /**
     * Get option of obstacle
+    *
     * @param coordinate
     * @return obstacle
     */
-  def getCellObs(coordinate: Coordinate): Option[Obstacle] = {
-    gameFieldArray(coordinate.x)(coordinate.y).obstacle match {
-      case Some(obstacle) => Option(obstacle)
-      case None => None
-    }
-  }
+  def cellObstacle(coordinate: Coordinate): Option[Obstacle] = gameFieldArray(coordinate.x)(coordinate.y).obstacle
 
 }
-

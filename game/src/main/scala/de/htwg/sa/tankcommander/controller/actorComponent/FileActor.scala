@@ -1,11 +1,9 @@
 package de.htwg.sa.tankcommander.controller.actorComponent
 
-import akka.actor.{Actor, ActorLogging, ActorRef, ActorSystem, Props}
+import akka.actor.{Actor, ActorLogging, Props}
 import de.htwg.sa.tankcommander.TankCommander
-import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
 import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.util.SavedGameEvent
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.GameStatus
 
 import scala.language.postfixOps
 

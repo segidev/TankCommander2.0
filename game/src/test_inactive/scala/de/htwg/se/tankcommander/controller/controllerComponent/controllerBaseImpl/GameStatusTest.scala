@@ -1,7 +1,7 @@
-package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl
+package de.htwg.sa.tankcommander.controller.controllerComponent.controller
 
-import de.htwg.sa.tankcommander.model.individualComponent.{Player, Tank}
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Player, Tank}
+import de.htwg.sa.tankcommander.model.individualComponent.Tank
 
 class GameStatusTest extends FlatSpec with Matchers {
   "GameStatus" should "" in {

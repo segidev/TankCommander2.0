@@ -1,11 +1,13 @@
-package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl
+package de.htwg.sa.tankcommander.controller.controllerComponent.controller
 
 
 import java.io.ByteArrayInputStream
 
-import de.htwg.sa.tankcommander.model.individualComponent.{Player, Tank}
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl._
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
+import de.htwg.sa.tankcommander.model.gameFieldComponent.{Bush, Cell}
+import de.htwg.sa.tankcommander.model.individualComponent.Tank
+import de.htwg.sa.tankcommander.model.gameFieldComponent.grid.gridBaseImpl._
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Player, Tank}
 
 
 class ControllerTest extends FlatSpec with Matchers {

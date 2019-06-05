@@ -1,7 +1,7 @@
-package de.htwg.sa.tankcommander.model.gameFieldComponent.maps
+package de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.maps
 
-import de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl._
-import de.htwg.sa.tankcommander.util.{Coordinate, MapSelectionException}
+import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl.MapSelectionException
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl._
 
 import scala.util.{Failure, Success, Try}
 

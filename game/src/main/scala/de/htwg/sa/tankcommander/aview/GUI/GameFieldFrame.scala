@@ -2,8 +2,8 @@ package de.htwg.sa.tankcommander.aview.GUI
 
 import java.awt.Dimension
 
-import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.util.{GameEvent, MsgEvent, Observer, UpdateEvent}
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.{Controller, Observer}
+import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl.{GameEvent, MsgEvent, UpdateEvent}
 import javax.swing.ImageIcon
 
 import scala.swing.Swing.LineBorder

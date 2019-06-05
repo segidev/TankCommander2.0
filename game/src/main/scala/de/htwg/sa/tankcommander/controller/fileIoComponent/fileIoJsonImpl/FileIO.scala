@@ -5,9 +5,8 @@ import java.io._
 import com.google.inject.Inject
 import de.htwg.sa.tankcommander.controller.actorComponent.LoadResponse
 import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
-import de.htwg.sa.tankcommander.model.individualComponent.{Individual, Player, Tank}
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.util.Coordinate
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
 import play.api.libs.json._
 
 import scala.io.Source

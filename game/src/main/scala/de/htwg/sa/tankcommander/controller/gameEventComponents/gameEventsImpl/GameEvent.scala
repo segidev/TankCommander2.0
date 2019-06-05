@@ -1,6 +1,6 @@
-package de.htwg.sa.tankcommander.util
+package de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl
 
-import de.htwg.sa.tankcommander.model.individualComponent.Individual
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.Individual
 
 trait GameEvent
 

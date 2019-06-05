@@ -1,11 +1,9 @@
 package de.htwg.sa.tankcommander
 
 import com.google.inject.{Guice, Injector}
+import de.htwg.sa.tankcommander.aview.GUI.GUI
 import de.htwg.sa.tankcommander.aview.TUI.TUI
-import de.htwg.sa.tankcommander.aview.GUI.{GameFieldFrame, GUI}
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.model.gameFieldComponent.GameField
-import scalafx.application.JFXApp
 
 object TankCommander {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)

@@ -1,6 +1,4 @@
-package de.htwg.sa.tankcommander.model.gameStatusComponent
-
-import de.htwg.sa.tankcommander.model.individualComponent.Individual
+package de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl
 
 case class GameStatus(activePlayer: Individual, passivePlayer: Individual) {
   def changeActivePlayer(): GameStatus = copy(activePlayer = passivePlayer.copy(movesLeft = 2), passivePlayer = activePlayer.copy(movesLeft = 2))

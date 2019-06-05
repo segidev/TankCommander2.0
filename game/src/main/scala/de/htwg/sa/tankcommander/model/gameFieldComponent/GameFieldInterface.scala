@@ -1,6 +1,6 @@
-package de.htwg.sa.tankcommander.model.gridComponent
+package de.htwg.sa.tankcommander.model.gameFieldComponent
 
-import de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl.Cell
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Cell
 
 trait GameFieldInterface {
   val gridsX: Int

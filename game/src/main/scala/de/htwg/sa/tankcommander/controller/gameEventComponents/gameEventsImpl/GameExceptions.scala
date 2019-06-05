@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.util
+package de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl
 
 trait GameExceptions extends Exception with GameEvent
 

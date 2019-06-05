@@ -1,7 +1,6 @@
-package de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor
+package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.executor
 
-import de.htwg.sa.tankcommander.model.gameFieldComponent.GameField
-import de.htwg.sa.tankcommander.util.Coordinate
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.{Coordinate, GameField}
 
 case class Calculator(gameField: GameField) {
   var hitChance = 0
@@ -18,7 +17,7 @@ case class Calculator(gameField: GameField) {
 
   private def calcMalus(lst: List[Coordinate]): Int = {
     lst.foldLeft(0) { (accumulatedValue, i) =>
-      gameField.getCellObs(i) match {
+      gameField.cellObstacle(i) match {
         case Some(o) => accumulatedValue + o.hitMalus
         case None => accumulatedValue + 5
       }

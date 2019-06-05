@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl
+package de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl
 
 trait Obstacle {
   val name: String

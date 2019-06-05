@@ -1,9 +1,7 @@
-package de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor
+package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.executor
 
-import de.htwg.sa.tankcommander.model.individualComponent.Individual
-import de.htwg.sa.tankcommander.model.gameFieldComponent.GameField
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.util.Coordinate
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.{Coordinate, GameField}
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual}
 
 case class Mover(gameStatus: GameStatus, gameField: GameField) {
 

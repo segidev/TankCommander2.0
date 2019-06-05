@@ -7,13 +7,13 @@ import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.sa.tankcommander.TankCommanderModule
 import de.htwg.sa.tankcommander.controller.actorComponent.{FileActor, LoadRequest, LoadResponse, SaveRequest}
 import de.htwg.sa.tankcommander.controller.controllerComponent.ControllerInterface
-import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor.Calculator
-import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.{MoveCommand, ShootCommand}
-import de.htwg.sa.tankcommander.model.gameFieldComponent.GameField
-import de.htwg.sa.tankcommander.model.gameFieldComponent.maps.MapSelector
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
-import de.htwg.sa.tankcommander.model.individualComponent.{Individual, Player, Tank}
-import de.htwg.sa.tankcommander.util._
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.executor.Calculator
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.{CommandManager, MoveCommand, ShootCommand}
+import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl._
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.maps.MapSelector
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.{Coordinate, GameField}
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
 
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration._
@@ -23,7 +23,7 @@ import scala.util.{Failure, Success}
 
 class Controller @Inject() extends Observable with ControllerInterface {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)
-  var undoManager = UndoManager()
+  var undoManager = CommandManager()
   var gameField: GameField = _
   var gameStatus: GameStatus = _
   var calculator: Calculator = _
@@ -52,7 +52,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
     MapSelector.select(mapName) match {
       case Success(map) =>
         val activePlayer = Individual(player1, tank1)
-        val passivePlayer = Individual(player2, tank2)
+        val passivePlayer = gameStatusImpl.Individual(player2, tank2)
         gameField = GameField(map)
         calculator = Calculator(gameField)
         gameStatus = GameStatus(activePlayer, passivePlayer)

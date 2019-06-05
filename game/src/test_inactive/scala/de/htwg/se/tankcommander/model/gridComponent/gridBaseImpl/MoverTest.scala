@@ -1,9 +1,9 @@
-package de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl
+package de.htwg.sa.tankcommander.model.gameFieldComponent.grid.gridBaseImpl
 
-import de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor.Mover
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.executor.Mover
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.model.individualComponent.Tank
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
+import de.htwg.sa.tankcommander.model.gameFieldComponent.{Bush, Obstacle}
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Tank}
 
 import scala.collection.mutable.ListBuffer
 

@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.model.gridComponent.gridBaseImpl
+package de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl
 
 case class Cell(x: Int, y: Int, obstacle: Option[Obstacle]) {
 

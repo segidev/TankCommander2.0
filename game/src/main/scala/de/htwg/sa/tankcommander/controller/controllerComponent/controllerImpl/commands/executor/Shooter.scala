@@ -1,7 +1,7 @@
-package de.htwg.sa.tankcommander.controller.controllerComponent.commandsImpl.executor
+package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.executor
 
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
-import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatus
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.GameStatus
 
 case class Shooter(gameStatus: GameStatus, controller: Controller) {
   def shoot(): (GameStatus, Option[Int]) = {

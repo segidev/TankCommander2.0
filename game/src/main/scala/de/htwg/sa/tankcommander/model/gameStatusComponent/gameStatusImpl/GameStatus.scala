@@ -1,13 +1,16 @@
 package de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl
 
-case class GameStatus(activePlayer: Individual, passivePlayer: Individual) {
-  def changeActivePlayer(): GameStatus = copy(activePlayer = passivePlayer.copy(movesLeft = 2), passivePlayer = activePlayer.copy(movesLeft = 2))
+import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatusInterface
+
+case class GameStatus(activePlayer: Individual, passivePlayer: Individual) extends GameStatusInterface {
+  override def changeActivePlayer(): GameStatus = copy(activePlayer = passivePlayer.copy(movesLeft = 2), passivePlayer = activePlayer.copy(movesLeft = 2))
 
   override def toString: String = {
-    val output = new StringBuilder()
-    output.append(s"Aktiver Spieler: ${activePlayer.player} [Panzer: ${activePlayer.tank.hp} Lebenspunkte]\n")
-    output.append(s"Passiver Spieler: ${passivePlayer.player} [Panzer: ${passivePlayer.tank.hp} Lebenspunkte]\n")
-    output.append(s"Übrige Züge: ${activePlayer.movesLeft}\n")
-    output.toString()
+    val output = {
+      "Aktiver Spieler: %s [Panzer: %d Lebenspunkte]\n".format(activePlayer.player, activePlayer.tank.hp) +
+        "Passiver Spieler: %s [Panzer: %d Lebenspunkte]\n".format(passivePlayer.player, passivePlayer.tank.hp) +
+        "Übrige Züge: %d\n".format(activePlayer.movesLeft)
+    }
+    output
   }
 }

@@ -5,7 +5,7 @@ import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl._
 
 import scala.util.{Failure, Success, Try}
 
-trait MapOptions {
+trait MapOptions{
   val name: String
   val obstacles: Map[Obstacle, Option[Array[Coordinate]]]
 

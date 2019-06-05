@@ -7,7 +7,5 @@ trait GameFieldInterface {
   val gridsY: Int
   val gameFieldArray: Array[Array[Cell]]
 
-  def generateGameField(): Array[Array[Cell]]
-
   def toString: String
 }

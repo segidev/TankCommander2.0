@@ -1,5 +1,6 @@
 package de.htwg.sa.tankcommander.aview.TUI
 
+import de.htwg.sa.tankcommander.aview.util.ICommands
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.{Controller, Observer}
 import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl.{GameEvent, GameExceptions, MsgEvent, UpdateEvent}
 
@@ -9,15 +10,15 @@ class TUI(controller: Controller) extends Observer {
   //noinspection ScalaStyle
   def processInputLine(input: String): Unit = {
     input.toLowerCase match {
-      case "exit" =>
-      case "start" => controller.initGame()
-      case "end turn" => controller.endTurnChangeActivePlayer()
-      case "undo" => controller.undo()
-      case "redo" => controller.redo()
-      case "save" => controller.save()
-      case "load" => controller.load()
-      case "up" | "down" | "left" | "right" => controller.move(input)
-      case "shoot" => controller.shoot()
+      case ICommands.exit => System.exit(0)
+      case ICommands.start => controller.initGame()
+      case ICommands.end_turn => controller.endTurnChangeActivePlayer()
+      case ICommands.undo => controller.undo()
+      case ICommands.redo => controller.redo()
+      case ICommands.save => controller.save()
+      case ICommands.load => controller.load()
+      case ICommands.up | ICommands.down | ICommands.left | ICommands.right => controller.move(input)
+      case ICommands.shoot => controller.shoot()
       case _ => println("Kommando \"%s\" existiert nicht.".format(input))
     }
   }
@@ -29,7 +30,6 @@ class TUI(controller: Controller) extends Observer {
       case _: UpdateEvent =>
         print(controller.gameFieldToString)
         print(controller.gameStatus)
-
     }
   }
 }

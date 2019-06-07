@@ -56,7 +56,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
         gameField = GameField(map)
         calculator = Calculator(gameField)
         gameStatus = GameStatus(activePlayer, passivePlayer)
-        //notifyObservers(DrawGameField())
+      //notifyObservers(DrawGameField())
       case Failure(e) =>
         notifyObservers(MapSelectionErrorEvent())
         initGameStatus(player1, player2, tank1, tank2)
@@ -69,11 +69,6 @@ class Controller @Inject() extends Observable with ControllerInterface {
 
   override def gameFieldToString: String = {
     val output = new StringBuilder
-
-    /*Debug "Monoid"
-    for (arr1 <- gameField.gameFieldArray; cell: Cell <- arr1) yield print(cell)
-    */
-
     gameField.gameFieldArray.zipWithIndex.foreach {
       case (xArray, y) =>
         xArray.zipWithIndex.foreach {
@@ -89,6 +84,10 @@ class Controller @Inject() extends Observable with ControllerInterface {
         }
     }
     output.toString()
+  }
+
+  def printEverything: String = {
+    gameFieldToString + "\n" + gameStatus
   }
 
   /*

@@ -3,7 +3,7 @@ package de.htwg.sa.tankcommander.aview.util
 object ICommands {
   val exit = "exit"
   val start = "start"
-  val end_turn = "end turn"
+  val end_turn = "turn"
   val undo = "undo"
   val redo = "redo"
   val save = "save"

@@ -3,9 +3,9 @@ package de.htwg.sa.tankcommander.aview.REST
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
-import akka.stream.ActorMaterializer
 import akka.http.scaladsl.server.Directives._
 import akka.http.scaladsl.server.Route
+import akka.stream.ActorMaterializer
 import de.htwg.sa.tankcommander.aview.util.ICommands
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
 
@@ -17,10 +17,11 @@ class Rest(controller: Controller) {
   implicit val actorMaterializer: ActorMaterializer = ActorMaterializer()
   implicit val executionContext: ExecutionContextExecutor = actorSystem.dispatcher
 
+  //noinspection ScalaStyle
   def startRestApi() = {
     val route: Route =
 
-      path("TankCommander2") {
+      pathSingleSlash {
         get {
           complete(HttpResponse(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, "Well, Hello there")))
         }
@@ -68,7 +69,7 @@ class Rest(controller: Controller) {
 
     val bindingFuture = Http().bindAndHandle(route, "localhost", 9090)
 
-    println("Server online at http://localhost:9090/TankCommander2")
+    println("Server online at http://localhost:9090/")
     StdIn.readLine()
     bindingFuture
       .flatMap(_.unbind())

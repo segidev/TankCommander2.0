@@ -10,13 +10,10 @@ import scala.language.postfixOps
 class FileActor() extends Actor with ActorLogging {
   val fileIO: FileIOInterface = TankCommander.injector.getInstance(classOf[FileIOInterface])
 
-  //noinspection TypeAnnotation
-  override def receive = {
-    case SaveRequest(status, map) =>
-      fileIO.save(status, map)
+  override def receive: PartialFunction[Any, Unit] = {
+    case SaveRequest(status, map) => fileIO.save(status, map)
     case LoadRequest => sender ! fileIO.load()
   }
-
 }
 
 object FileActor {
@@ -24,6 +21,8 @@ object FileActor {
 }
 
 case class SaveRequest(gameStatus: GameStatus, string: String)
+
+case class SaveResponse()
 
 case class LoadRequest()
 

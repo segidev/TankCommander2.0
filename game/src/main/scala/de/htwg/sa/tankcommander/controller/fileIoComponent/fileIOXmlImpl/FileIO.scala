@@ -2,7 +2,7 @@ package de.htwg.sa.tankcommander.controller.fileIoComponent.fileIOXmlImpl
 
 import java.io._
 
-import de.htwg.sa.tankcommander.controller.actorComponent.LoadResponse
+import de.htwg.sa.tankcommander.controller.actorComponent.{LoadResponse, SaveResponse}
 import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
 import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
@@ -10,14 +10,16 @@ import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameSt
 import scala.xml.{Elem, PrettyPrinter, XML}
 
 class FileIO extends FileIOInterface {
-  override def save(gameStatus: GameStatus, map: String): Unit = {
-    val file = new File("src/main/ressources/savegame.xml")
+  override def save(gameStatus: GameStatus, map: String): SaveResponse = {
+    val file = new File("game/src/main/ressources/savegame.xml")
     file.createNewFile()
     val pw = new PrintWriter(file)
     val prettyPrinter = new PrettyPrinter(120, 4)
     val xml = prettyPrinter.format(gameStateToXML(gameStatus))
     pw.write(xml)
     pw.close()
+
+    SaveResponse()
   }
 
   def gameStateToXML(gameStatus: GameStatus): Elem = {
@@ -60,7 +62,7 @@ class FileIO extends FileIOInterface {
   }
 
   override def load(): LoadResponse = {
-    val file = XML.loadFile("src/main/ressources/savegame.xml")
+    val file = XML.loadFile("game/src/main/ressources/savegame.xml")
     val activePlayer = Individual(
       Player((file \\ "game" \\ "aPlayer").text),
       Tank(

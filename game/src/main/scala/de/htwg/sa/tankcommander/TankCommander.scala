@@ -15,7 +15,6 @@ object TankCommander {
 
   def main(args: Array[String]): Unit = {
     var input: String = ""
-    print("Du befindest dich im Hauptmenü\nWähle: start oder exit\n")
 
     do {
       input = scala.io.StdIn.readLine()

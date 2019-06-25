@@ -3,7 +3,7 @@ package de.htwg.sa.tankcommander.controller.fileIoComponent.fileIoJsonImpl
 import java.io._
 
 import com.google.inject.Inject
-import de.htwg.sa.tankcommander.controller.actorComponent.LoadResponse
+import de.htwg.sa.tankcommander.controller.actorComponent.{LoadResponse, SaveResponse}
 import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
 import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
@@ -12,12 +12,14 @@ import play.api.libs.json._
 import scala.io.Source
 
 class FileIO @Inject() extends FileIOInterface {
-  override def save(gameStatus: GameStatus, map: String): Unit = {
-    val file = new File("src/main/ressources/savegame.json")
+  override def save(gameStatus: GameStatus, map: String): SaveResponse = {
+    val file = new File("game/src/main/resources/savegame.json")
     file.createNewFile()
     val pw = new PrintWriter(file)
     pw.write(Json.prettyPrint(gameStateToJson(gameStatus, map)))
     pw.close()
+
+    SaveResponse()
   }
 
   def gameStateToJson(gameStatus: GameStatus, map: String): JsObject =
@@ -38,7 +40,7 @@ class FileIO @Inject() extends FileIOInterface {
     )
 
   override def load(): LoadResponse = {
-    val io = Source.fromFile("src/main/ressources/savegame.json")
+    val io = Source.fromFile("game/src/main/resources/savegame.json")
     val source: String = io.getLines.mkString
     io.close()
     val json: JsValue = Json.parse(source)

@@ -1,13 +1,13 @@
-package de.htwg.sa.database.restAPI.dao.impl
+package de.htwg.sa.database.restAPI.dao.slickImpl
 
-import de.htwg.sa.database.restAPI.dao.SaveDAO
+import de.htwg.sa.database.restAPI.dao.SaveDAOInterface
 import de.htwg.sa.database.restAPI.entities.{SaveGame, SavesGames}
 import slick.jdbc.H2Profile.api._
 import slick.lifted.TableQuery
 
 import scala.concurrent.Future
 
-case class SaveSlickDAOImpl() extends TableQuery(new SavesGames(_)) with SaveDAO {
+case class SaveDAO() extends TableQuery(new SavesGames(_)) with SaveDAOInterface {
   val db = Database.forConfig("h2database")
 
   db.run(this.schema.createIfNotExists)

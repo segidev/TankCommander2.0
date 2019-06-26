@@ -22,3 +22,16 @@ The project has
 * redo: redo your last command
 * save: save the current state of the game
 * load: load the game from a file
+
+# Docker
+1. `docker build -t tank-commander-database -f .deployment/database/Dockerfile .`
+2. `docker run -it -p 9001:80 --rm tank-commander-database`
+
+# Docker-Compose
+1. `docker build -t tank-commander-database -f .deployment/database/Dockerfile .`
+2. `docker-compose up`
+
+# Routes
+1. Create a save game http://localhost:9001/save?id=1&aPlayer=Player%201&pPlayer=Player%201&mapSelected=Map1&movesLeft=1&posATankX=0&posATankY=5&posBTankX=10&posBTankY=5&aTankHP=100&pTankHP=100
+2. Load a save game http://localhost:9001/load/1/
+3. Delete a save game http://localhost:9001/delete/1/

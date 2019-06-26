@@ -7,6 +7,6 @@ import de.htwg.sa.database.restAPI.controller.databaseComponent._
 
 class TankDatabaseModule extends AbstractModule with ScalaModule {
   override def configure(): Unit = {
-    bind[DatabaseInterface].to[slickImpl.Database]
+    bind[DatabaseInterface].to[mongoImpl.Database]
   }
 }

@@ -1,11 +1,9 @@
 package de.htwg.sa.database.restAPI.entities
 
+import de.htwg.sa.database.restAPI.SaveEntry
 import slick.jdbc.H2Profile.api._
 
-case class SaveGame(id: Long, aPlayer: String, pPlayer: String, mapSelected: String, movesLeft: Int,
-                    posATankX: Int, posATankY: Int, posBTankX: Int, posBTankY: Int, aTankHP: Int, pTankHP: Int) {}
-
-class SavesGames(tag: Tag) extends Table[SaveGame](tag, "saves") {
+class SavesGames(tag: Tag) extends Table[SaveEntry](tag, "saves") {
   def id: Rep[Long] = column[Long]("id", O.PrimaryKey)
   def aPlayer: Rep[String] = column[String]("aPlayer")
   def pPlayer: Rep[String] = column[String]("pPlayer")
@@ -19,5 +17,5 @@ class SavesGames(tag: Tag) extends Table[SaveGame](tag, "saves") {
   def pTankHP: Rep[Int] = column[Int]("pTankHP")
 
   def * = (id, aPlayer, pPlayer, mapSelected, movesLeft, posATankX, posATankY,
-    posPTankX, posPTankY, aTankHP, pTankHP) <> (SaveGame.tupled, SaveGame.unapply)
+    posPTankX, posPTankY, aTankHP, pTankHP) <> (SaveEntry.tupled, SaveEntry.unapply)
 }

@@ -21,5 +21,11 @@ services:
     volumes:
       - h2_data:/opt/h2-data
 
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+      - 27017:27017
+
 volumes:
   h2_data:

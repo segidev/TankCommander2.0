@@ -2,7 +2,7 @@ package de.htwg.sa.tankcommander.controller.actorComponent
 
 import akka.actor.{Actor, ActorLogging, Props}
 import de.htwg.sa.tankcommander.TankCommander
-import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
+import de.htwg.sa.tankcommander.controller.saveIoComponent.FileIOInterface
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.GameStatus
 
 import scala.language.postfixOps
@@ -11,7 +11,9 @@ class FileActor() extends Actor with ActorLogging {
   val fileIO: FileIOInterface = TankCommander.injector.getInstance(classOf[FileIOInterface])
 
   override def receive: PartialFunction[Any, Unit] = {
-    case SaveRequest(status, map) => fileIO.save(status, map)
+    case SaveRequest(status, map) =>
+      println("FUCK OFF")
+      fileIO.save(status, map)
     case LoadRequest => sender ! fileIO.load()
   }
 }

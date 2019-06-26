@@ -1,6 +1,7 @@
 package de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl
 
 import de.htwg.sa.tankcommander.model.gameStatusComponent.GameStatusInterface
+import play.api.libs.json.{JsNumber, JsObject, JsString, Json}
 
 case class GameStatus(activePlayer: Individual, passivePlayer: Individual) extends GameStatusInterface {
   override def changeActivePlayer(): GameStatus = copy(activePlayer = passivePlayer.copy(movesLeft = 2), passivePlayer = activePlayer.copy(movesLeft = 2))

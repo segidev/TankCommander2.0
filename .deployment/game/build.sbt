@@ -4,17 +4,9 @@ lazy val commonSettings = Seq(
   scalaVersion := "2.12.8"
 )
 
-lazy val tankCommander = (project in file("."))
-  .settings(
-    name := "TankCommander"
-  )
-  .aggregate(
-    game,
-    database
-  )
-
 lazy val game = project
   .settings(
+    name := "TankCommander Game",
     commonSettings,
     libraryDependencies ++= List(
       "com.typesafe.slick" %% "slick" % "3.2.0",
@@ -34,24 +26,4 @@ lazy val game = project
     libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.22",
     libraryDependencies += "org.scalafx" %% "scalafx" % "8.0.144-R12",
     libraryDependencies += "org.apache.httpcomponents" % "httpclient" % "4.5.9"
-  )
-
-lazy val database = project
-  .settings(
-    commonSettings,
-    mainClass in Compile := Some("main"),
-    libraryDependencies ++= List(
-      "com.typesafe.slick" %% "slick" % "3.2.0",
-      "org.slf4j" % "slf4j-nop" % "1.7.10",
-      "com.h2database" % "h2" % "1.4.187"
-    ),
-    libraryDependencies += "org.mongodb.scala" %% "mongo-scala-driver" % "2.6.0",
-    libraryDependencies += "com.google.inject" % "guice" % "4.1.0",
-    libraryDependencies += "net.codingwell" %% "scala-guice" % "4.1.0",
-    libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.6",
-    libraryDependencies += "com.typesafe.akka" %% "akka-http" % "10.1.8",
-    libraryDependencies += "com.typesafe.akka" %% "akka-http-spray-json" % "10.1.8",
-    libraryDependencies += "com.typesafe.akka" %% "akka-stream" % "2.5.22",
-    libraryDependencies += "com.typesafe.play" %% "play-slick" % "4.0.0",
-    libraryDependencies += "com.typesafe.play" %% "play-slick-evolutions" % "4.0.0"
   )

@@ -1,10 +1,10 @@
-package de.htwg.sa.tankcommander.controller.fileIoComponent.fileIoJsonImpl
+package de.htwg.sa.tankcommander.controller.saveIoComponent.saveIoJsonImpl
 
 import java.io._
 
 import com.google.inject.Inject
 import de.htwg.sa.tankcommander.controller.actorComponent.{LoadResponse, SaveResponse}
-import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
+import de.htwg.sa.tankcommander.controller.saveIoComponent.FileIOInterface
 import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
 import play.api.libs.json._

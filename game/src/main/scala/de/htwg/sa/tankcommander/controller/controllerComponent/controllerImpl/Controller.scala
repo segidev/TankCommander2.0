@@ -23,7 +23,6 @@ import scala.util.{Failure, Success}
 
 class Controller @Inject() extends Observable with ControllerInterface {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)
-  //val supervisor: ActorRef = system.actorOf(GameSupervisor.props(), "GameSupervisor")
   var undoManager = CommandManager()
   var gameField: GameField = _
 

@@ -1,8 +1,8 @@
 package de.htwg.sa.database.restAPI.controller.databaseComponent.mongoImpl
 
+import de.htwg.sa.database.restAPI.SaveEntry
 import de.htwg.sa.database.restAPI.controller.databaseComponent.DatabaseInterface
 import de.htwg.sa.database.restAPI.dao.mongoImpl.SaveDAO
-import de.htwg.sa.database.restAPI.entities.SaveGame
 import javax.inject.Inject
 
 import scala.concurrent.Future
@@ -10,15 +10,15 @@ import scala.concurrent.Future
 class Database @Inject() extends DatabaseInterface {
   val saveMongoDAO = SaveDAO()
 
-  override def loadSavedGame(id: Long): Future[Seq[SaveGame]] = {
+  override def loadSavedGame(id: Long): Future[Seq[SaveEntry]] = {
     saveMongoDAO.getSavedGame(id)
   }
 
-  override def saveGame(saveGame: SaveGame): Future[Int] = {
-    saveMongoDAO.saveGame(saveGame)
+  override def saveGame(saveEntry: SaveEntry): Future[SaveEntry] = {
+    saveMongoDAO.saveGame(saveEntry)
   }
 
-  override def deleteSavedGame(id: Long): Future[Int] = {
+  override def deleteSavedGame(id: Long): Future[String] = {
     saveMongoDAO.deleteSavedGame(id)
   }
 }

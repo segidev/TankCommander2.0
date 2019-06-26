@@ -1,4 +1,4 @@
-package de.htwg.sa.tankcommander.controller.fileIoComponent
+package de.htwg.sa.tankcommander.controller.saveIoComponent
 
 import de.htwg.sa.tankcommander.controller.actorComponent.{LoadResponse, SaveResponse}
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.GameStatus

@@ -1,48 +1,42 @@
 package de.htwg.sa.database.restAPI.dao.mongoImpl
 
-import com.mongodb.client.model.Filters
+import de.htwg.sa.database.restAPI.SaveEntry
 import de.htwg.sa.database.restAPI.dao.SaveDAOInterface
-import de.htwg.sa.database.restAPI.entities.SaveGame
+import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
+import org.bson.codecs.configuration.CodecRegistry
 import org.mongodb.scala._
-import org.mongodb.scala.result.UpdateResult
+import org.mongodb.scala.bson.codecs.DEFAULT_CODEC_REGISTRY
+import org.mongodb.scala.bson.codecs.Macros._
+import org.mongodb.scala.model.Filters._
+import org.mongodb.scala.model.ReplaceOptions
 
-import scala.concurrent._
-import ExecutionContext.Implicits.global
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 case class SaveDAO() extends SaveDAOInterface {
-  val client: MongoClient = MongoClient("mongodb://localhost:27027")
-  client.listDatabaseNames().toFuture().onComplete {
-    case Success(value) => println(value)
-    case Failure(exception) => println(exception)
-  }
-  val db: MongoDatabase = client.getDatabase("tankcommander")
-  val collection: MongoCollection[Document] = db.getCollection("saves")
+  val client: MongoClient = MongoClient("mongodb://localhost:27017")
 
-//  collection.find().collect().subscribe((results: Seq[Document]) => println(s"Found: #${results.size}"))
+  val codecRegistry: CodecRegistry = fromRegistries(fromProviders(classOf[SaveEntry]), DEFAULT_CODEC_REGISTRY)
 
-  override def saveGame(saveGame: SaveGame): Future[Int] = {
-    val replacementDoc: Document = Document("_id" -> 1, "x" -> 2, "y" -> 3)
-    // Filters.eq("_id", 1),
-    collection.insertOne(
-      replacementDoc
-    )
-      .subscribe(new Observer[Completed] {
-        override def onNext(result: Completed): Unit = println(s"onNext: $result")
-        override def onError(e: Throwable): Unit = println(s"onError: $e")
-        override def onComplete(): Unit = println("onComplete")
-      })
-//      .toFuture()
-//      .map(_ => 1)
-    Future.apply(0)
+  val db: MongoDatabase = client.getDatabase("tankcommander").withCodecRegistry(codecRegistry)
+  val collection: MongoCollection[SaveEntry] = db.getCollection("saves")
+
+  override def saveGame(saveEntry: SaveEntry): Future[SaveEntry] = {
+    collection.replaceOne(equal("id", saveEntry.id), saveEntry, new ReplaceOptions().upsert(true)).toFuture.transformWith {
+      case Success(value) => Future.apply(saveEntry)
+      case Failure(exception) => Future.apply(saveEntry)
+    }
   }
 
-  override def getSavedGame(id: Long): Future[Seq[SaveGame]] = {
-    throw new NotImplementedError()
+  override def getSavedGame(id: Long): Future[Seq[SaveEntry]] = {
+    collection.find(equal("id", id)).toFuture
   }
 
-  override def deleteSavedGame(id: Long): Future[Int] = {
-    throw new NotImplementedError()
+  override def deleteSavedGame(id: Long): Future[String] = {
+    collection.deleteOne(equal("id", id)).toFuture.transformWith {
+      case Success(value) => Future.apply("Deleted")
+      case Failure(exception) => Future.failed(exception)
+    }
   }
 }

@@ -1,9 +1,9 @@
-package de.htwg.sa.tankcommander.controller.fileIoComponent.fileIOXmlImpl
+package de.htwg.sa.tankcommander.controller.saveIoComponent.saveIOXmlImpl
 
 import java.io._
 
 import de.htwg.sa.tankcommander.controller.actorComponent.{LoadResponse, SaveResponse}
-import de.htwg.sa.tankcommander.controller.fileIoComponent.FileIOInterface
+import de.htwg.sa.tankcommander.controller.saveIoComponent.FileIOInterface
 import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
 

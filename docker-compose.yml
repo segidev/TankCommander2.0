@@ -1,14 +1,14 @@
 version: '3'
 
 services:
-#  database:
-#    tty: true
-#    image: tank-commander-database
-##    build:
-##      context: .
-##      dockerfile: ./.deployment/database/Dockerfile
-#    ports:
-#      - 9001:9001
+  database:
+    tty: true
+    image: tank-commander-database
+#    build:
+#      context: .
+#      dockerfile: ./.deployment/database/Dockerfile
+    ports:
+      - 9001:9001
 
   h2:
     image: oscarfonts/h2

@@ -44,6 +44,7 @@ lazy val database = project
       "org.slf4j" % "slf4j-nop" % "1.7.10",
       "com.h2database" % "h2" % "1.4.187"
     ),
+    libraryDependencies += "org.mongodb.scala" %% "mongo-scala-driver" % "2.6.0",
     libraryDependencies += "com.google.inject" % "guice" % "4.1.0",
     libraryDependencies += "net.codingwell" %% "scala-guice" % "4.1.0",
     libraryDependencies += "com.typesafe.play" %% "play-json" % "2.6.6",

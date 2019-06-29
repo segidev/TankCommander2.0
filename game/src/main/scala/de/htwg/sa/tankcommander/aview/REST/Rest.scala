@@ -70,7 +70,6 @@ class Rest(controller: Controller) {
     val bindingFuture = Http().bindAndHandle(route, "localhost", 9090)
 
     println("Server online at http://localhost:9090/")
-    StdIn.readLine()
     bindingFuture
       .flatMap(_.unbind())
       .onComplete(_ => actorSystem.terminate())

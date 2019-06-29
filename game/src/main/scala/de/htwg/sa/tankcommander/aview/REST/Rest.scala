@@ -63,6 +63,7 @@ class Rest(controller: Controller) {
       } ~ path(ICommands.load) {
         get {
           controller.load()
+          Thread.sleep(2000)
           complete(HttpResponse(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, controller.printEverything)))
         }
       }

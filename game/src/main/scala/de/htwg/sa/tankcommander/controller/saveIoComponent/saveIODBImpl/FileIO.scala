@@ -71,7 +71,8 @@ class FileIO @Inject() extends FileIOInterface with JsonSupport {
 
     val individual1 = Individual(
       Player(loadEntry.aPlayer),
-      Tank(Coordinate(loadEntry.posATankX, loadEntry.posATankY))
+      Tank(Coordinate(loadEntry.posATankX, loadEntry.posATankY)),
+      movesLeft = loadEntry.movesLeft
     )
     val individual2 = Individual(
       Player(loadEntry.pPlayer),

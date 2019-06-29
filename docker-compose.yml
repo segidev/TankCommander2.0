@@ -12,7 +12,6 @@ services:
       - ./game:/app/game
       - ./.deployment/game/build.sbt:/app/build.sbt
       - ./.deployment/game/entrypoint.sh:/app/entrypoint.sh
-      - /tmp/.X11-unix:/tmp/.X11-unix
     ports:
       - 9002:9002
     links:

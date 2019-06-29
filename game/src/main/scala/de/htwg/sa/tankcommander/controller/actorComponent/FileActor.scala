@@ -11,9 +11,7 @@ class FileActor() extends Actor with ActorLogging {
   val fileIO: FileIOInterface = TankCommander.injector.getInstance(classOf[FileIOInterface])
 
   override def receive: PartialFunction[Any, Unit] = {
-    case SaveRequest(status, map) =>
-      println("FUCK OFF")
-      fileIO.save(status, map)
+    case SaveRequest(status, map) => sender ! fileIO.save(status, map)
     case LoadRequest => sender ! fileIO.load()
   }
 }

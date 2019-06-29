@@ -1,17 +1,29 @@
 version: '3'
 
 services:
-  database:
-    tty: true
-    build:
-      context: .
-      dockerfile: ./.deployment/database/Dockerfile
-    ports:
-      - 9001:9001
-    depends_on:
-      - h2
-    links:
-      - h2:db
+#  game:
+#    tty: true
+#    build:
+#      context: .
+#      dockerfile: ./.deployment/game/Dockerfile
+#    ports:
+#      - 9090:9090
+#
+#  database:
+#    tty: true
+#    build:
+#      context: .
+#      dockerfile: ./.deployment/database/Dockerfile
+#    ports:
+#      - 9001:9001
+#    volumes:
+#      - ./database /app/database
+#      - ./.deployment/database/build.sbt /app
+#      - ./.deployment/database/application.conf /app/src/main/resources/application.conf
+#    depends_on:
+#      - h2
+#    links:
+#      - h2:db
 
   h2:
     image: oscarfonts/h2

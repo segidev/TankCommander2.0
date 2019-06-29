@@ -1,51 +1,83 @@
 package de.htwg.sa.tankcommander.controller.saveIoComponent.saveIODBImpl
 
-import com.google.gson.Gson
+import akka.actor.ActorSystem
+import akka.http.scaladsl.Http
+import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, _}
+import akka.http.scaladsl.unmarshalling.Unmarshal
+import akka.stream.ActorMaterializer
 import com.google.inject.Inject
 import de.htwg.sa.tankcommander.controller.actorComponent.{LoadResponse, SaveResponse}
+import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
 import de.htwg.sa.tankcommander.controller.saveIoComponent.FileIOInterface
-import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.GameStatus
-import org.apache.http.{HttpHeaders, HttpResponse}
-import org.apache.http.client.HttpClient
-import org.apache.http.client.methods.HttpPost
-import org.apache.http.entity.StringEntity
-import org.apache.http.impl.client.{DefaultHttpClient, HttpClientBuilder}
-import play.api.libs.json.{JsNumber, JsObject, JsString, Json}
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
+import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
+import play.api.libs.json.Json
+import spray.json.DefaultJsonProtocol
 
-class FileIO @Inject() extends FileIOInterface {
+import scala.concurrent.Await
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.duration.Duration
+import scala.util.{Failure, Success}
+
+final case class LoadEntry(id: Long, aPlayer: String, pPlayer: String, mapSelected: String, movesLeft: Int,
+                           posATankX: Int, posATankY: Int, posBTankX: Int, posBTankY: Int, aTankHP: Int, pTankHP: Int) {}
+
+trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
+  implicit val loadFormat = jsonFormat11(LoadEntry)
+
+}
+
+class FileIO @Inject() extends FileIOInterface with JsonSupport {
   override def save(gameStatus: GameStatus, map: String): SaveResponse = {
-    val payload = new Gson().toJson(gameStatus)
-
-    val client: HttpClient = HttpClientBuilder.create().build()
-    val post = new HttpPost("http://localhost:9001/save")
-    post.setHeader(HttpHeaders.CONTENT_TYPE, "application/json")
-
-    post.setEntity(new StringEntity(payload))
-    val response: HttpResponse = client.execute(post)
-
-    println(
-      response.getStatusLine.getStatusCode,
-      response.getStatusLine.getReasonPhrase,
-      response.toString
+    val payload = Json.obj(
+      "id" -> 1,
+      "aPlayer" -> gameStatus.activePlayer.player.name,
+      "pPlayer" -> gameStatus.passivePlayer.player.name,
+      "mapSelected" -> map,
+      "movesLeft" -> gameStatus.activePlayer.movesLeft,
+      "posATankX" -> gameStatus.activePlayer.tank.coordinates.x,
+      "posATankY" -> gameStatus.activePlayer.tank.coordinates.y,
+      "posBTankX" -> gameStatus.passivePlayer.tank.coordinates.x,
+      "posBTankY" -> gameStatus.passivePlayer.tank.coordinates.y,
+      "aTankHP" -> gameStatus.activePlayer.tank.hp,
+      "pTankHP" -> gameStatus.passivePlayer.tank.hp
     )
+
+    val http = Http(Controller.system)
+    val httpEntity = HttpEntity(ContentTypes.`application/json`, Json.stringify(payload))
+
+    val request = HttpRequest(
+      method = HttpMethods.POST,
+      uri = "http://db:9001/save",
+      entity = httpEntity
+    )
+
+    http.singleRequest(request).onComplete {
+      case Success(value) => println(value)
+      case Failure(exception) => println(exception)
+    }
 
     SaveResponse()
   }
 
-  def gameStateToJson(gameStatus: GameStatus, map: String): JsObject =
-    Json.obj(
-      "id" -> JsNumber(1),
-      "aPlayer" -> JsString(gameStatus.activePlayer.player.name),
-      "pPlayer" -> JsString(gameStatus.passivePlayer.player.name),
-      "MapSelected" -> JsString(map),
-      "movesLeft" -> JsNumber(gameStatus.activePlayer.movesLeft),
-      "posATankX" -> JsNumber(gameStatus.activePlayer.tank.coordinates.x),
-      "posATankY" -> JsNumber(gameStatus.activePlayer.tank.coordinates.y),
-      "posPTankX" -> JsNumber(gameStatus.passivePlayer.tank.coordinates.x),
-      "posPTankY" -> JsNumber(gameStatus.passivePlayer.tank.coordinates.y),
-      "aTankHP" -> JsNumber(gameStatus.activePlayer.tank.hp),
-      "pTankHP" -> JsNumber(gameStatus.passivePlayer.tank.hp)
+  override def load(): LoadResponse = {
+    implicit val system: ActorSystem = Controller.system
+    implicit val materializer: ActorMaterializer = ActorMaterializer()
+
+    val http = Http()
+    val response = Await.result(http.singleRequest(HttpRequest(HttpMethods.GET, Uri("http://db:9001/load/1"))), Duration(5000, "millis"))
+    val loadEntry = Await.result(Unmarshal(response.entity).to[LoadEntry], Duration(5000, "millis"))
+
+    val individual1 = Individual(
+      Player(loadEntry.aPlayer),
+      Tank(Coordinate(loadEntry.posATankX, loadEntry.posATankY))
+    )
+    val individual2 = Individual(
+      Player(loadEntry.pPlayer),
+      Tank(Coordinate(loadEntry.posBTankX, loadEntry.posBTankY))
     )
 
-  override def load(): LoadResponse = ???
+    LoadResponse(GameStatus(individual1, individual2), loadEntry.mapSelected)
+  }
 }

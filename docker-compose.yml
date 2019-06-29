@@ -1,29 +1,40 @@
 version: '3'
 
 services:
-#  game:
-#    tty: true
-#    build:
-#      context: .
-#      dockerfile: ./.deployment/game/Dockerfile
-#    ports:
-#      - 9090:9090
-#
-#  database:
-#    tty: true
-#    build:
-#      context: .
-#      dockerfile: ./.deployment/database/Dockerfile
-#    ports:
-#      - 9001:9001
-#    volumes:
-#      - ./database /app/database
-#      - ./.deployment/database/build.sbt /app
-#      - ./.deployment/database/application.conf /app/src/main/resources/application.conf
-#    depends_on:
-#      - h2
-#    links:
-#      - h2:db
+  game:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./.deployment/game/Dockerfile
+    environment:
+      - DISPLAY=:1.0
+    volumes:
+      - ./game:/app/game
+      - ./.deployment/game/build.sbt:/app/build.sbt
+      - ./.deployment/game/entrypoint.sh:/app/entrypoint.sh
+      - /tmp/.X11-unix:/tmp/.X11-unix
+    ports:
+      - 9002:9002
+    links:
+      - database:db
+    entrypoint: ["/app/entrypoint.sh"]
+
+  database:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./.deployment/database/Dockerfile
+    ports:
+      - 9001:9001
+    volumes:
+      - ./database:/app/database
+      - ./.deployment/database/build.sbt:/app/build.sbt
+      - ./.deployment/database/application.conf:/app/src/main/resources/application.conf
+    depends_on:
+      - h2
+    links:
+      - h2:db
+      - mongo:mongo
 
   h2:
     image: oscarfonts/h2

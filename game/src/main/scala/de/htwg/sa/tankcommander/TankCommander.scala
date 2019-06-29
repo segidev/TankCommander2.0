@@ -10,7 +10,7 @@ object TankCommander {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)
   val controller: Controller = injector.getInstance(classOf[Controller])
   val tui = new TUI(controller)
-//  val gui = new GUI(controller)
+  val gui = new GUI(controller)
   val rest = new Rest(controller)
 
   def main(args: Array[String]): Unit = {

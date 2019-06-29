@@ -15,7 +15,7 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 case class SaveDAO() extends SaveDAOInterface {
-  val client: MongoClient = MongoClient("mongodb://localhost:27017")
+  val client: MongoClient = MongoClient("mongodb://mongo:27017")
 
   val codecRegistry: CodecRegistry = fromRegistries(fromProviders(classOf[SaveEntry]), DEFAULT_CODEC_REGISTRY)
 

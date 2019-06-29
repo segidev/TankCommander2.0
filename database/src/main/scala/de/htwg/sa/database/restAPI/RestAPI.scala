@@ -27,7 +27,7 @@ class RestAPI(database: DatabaseInterface) extends Directives with JsonSupport {
   implicit val actorMaterializer: ActorMaterializer = ActorMaterializer()
   implicit val executionContext: ExecutionContextExecutor = actorSystem.dispatcher
 
-  val requestTimeout = 1000
+  val requestTimeout = 5000
   val port = 9001
 
   def startServer(): Unit = {
@@ -40,6 +40,7 @@ class RestAPI(database: DatabaseInterface) extends Directives with JsonSupport {
       } ~ path("save") {
         post {
           entity(as[SaveEntry]) { saveEntry =>
+            println(saveEntry)
             val response = Await.result(database.saveGame(saveEntry), Duration(requestTimeout, "millis"))
             complete(response)
           }
@@ -66,10 +67,10 @@ class RestAPI(database: DatabaseInterface) extends Directives with JsonSupport {
     val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", port)
 
     println(s"Server online at http://0.0.0.0:$port/")
-    StdIn.readLine()
-    bindingFuture
-      .flatMap(_.unbind())
-      .onComplete(_ => actorSystem.terminate())
+//    StdIn.readLine()
+//    bindingFuture
+//      .flatMap(_.unbind())
+//      .onComplete(_ => actorSystem.terminate())
   }
 }
 

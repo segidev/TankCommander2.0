@@ -67,12 +67,13 @@ class Rest(controller: Controller) {
         }
       }
 
-    val bindingFuture = Http().bindAndHandle(route, "localhost", 9090)
+    val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 9002)
 
-    println("Server online at http://localhost:9090/")
-    bindingFuture
-      .flatMap(_.unbind())
-      .onComplete(_ => actorSystem.terminate())
+    println("Server online at http://0.0.0.0:9002/")
+//    StdIn.readLine()
+//    bindingFuture
+//      .flatMap(_.unbind())
+//      .onComplete(_ => actorSystem.terminate())
   }
 
   startRestApi()

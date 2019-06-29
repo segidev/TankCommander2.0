@@ -2,6 +2,7 @@ package de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl
 
 import akka.actor.{ActorRef, ActorSystem}
 import akka.pattern.ask
+import akka.stream.ActorMaterializer
 import akka.util.Timeout
 import com.google.inject.{Guice, Inject, Injector}
 import de.htwg.sa.tankcommander.TankCommanderModule
@@ -26,8 +27,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
   var undoManager = CommandManager()
   var gameField: GameField = _
 
-  implicit val system: ActorSystem = ActorSystem("ControllerSystem")
-  val fileActor: ActorRef = system.actorOf(FileActor.props(), "FileActor")
+  val fileActor: ActorRef = Controller.system.actorOf(FileActor.props(), "FileActor")
   var gameStatus: GameStatus = _
   var calculator: Calculator = _
   implicit val timeout: Timeout = Timeout(15 seconds)
@@ -145,4 +145,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
   }
 }
 
-
+object Controller {
+  implicit val system: ActorSystem = ActorSystem("ControllerSystem")
+  implicit val actorMaterializer: ActorMaterializer = ActorMaterializer()
+}

@@ -10,20 +10,22 @@ import de.htwg.sa.tankcommander.aview.util.ICommands
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
 
 import scala.concurrent.ExecutionContextExecutor
-import scala.io.StdIn
 
 class Rest(controller: Controller) {
   implicit val actorSystem: ActorSystem = ActorSystem("RestSystem")
   implicit val actorMaterializer: ActorMaterializer = ActorMaterializer()
   implicit val executionContext: ExecutionContextExecutor = actorSystem.dispatcher
 
+  val ip = "0.0.0.0"
+  val port = 9002
+
   //noinspection ScalaStyle
-  def startRestApi() = {
+  def startRestApi(): Unit = {
     val route: Route =
 
       pathSingleSlash {
         get {
-          complete(HttpResponse(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, "Well, Hello there")))
+          complete(HttpResponse(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, s"Welcome, available routes are\n${ICommands.printCommands}")))
         }
       } ~ path(ICommands.start) {
         get {
@@ -63,33 +65,14 @@ class Rest(controller: Controller) {
       } ~ path(ICommands.load) {
         get {
           controller.load()
-          Thread.sleep(2000)
           complete(HttpResponse(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, controller.printEverything)))
         }
       }
 
-    val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", 9002)
+    val bindingFuture = Http().bindAndHandle(route, ip, port)
 
-    println("Server online at http://0.0.0.0:9002/")
-//    StdIn.readLine()
-//    bindingFuture
-//      .flatMap(_.unbind())
-//      .onComplete(_ => actorSystem.terminate())
+    println(s"Game Server API online at http://$ip:$port/")
   }
 
   startRestApi()
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-

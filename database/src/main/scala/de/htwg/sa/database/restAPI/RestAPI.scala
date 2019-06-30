@@ -3,22 +3,20 @@ package de.htwg.sa.database.restAPI
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
-import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse}
+import akka.http.scaladsl.model.{ContentTypes, HttpEntity, HttpResponse, StatusCodes}
 import akka.http.scaladsl.server.{Directives, Route}
 import akka.stream.ActorMaterializer
 import de.htwg.sa.database.restAPI.controller.databaseComponent.DatabaseInterface
-import play.api.libs.json.Json
-import spray.json.DefaultJsonProtocol
+import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 import scala.concurrent.duration.Duration
 import scala.concurrent.{Await, ExecutionContextExecutor}
-import scala.io.StdIn
 
 final case class SaveEntry(id: Long, aPlayer: String, pPlayer: String, mapSelected: String, movesLeft: Int,
                            posATankX: Int, posATankY: Int, posBTankX: Int, posBTankY: Int, aTankHP: Int, pTankHP: Int) {}
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val saveFormat = jsonFormat11(SaveEntry)
+  implicit val saveFormat: RootJsonFormat[SaveEntry] = jsonFormat11(SaveEntry)
 }
 
 class RestAPI(database: DatabaseInterface) extends Directives with JsonSupport {
@@ -28,6 +26,8 @@ class RestAPI(database: DatabaseInterface) extends Directives with JsonSupport {
   implicit val executionContext: ExecutionContextExecutor = actorSystem.dispatcher
 
   val requestTimeout = 5000
+  val maxRequestDuration = Duration(requestTimeout, "millis")
+  val ip = "0.0.0.0"
   val port = 9001
 
   def startServer(): Unit = {
@@ -35,42 +35,37 @@ class RestAPI(database: DatabaseInterface) extends Directives with JsonSupport {
 
       pathSingleSlash {
         get {
-          complete(HttpResponse(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, "Visit /save, /load or /delete for database action.")))
+          complete(HttpResponse(entity = HttpEntity(ContentTypes.`text/plain(UTF-8)`, "Visit /save, /load/:id or /delete/:id for database action.")))
         }
       } ~ path("save") {
         post {
           entity(as[SaveEntry]) { saveEntry =>
-            println(saveEntry)
-            val response = Await.result(database.saveGame(saveEntry), Duration(requestTimeout, "millis"))
+            val response = Await.result(database.saveGame(saveEntry), maxRequestDuration)
             complete(response)
           }
         }
       } ~ path("load" / LongNumber) { id: Long =>
         get {
-          val response = Await.result(database.loadSavedGame(id), Duration(requestTimeout, "millis"))
+          val response = Await.result(database.loadSavedGame(id), maxRequestDuration)
           response.headOption match {
             case Some(payload) =>
               complete(payload)
             case None => complete(HttpResponse(
-              status = 404,
+              status = StatusCodes.NotFound,
               entity = HttpEntity(ContentTypes.`application/json`, s"Save game with id $id not found."))
             )
           }
         }
       } ~ path("delete" / LongNumber) { id: Long =>
         get {
-          val response = Await.result(database.deleteSavedGame(id), Duration(requestTimeout, "millis"))
+          val response = Await.result(database.deleteSavedGame(id), maxRequestDuration)
           complete(response)
         }
       }
 
-    val bindingFuture = Http().bindAndHandle(route, "0.0.0.0", port)
+    Http().bindAndHandle(route, ip, port)
 
-    println(s"Server online at http://0.0.0.0:$port/")
-//    StdIn.readLine()
-//    bindingFuture
-//      .flatMap(_.unbind())
-//      .onComplete(_ => actorSystem.terminate())
+    println(s"Server online at http://$ip:$port/")
   }
 }
 

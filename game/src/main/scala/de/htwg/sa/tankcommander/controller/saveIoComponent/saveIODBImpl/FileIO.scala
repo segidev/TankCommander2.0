@@ -7,28 +7,33 @@ import akka.http.scaladsl.model.{ContentTypes, HttpEntity, _}
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.ActorMaterializer
 import com.google.inject.Inject
+import com.typesafe.config.{Config, ConfigFactory}
 import de.htwg.sa.tankcommander.controller.actorComponent.{LoadResponse, SaveResponse}
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.Controller
 import de.htwg.sa.tankcommander.controller.saveIoComponent.FileIOInterface
 import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.Coordinate
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
 import play.api.libs.json.Json
-import spray.json.DefaultJsonProtocol
+import spray.json.{DefaultJsonProtocol, RootJsonFormat}
 
 import scala.concurrent.Await
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.duration.Duration
-import scala.util.{Failure, Success}
 
 final case class LoadEntry(id: Long, aPlayer: String, pPlayer: String, mapSelected: String, movesLeft: Int,
                            posATankX: Int, posATankY: Int, posBTankX: Int, posBTankY: Int, aTankHP: Int, pTankHP: Int) {}
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
-  implicit val loadFormat = jsonFormat11(LoadEntry)
+  implicit val loadFormat: RootJsonFormat[LoadEntry] = jsonFormat11(LoadEntry)
 
 }
 
 class FileIO @Inject() extends FileIOInterface with JsonSupport {
+  val config: Config = ConfigFactory.load()
+  val url: String = config.getString("databaseservice.url")
+  val requestTimeout = 5000
+  val maxRequestDuration = Duration(requestTimeout, "millis")
+
   override def save(gameStatus: GameStatus, map: String): SaveResponse = {
     val payload = Json.obj(
       "id" -> 1,
@@ -49,15 +54,11 @@ class FileIO @Inject() extends FileIOInterface with JsonSupport {
 
     val request = HttpRequest(
       method = HttpMethods.POST,
-      uri = "http://db:9001/save",
+      uri = s"$url/save",
       entity = httpEntity
     )
 
-    http.singleRequest(request).onComplete {
-      case Success(value) => println(value)
-      case Failure(exception) => println(exception)
-    }
-
+    val response = Await.result(http.singleRequest(request), maxRequestDuration)
     SaveResponse()
   }
 
@@ -66,17 +67,17 @@ class FileIO @Inject() extends FileIOInterface with JsonSupport {
     implicit val materializer: ActorMaterializer = ActorMaterializer()
 
     val http = Http()
-    val response = Await.result(http.singleRequest(HttpRequest(HttpMethods.GET, Uri("http://db:9001/load/1"))), Duration(5000, "millis"))
-    val loadEntry = Await.result(Unmarshal(response.entity).to[LoadEntry], Duration(5000, "millis"))
+    val response = Await.result(http.singleRequest(HttpRequest(HttpMethods.GET, Uri(s"$url/load/1"))), maxRequestDuration)
+    val loadEntry = Await.result(Unmarshal(response.entity).to[LoadEntry], maxRequestDuration)
 
     val individual1 = Individual(
       Player(loadEntry.aPlayer),
-      Tank(Coordinate(loadEntry.posATankX, loadEntry.posATankY)),
+      Tank(Coordinate(loadEntry.posATankX, loadEntry.posATankY), hp = loadEntry.aTankHP),
       movesLeft = loadEntry.movesLeft
     )
     val individual2 = Individual(
       Player(loadEntry.pPlayer),
-      Tank(Coordinate(loadEntry.posBTankX, loadEntry.posBTankY))
+      Tank(Coordinate(loadEntry.posBTankX, loadEntry.posBTankY), hp = loadEntry.pTankHP)
     )
 
     LoadResponse(GameStatus(individual1, individual2), loadEntry.mapSelected)

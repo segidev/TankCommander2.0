@@ -14,4 +14,21 @@ object ICommands {
   val right = "right"
   val shoot = "shoot"
   val move = "move"
+
+  def printCommands(): String = {
+    Seq(
+      start,
+      s"$move/$left",
+      s"$move/$right",
+      s"$move/$up",
+      s"$move/$down",
+      shoot,
+      undo,
+      redo,
+      save,
+      load,
+      end_turn,
+      exit
+    ).mkString("\n")
+  }
 }

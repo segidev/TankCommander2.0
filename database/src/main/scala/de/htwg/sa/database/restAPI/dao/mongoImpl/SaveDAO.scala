@@ -1,5 +1,6 @@
 package de.htwg.sa.database.restAPI.dao.mongoImpl
 
+import com.typesafe.config.{Config, ConfigFactory, ConfigObject}
 import de.htwg.sa.database.restAPI.SaveEntry
 import de.htwg.sa.database.restAPI.dao.SaveDAOInterface
 import org.bson.codecs.configuration.CodecRegistries.{fromProviders, fromRegistries}
@@ -15,12 +16,17 @@ import scala.concurrent.Future
 import scala.util.{Failure, Success}
 
 case class SaveDAO() extends SaveDAOInterface {
-  val client: MongoClient = MongoClient("mongodb://mongo:27017")
+  val config: Config = ConfigFactory.load()
+  val url: String = config.getString("mongodatabase.url")
+  val databaseName: String = config.getString("mongodatabase.databaseName")
+  val collectionName: String = config.getString("mongodatabase.collectionName")
+
+  val client: MongoClient = MongoClient(url)
 
   val codecRegistry: CodecRegistry = fromRegistries(fromProviders(classOf[SaveEntry]), DEFAULT_CODEC_REGISTRY)
 
-  val db: MongoDatabase = client.getDatabase("tankcommander").withCodecRegistry(codecRegistry)
-  val collection: MongoCollection[SaveEntry] = db.getCollection("saves")
+  val db: MongoDatabase = client.getDatabase(databaseName).withCodecRegistry(codecRegistry)
+  val collection: MongoCollection[SaveEntry] = db.getCollection(collectionName)
 
   override def saveGame(saveEntry: SaveEntry): Future[SaveEntry] = {
     collection.replaceOne(equal("id", saveEntry.id), saveEntry, new ReplaceOptions().upsert(true)).toFuture.transformWith {

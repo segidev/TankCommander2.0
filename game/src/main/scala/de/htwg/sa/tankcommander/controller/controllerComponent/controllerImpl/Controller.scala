@@ -17,20 +17,20 @@ import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
 
 import scala.concurrent.ExecutionContext.Implicits.global
-import scala.concurrent.Future
 import scala.concurrent.duration._
+import scala.concurrent.{Await, Future}
 import scala.language.postfixOps
 import scala.util.{Failure, Success}
 
 class Controller @Inject() extends Observable with ControllerInterface {
   val injector: Injector = Guice.createInjector(new TankCommanderModule)
+  val fileActor: ActorRef = Controller.system.actorOf(FileActor.props(), "FileActor")
+  val requestTimeout = 5000
   var undoManager = CommandManager()
   var gameField: GameField = _
-
-  val fileActor: ActorRef = Controller.system.actorOf(FileActor.props(), "FileActor")
   var gameStatus: GameStatus = _
-  var calculator: Calculator = _
   implicit val timeout: Timeout = Timeout(15 seconds)
+  var calculator: Calculator = _
 
   override def initGame(): Unit = {
     val player1 = Player.generatePlayer("Player 1")
@@ -89,6 +89,14 @@ class Controller @Inject() extends Observable with ControllerInterface {
     updateHitChance()
   }
 
+  def updateHitChance(): Unit = {
+    Future(calculator.update(gameStatus.activePlayer.tank.coordinates,
+      gameStatus.passivePlayer.tank.coordinates)).onComplete {
+      case Success(value) => notifyObservers(HitChanceEvent(value))
+      case Failure(e) => notifyObservers(CalculatorException())
+    }
+  }
+
   override def shoot(): Unit = {
     gameStatus.activePlayer.movesLeft match {
       case 0 => notifyObservers(NoMovesLeftEvent())
@@ -103,14 +111,6 @@ class Controller @Inject() extends Observable with ControllerInterface {
     notifyObservers(EndOfRoundEvent())
     notifyObservers(DrawGameField())
     updateHitChance()
-  }
-
-  def updateHitChance(): Unit = {
-    Future(calculator.update(gameStatus.activePlayer.tank.coordinates,
-      gameStatus.passivePlayer.tank.coordinates)).onComplete {
-      case Success(value) => notifyObservers(HitChanceEvent(value))
-      case Failure(e) => notifyObservers(CalculatorException())
-    }
   }
 
   override def undo(): Unit = {
@@ -132,16 +132,12 @@ class Controller @Inject() extends Observable with ControllerInterface {
   }
 
   override def load(): Unit = {
-    val future = fileActor ? LoadRequest
-    future.onComplete {
-      case Success(res: LoadResponse) =>
-        gameStatus = res.gameStatus
-        gameField = GameField(MapSelector.select(res.string).get)
-        notifyObservers(LoadedGameEvent())
-        notifyObservers(DrawGameField())
-        updateHitChance()
-      case Failure(e) => println(e)
-    }
+    val result: LoadResponse = Await.result((fileActor ? LoadRequest).mapTo[LoadResponse], Duration(requestTimeout, "millis"))
+    gameStatus = result.gameStatus
+    gameField = GameField(MapSelector.select(result.string).get)
+    notifyObservers(LoadedGameEvent())
+    notifyObservers(DrawGameField())
+    updateHitChance()
   }
 }
 

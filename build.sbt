@@ -6,9 +6,7 @@ lazy val commonSettings = Seq(
 
 lazy val tankCommander = (project in file("."))
   .settings(
-    name := "TankCommander",
-    libraryDependencies += "org.scoverage" %% "scalac-scoverage-plugin" % "1.4.0" % "provided",
-    libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.23" % Test
+    name := "TankCommander"
   )
   .aggregate(
     game,
@@ -25,6 +23,8 @@ lazy val game = project
     ),
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test",
     libraryDependencies += "junit" % "junit" % "4.8" % "test",
+    libraryDependencies += "org.scoverage" %% "scalac-scoverage-plugin" % "1.4.0" % "provided",
+    libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.23" % Test,
     libraryDependencies += "org.scala-lang.modules" % "scala-swing_2.12" % "2.0.3",
     libraryDependencies += "com.google.inject" % "guice" % "4.1.0",
     libraryDependencies += "net.codingwell" %% "scala-guice" % "4.1.0",
@@ -46,6 +46,10 @@ lazy val database = project
       "org.slf4j" % "slf4j-nop" % "1.7.10",
       "com.h2database" % "h2" % "1.4.187"
     ),
+    libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test",
+    libraryDependencies += "junit" % "junit" % "4.8" % "test",
+    libraryDependencies += "org.scoverage" %% "scalac-scoverage-plugin" % "1.4.0" % "provided",
+    libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.23" % Test,
     libraryDependencies += "org.mongodb.scala" %% "mongo-scala-driver" % "2.6.0",
     libraryDependencies += "com.google.inject" % "guice" % "4.1.0",
     libraryDependencies += "net.codingwell" %% "scala-guice" % "4.1.0",

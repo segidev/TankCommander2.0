@@ -6,7 +6,9 @@ lazy val commonSettings = Seq(
 
 lazy val tankCommander = (project in file("."))
   .settings(
-    name := "TankCommander"
+    name := "TankCommander",
+    libraryDependencies += "org.scoverage" %% "scalac-scoverage-plugin" % "1.4.0" % "provided",
+    libraryDependencies += "com.typesafe.akka" %% "akka-testkit" % "2.5.23" % Test
   )
   .aggregate(
     game,

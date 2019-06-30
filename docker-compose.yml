@@ -12,11 +12,11 @@ services:
       - ./game:/app/game
       - ./.deployment/game/build.sbt:/app/build.sbt
       - ./.deployment/game/entrypoint.sh:/app/entrypoint.sh
+      - ./.deployment/game/application.conf:/app/game/src/main/resources/application.conf
     ports:
       - 9002:9002
     links:
-      - database:db
-    entrypoint: ["/app/entrypoint.sh"]
+      - database:database
 
   database:
     tty: true
@@ -28,11 +28,9 @@ services:
     volumes:
       - ./database:/app/database
       - ./.deployment/database/build.sbt:/app/build.sbt
-      - ./.deployment/database/application.conf:/app/src/main/resources/application.conf
-    depends_on:
-      - h2
+      - ./.deployment/database/application.conf:/app/database/src/main/resources/application.conf
     links:
-      - h2:db
+      - h2:h2
       - mongo:mongo
 
   h2:

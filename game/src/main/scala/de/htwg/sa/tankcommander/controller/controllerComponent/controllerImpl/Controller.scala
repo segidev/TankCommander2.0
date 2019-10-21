@@ -12,7 +12,7 @@ import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.co
 import de.htwg.sa.tankcommander.controller.controllerComponent.controllerImpl.commands.{CommandManager, MoveCommand, ShootCommand}
 import de.htwg.sa.tankcommander.controller.gameEventComponents.gameEventsImpl._
 import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.maps.MapSelector
-import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.{Coordinate, GameField}
+import de.htwg.sa.tankcommander.model.gameFieldComponent.gameFieldImpl.{Cell, Coordinate, GameField}
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl
 import de.htwg.sa.tankcommander.model.gameStatusComponent.gameStatusImpl.{GameStatus, Individual, Player, Tank}
 
@@ -53,7 +53,7 @@ class Controller @Inject() extends Observable with ControllerInterface {
 
   override def playerHasMovesLeft(): Boolean = gameStatus.activePlayer.movesLeft > 0
 
-  def printEverything: String = {
+  override def printEverything: String = {
     gameFieldToString + "\n" + gameStatus
   }
 
@@ -74,6 +74,23 @@ class Controller @Inject() extends Observable with ControllerInterface {
         }
     }
     output.toString()
+  }
+
+  override def gameFieldToHTML: Array[Array[String]] = {
+    gameField.gameFieldArray.zipWithIndex.map {
+      case (xArray, y) => xArray.zipWithIndex.map(cellWithIndex => {
+        val cell = cellWithIndex._1
+        val x = cellWithIndex._2
+        val coordinate = Coordinate(x, y)
+        gameStatus.activePlayer.tank.coordinates match {
+          case `coordinate` => "T"
+          case _ => gameStatus.passivePlayer.tank.coordinates match {
+            case `coordinate` => "T"
+            case _ => cell.toString
+          }
+        }
+      })
+    }
   }
 
   /*

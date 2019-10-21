@@ -1,7 +1,7 @@
 lazy val commonSettings = Seq(
   organization := "de.htwg.sa",
   version := "2.0.0",
-  scalaVersion := "2.12.8"
+  scalaVersion := "2.12.3"
 )
 
 lazy val tankCommander = (project in file("."))
@@ -18,7 +18,6 @@ lazy val game = project
     commonSettings,
     libraryDependencies ++= List(
       "com.typesafe.slick" %% "slick" % "3.2.0",
-      "org.slf4j" % "slf4j-nop" % "1.7.10",
       "com.h2database" % "h2" % "1.4.187"
     ),
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test",
@@ -43,7 +42,6 @@ lazy val database = project
     mainClass in Compile := Some("main"),
     libraryDependencies ++= List(
       "com.typesafe.slick" %% "slick" % "3.2.0",
-      "org.slf4j" % "slf4j-nop" % "1.7.10",
       "com.h2database" % "h2" % "1.4.187"
     ),
     libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.5" % "test",

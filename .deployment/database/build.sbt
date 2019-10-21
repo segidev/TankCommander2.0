@@ -11,7 +11,6 @@ lazy val database = project
     mainClass in Compile := Some("de.htwg.sa.database.restAPI.TankDatabase"),
     libraryDependencies ++= List(
       "com.typesafe.slick" %% "slick" % "3.2.0",
-      "org.slf4j" % "slf4j-nop" % "1.7.10",
       "com.h2database" % "h2" % "1.4.187"
     ),
     libraryDependencies += "org.mongodb.scala" %% "mongo-scala-driver" % "2.6.0",
